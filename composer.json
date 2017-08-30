@@ -1,0 +1,12 @@
+{
+    "name": "villermen/runescape-commons",
+    "description": "PHP library of common RuneScape functionality.",
+    "type": "library",
+    "license": "MIT",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Villermen\\RuneScape\\": "src/"
+        }
+    }
+}
