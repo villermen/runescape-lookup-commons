@@ -319,15 +319,15 @@ abstract class Constants
             16 => new Skill("Herblore"),
             17 => new Skill("Agility"),
             18 => new Skill("Thieving"),
-            19 => new Skill("Slayer"),
+            19 => new Skill("Slayer", true),
             20 => new Skill("Farming"),
             21 => new Skill("Runecrafting"),
             22 => new Skill("Hunter"),
             23 => new Skill("Construction"),
             24 => new Skill("Summoning"),
-            25 => new Skill("Dungeoneering"),
+            25 => new Skill("Dungeoneering", true),
             26 => new Skill("Divination"),
-            27 => new Skill("Invention")
+            27 => new Skill("Invention", true, true)
         ];
 
         self::$activities = [
@@ -365,6 +365,59 @@ abstract class Constants
     {
         return self::$skills;
     }
+
+    /**
+     * @param int|string $idOrName
+     * @return Skill
+     * @throws RuneScapeException
+     */
+    public static function getSkill($idOrName): Skill
+    {
+        $skills = self::getSkills();
+
+        if (is_int($idOrName)) {
+            if (!isset($skills[$idOrName])) {
+                throw new RuneScapeException("No skill with that id found.");
+            }
+
+            return $skills[$idOrName];
+        } else {
+            foreach($skills as $skill) {
+                if (strtolower($skill->getName()) === strtolower($idOrName)) {
+                    return $skill;
+                }
+            }
+
+            throw new RuneScapeException("No skill with that name found.");
+        }
+    }
+
+    /**
+     * @param int|string $idOrName
+     * @return Activity
+     * @throws RuneScapeException
+     */
+    public static function getActivity($idOrName): Activity
+    {
+        $activities = self::getActivities();
+
+        if (is_int($idOrName)) {
+            if (!isset($activities[$idOrName])) {
+                throw new RuneScapeException("No activity with that id found.");
+            }
+
+            return $activities[$idOrName];
+        } else {
+            foreach($activities as $activity) {
+                if (strtolower($activity->getName()) === strtolower($idOrName)) {
+                    return $activity;
+                }
+            }
+
+            throw new RuneScapeException("No activity with that name found.");
+        }
+    }
+
 
     /**
      * @return Activity[]

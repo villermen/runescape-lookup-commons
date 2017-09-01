@@ -22,7 +22,10 @@ class Highscore implements Iterator
     private $activities = [];
 
     /** @var DateTime */
-    protected $time;
+    private $time;
+
+    /** @var int */
+    private $iteratorKey;
 
     /**
      * Creates a Highscore object from a raw high score data response.
@@ -32,7 +35,7 @@ class Highscore implements Iterator
      * @param DateTime|null $time
      * @throws RuneScapeException
      */
-    public function __construct(Player $player = null, string $rawData, DateTime $time = null)
+    public function __construct(Player $player, string $rawData, DateTime $time = null)
     {
         $this->player = $player;
         $this->rawData = $rawData;
@@ -177,6 +180,14 @@ class Highscore implements Iterator
     }
 
     /**
+     * @return HighscoreEntry[]
+     */
+    public function getEntries(): array
+    {
+        return array_merge($this->getSkills(), $this->getActivities());
+    }
+
+    /**
      * @return HighscoreSkill[]
      */
     public function getSkills(): array
@@ -192,38 +203,36 @@ class Highscore implements Iterator
         return $this->activities;
     }
 
-    /** @inheritdoc */
+    /**
+     * @inheritdoc
+     * @return HighscoreEntry
+     */
     public function current()
     {
-        // TODO: Implement current() method.
-        throw new RuneScapeException("Not implemented.");
+        return $this->getEntries()[$this->iteratorKey];
     }
 
     /** @inheritdoc */
     public function next()
     {
-        // TODO: Implement next() method.
-        throw new RuneScapeException("Not implemented.");
+        $this->iteratorKey++;
     }
 
     /** @inheritdoc */
     public function key()
     {
-        // TODO: Implement key() method.
-        throw new RuneScapeException("Not implemented.");
+        return $this->iteratorKey;
     }
 
     /** @inheritdoc */
     public function valid()
     {
-        // TODO: Implement valid() method.
-        throw new RuneScapeException("Not implemented.");
+        return isset($this->getEntries()[$this->iteratorKey]);
     }
 
     /** @inheritdoc */
     public function rewind()
     {
-        // TODO: Implement rewind() method.
-        throw new RuneScapeException("Not implemented.");
+        $this->iteratorKey = 0;
     }
 }

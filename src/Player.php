@@ -72,7 +72,7 @@ class Player
             throw new RuneScapeException("Could not obtain player stats from RuneScape high scores.");
         }
 
-        return $this->cachedHighscores = new Highscore($data);
+        return $this->cachedHighscores = new Highscore($this, $data);
     }
 
     /**
