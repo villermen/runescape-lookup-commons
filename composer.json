@@ -3,7 +3,9 @@
     "description": "PHP library of common RuneScape functionality.",
     "type": "library",
     "license": "MIT",
-    "require": {},
+    "require": {
+        "php": ">=7"
+    },
     "autoload": {
         "psr-4": {
             "Villermen\\RuneScape\\": "src/"
