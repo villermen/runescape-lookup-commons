@@ -4,6 +4,9 @@ namespace Villermen\RuneScape;
 
 class Skill
 {
+    /** @var int */
+    private $id;
+
     /** @var string */
     private $name;
 
@@ -13,8 +16,15 @@ class Skill
     /** @var bool */
     private $elite;
 
-    public function __construct(string $name, bool $highLevelCap = false, bool $elite = false)
+    /**
+     * @param int $id
+     * @param string $name
+     * @param bool $highLevelCap
+     * @param bool $elite
+     */
+    public function __construct(int $id, string $name, bool $highLevelCap = false, bool $elite = false)
     {
+        $this->id = $id;
         $this->name = $name;
         $this->highLevelCap = $highLevelCap;
         $this->elite = $elite;
@@ -99,5 +109,13 @@ class Skill
     public function isElite(): bool
     {
         return $this->elite;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
     }
 }

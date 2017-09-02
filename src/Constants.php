@@ -7,6 +7,60 @@ namespace Villermen\RuneScape;
  */
 abstract class Constants
 {
+    const SKILL_TOTAL = 0;
+    const SKILL_ATTACK = 1;
+    const SKILL_DEFENCE = 2;
+    const SKILL_STRENGTH = 3;
+    const SKILL_CONSTITUTION = 4;
+    const SKILL_RANGED = 5;
+    const SKILL_PRAYER = 6;
+    const SKILL_MAGIC = 7;
+    const SKILL_COOKING = 8;
+    const SKILL_WOODCUTTING = 9;
+    const SKILL_FLETCHING = 10;
+    const SKILL_FISHING = 11;
+    const SKILL_FIREMAKING = 12;
+    const SKILL_CRAFTING = 13;
+    const SKILL_SMITHING = 14;
+    const SKILL_MINING = 15;
+    const SKILL_HERBLORE = 16;
+    const SKILL_AGILITY = 17;
+    const SKILL_THIEVING = 18;
+    const SKILL_SLAYER = 19;
+    const SKILL_FARMING = 20;
+    const SKILL_RUNECRAFTING = 21;
+    const SKILL_HUNTER = 22;
+    const SKILL_CONSTRUCTION = 23;
+    const SKILL_SUMMONING = 24;
+    const SKILL_DUNGEONEERING = 25;
+    const SKILL_DIVINATION = 26;
+    const SKILL_INVENTION = 27;
+
+    const ACTIVITY_BOUNTY_HUNTER = 0;
+    const ACTIVITY_BOUNTY_HUNTER_ROGUES = 1;
+    const ACTIVITY_DOMINION_TOWER = 2;
+    const ACTIVITY_CRUCIBLE = 3;
+    const ACTIVITY_CASTLE_WARS = 4;
+    const ACTIVITY_BARBARIAN_ASSAULT_ATTACKER = 5;
+    const ACTIVITY_BARBARIAN_ASSAULT_DEFENDER = 6;
+    const ACTIVITY_BARBARIAN_ASSAULT_COLLECTOR = 7;
+    const ACTIVITY_BARBARIAN_ASSAULT_HEALER = 8;
+    const ACTIVITY_DUEL_TOURNAMENT = 9;
+    const ACTIVITY_MOBILISING_ARMIES = 10;
+    const ACTIVITY_CONQUEST = 11;
+    const ACTIVITY_FIST_OF_GUTHIX = 12;
+    const ACTIVITY_GIELINOR_GAMES_RESOURCE_RACE = 13;
+    const ACTIVITY_GIELINOR_GAMES_ATHLETICS = 14;
+    const ACTIVITY_WORLD_EVENT_2_ARMADYL_CONTRIBUTION = 15;
+    const ACTIVITY_WORLD_EVENT_2_BANDOS_CONTRIBUTION = 16;
+    const ACTIVITY_WORLD_EVENT_2_ARMADYL_KILLS = 17;
+    const ACTIVITY_WORLD_EVENT_2_BANDOS_KILLS = 18;
+    const ACTIVITY_HEIST_GUARD = 19;
+    const ACTIVITY_HEIST_ROBBER = 20;
+    const ACTIVITY_CABBAGE_FACEPUNCH_BONANZA = 21;
+    const ACTIVITY_APRIL_FOOLS_2015_COW_TIPPING = 22;
+    const ACTIVITY_APRIL_FOOLS_2015_RAT_KILLS = 23;
+
     /** @var Skill[] */
     private static $skills;
 
@@ -300,61 +354,61 @@ abstract class Constants
     public static function initialize()
     {
         self::$skills = [
-            0 => new Skill("Total"),
-            1 => new Skill("Attack"),
-            2 => new Skill("Defence"),
-            3 => new Skill("Strength"),
-            4 => new Skill("Constitution"),
-            5 => new Skill("Ranged"),
-            6 => new Skill("Prayer"),
-            7 => new Skill("Magic"),
-            8 => new Skill("Cooking"),
-            9 => new Skill("Woodcutting"),
-            10 => new Skill("Fletching"),
-            11 => new Skill("Fishing"),
-            12 => new Skill("Firemaking"),
-            13 => new Skill("Crafting"),
-            14 => new Skill("Smithing"),
-            15 => new Skill("Mining"),
-            16 => new Skill("Herblore"),
-            17 => new Skill("Agility"),
-            18 => new Skill("Thieving"),
-            19 => new Skill("Slayer", true),
-            20 => new Skill("Farming"),
-            21 => new Skill("Runecrafting"),
-            22 => new Skill("Hunter"),
-            23 => new Skill("Construction"),
-            24 => new Skill("Summoning"),
-            25 => new Skill("Dungeoneering", true),
-            26 => new Skill("Divination"),
-            27 => new Skill("Invention", true, true)
+            self::SKILL_TOTAL => new Skill(self::SKILL_TOTAL, "Total"),
+            self::SKILL_ATTACK => new Skill(self::SKILL_ATTACK, "Attack"),
+            self::SKILL_DEFENCE => new Skill(self::SKILL_DEFENCE, "Defence"),
+            self::SKILL_STRENGTH => new Skill(self::SKILL_STRENGTH, "Strength"),
+            self::SKILL_CONSTITUTION => new Skill(self::SKILL_CONSTITUTION, "Constitution"),
+            self::SKILL_RANGED => new Skill(self::SKILL_RANGED, "Ranged"),
+            self::SKILL_PRAYER => new Skill(self::SKILL_PRAYER, "Prayer"),
+            self::SKILL_MAGIC => new Skill(self::SKILL_MAGIC, "Magic"),
+            self::SKILL_COOKING => new Skill(self::SKILL_COOKING, "Cooking"),
+            self::SKILL_WOODCUTTING => new Skill(self::SKILL_WOODCUTTING, "Woodcutting"),
+            self::SKILL_FLETCHING => new Skill(self::SKILL_FLETCHING, "Fletching"),
+            self::SKILL_FISHING => new Skill(self::SKILL_FISHING, "Fishing"),
+            self::SKILL_FIREMAKING => new Skill(self::SKILL_FIREMAKING, "Firemaking"),
+            self::SKILL_CRAFTING => new Skill(self::SKILL_CRAFTING, "Crafting"),
+            self::SKILL_SMITHING => new Skill(self::SKILL_SMITHING, "Smithing"),
+            self::SKILL_MINING => new Skill(self::SKILL_MINING, "Mining"),
+            self::SKILL_HERBLORE => new Skill(self::SKILL_HERBLORE, "Herblore"),
+            self::SKILL_AGILITY => new Skill(self::SKILL_AGILITY, "Agility"),
+            self::SKILL_THIEVING => new Skill(self::SKILL_THIEVING, "Thieving"),
+            self::SKILL_SLAYER => new Skill(self::SKILL_SLAYER, "Slayer", true),
+            self::SKILL_FARMING => new Skill(self::SKILL_FARMING, "Farming"),
+            self::SKILL_RUNECRAFTING => new Skill(self::SKILL_RUNECRAFTING, "Runecrafting"),
+            self::SKILL_HUNTER => new Skill(self::SKILL_HUNTER, "Hunter"),
+            self::SKILL_CONSTRUCTION => new Skill(self::SKILL_CONSTRUCTION, "Construction"),
+            self::SKILL_SUMMONING => new Skill(self::SKILL_SUMMONING, "Summoning"),
+            self::SKILL_DUNGEONEERING => new Skill(self::SKILL_DUNGEONEERING, "Dungeoneering", true),
+            self::SKILL_DIVINATION => new Skill(self::SKILL_DIVINATION, "Divination"),
+            self::SKILL_INVENTION => new Skill(self::SKILL_INVENTION, "Invention", true, true)
         ];
 
         self::$activities = [
-            0 => new Activity("Bounty Hunters"),
-            1 => new Activity("Bounty Hunters Rogues"),
-            2 => new Activity("Dominion Tower"),
-            3 => new Activity("The Crucible"),
-            4 => new Activity("Castle Wars Games"),
-            5 => new Activity("Barbarian Assault Attackers"),
-            6 => new Activity("Barbarian Assault Defenders"),
-            7 => new Activity("Barbarian Assault Collectors"),
-            8 => new Activity("Barbarian Assault Healers"),
-            9 => new Activity("Duel Tournament"),
-            10 => new Activity("Mobilising Armies"),
-            11 => new Activity("Conquest"),
-            12 => new Activity("Fist of Guthix"),
-            13 => new Activity("Gielinor Games: Resource Race"),
-            14 => new Activity("Gielinor Games: Athletics"),
-            15 => new Activity("World Event 2: Armadyl Lifetime Contribution"),
-            16 => new Activity("World Event 2: Bandos Lifetime Contribution"),
-            17 => new Activity("World Event 2: Armadyl PvP Kills"),
-            18 => new Activity("World Event 2: Bandos PvP Kills"),
-            19 => new Activity("Heist Guard Level"),
-            20 => new Activity("Heist Robber Level"),
-            21 => new Activity("Cabbage Facepunch Bonanza: 5 Game Average"),
-            22 => new Activity("April Fools 2015: Cow Tipping"),
-            23 => new Activity("April Fools 2015: Rat Kills")
+            self::ACTIVITY_BOUNTY_HUNTER => new Activity(self::ACTIVITY_BOUNTY_HUNTER, "Bounty Hunters"),
+            self::ACTIVITY_BOUNTY_HUNTER_ROGUES => new Activity(self::ACTIVITY_BOUNTY_HUNTER_ROGUES, "Bounty Hunters Rogues"),
+            self::ACTIVITY_DOMINION_TOWER => new Activity(self::ACTIVITY_DOMINION_TOWER, "Dominion Tower"),
+            self::ACTIVITY_CRUCIBLE => new Activity(self::ACTIVITY_CRUCIBLE, "The Crucible"),
+            self::ACTIVITY_CASTLE_WARS => new Activity(self::ACTIVITY_CASTLE_WARS, "Castle Wars Games"),
+            self::ACTIVITY_BARBARIAN_ASSAULT_ATTACKER => new Activity(self::ACTIVITY_BARBARIAN_ASSAULT_ATTACKER, "Barbarian Assault Attackers"),
+            self::ACTIVITY_BARBARIAN_ASSAULT_DEFENDER => new Activity(self::ACTIVITY_BARBARIAN_ASSAULT_DEFENDER, "Barbarian Assault Defenders"),
+            self::ACTIVITY_BARBARIAN_ASSAULT_COLLECTOR => new Activity(self::ACTIVITY_BARBARIAN_ASSAULT_COLLECTOR, "Barbarian Assault Collectors"),
+            self::ACTIVITY_BARBARIAN_ASSAULT_HEALER => new Activity(self::ACTIVITY_BARBARIAN_ASSAULT_HEALER, "Barbarian Assault Healers"),
+            self::ACTIVITY_DUEL_TOURNAMENT => new Activity(self::ACTIVITY_DUEL_TOURNAMENT, "Duel Tournament"),
+            self::ACTIVITY_MOBILISING_ARMIES => new Activity(self::ACTIVITY_MOBILISING_ARMIES, "Mobilising Armies"),
+            self::ACTIVITY_CONQUEST => new Activity(self::ACTIVITY_CONQUEST, "Conquest"),
+            self::ACTIVITY_FIST_OF_GUTHIX => new Activity(self::ACTIVITY_FIST_OF_GUTHIX, "Fist of Guthix"),
+            self::ACTIVITY_GIELINOR_GAMES_RESOURCE_RACE => new Activity(self::ACTIVITY_GIELINOR_GAMES_RESOURCE_RACE, "Gielinor Games: Resource Race"),
+            self::ACTIVITY_GIELINOR_GAMES_ATHLETICS => new Activity(self::ACTIVITY_GIELINOR_GAMES_ATHLETICS, "Gielinor Games: Athletics"),
+            self::ACTIVITY_WORLD_EVENT_2_ARMADYL_CONTRIBUTION => new Activity(self::ACTIVITY_WORLD_EVENT_2_ARMADYL_CONTRIBUTION, "World Event 2: Armadyl Lifetime Contribution"),
+            self::ACTIVITY_WORLD_EVENT_2_BANDOS_CONTRIBUTION => new Activity(self::ACTIVITY_WORLD_EVENT_2_BANDOS_CONTRIBUTION, "World Event 2: Bandos Lifetime Contribution"),
+            self::ACTIVITY_WORLD_EVENT_2_ARMADYL_KILLS => new Activity(self::ACTIVITY_WORLD_EVENT_2_ARMADYL_KILLS, "World Event 2: Armadyl PvP Kills"),
+            self::ACTIVITY_WORLD_EVENT_2_BANDOS_KILLS => new Activity(self::ACTIVITY_WORLD_EVENT_2_BANDOS_KILLS, "World Event 2: Bandos PvP Kills"),
+            self::ACTIVITY_HEIST_GUARD => new Activity(self::ACTIVITY_HEIST_GUARD, "Heist Guard Level"),
+            self::ACTIVITY_HEIST_ROBBER => new Activity(self::ACTIVITY_HEIST_ROBBER, "Heist Robber Level"),
+            self::ACTIVITY_CABBAGE_FACEPUNCH_BONANZA => new Activity(self::ACTIVITY_CABBAGE_FACEPUNCH_BONANZA, "Cabbage Facepunch Bonanza: 5 Game Average"),
+            self::ACTIVITY_APRIL_FOOLS_2015_COW_TIPPING => new Activity(self::ACTIVITY_APRIL_FOOLS_2015_COW_TIPPING, "April Fools 2015: Cow Tipping"),
+            self::ACTIVITY_APRIL_FOOLS_2015_RAT_KILLS => new Activity(self::ACTIVITY_APRIL_FOOLS_2015_RAT_KILLS, "April Fools 2015: Rat Kills")
         ];
     }
 
@@ -367,64 +421,31 @@ abstract class Constants
     }
 
     /**
-     * @param int|string $idOrName
-     * @return Skill
-     * @throws RuneScapeException
-     */
-    public static function getSkill($idOrName): Skill
-    {
-        $skills = self::getSkills();
-
-        if (is_int($idOrName)) {
-            if (!isset($skills[$idOrName])) {
-                throw new RuneScapeException("No skill with that id found.");
-            }
-
-            return $skills[$idOrName];
-        } else {
-            foreach($skills as $skill) {
-                if (strtolower($skill->getName()) === strtolower($idOrName)) {
-                    return $skill;
-                }
-            }
-
-            throw new RuneScapeException("No skill with that name found.");
-        }
-    }
-
-    /**
-     * @param int|string $idOrName
-     * @return Activity
-     * @throws RuneScapeException
-     */
-    public static function getActivity($idOrName): Activity
-    {
-        $activities = self::getActivities();
-
-        if (is_int($idOrName)) {
-            if (!isset($activities[$idOrName])) {
-                throw new RuneScapeException("No activity with that id found.");
-            }
-
-            return $activities[$idOrName];
-        } else {
-            foreach($activities as $activity) {
-                if (strtolower($activity->getName()) === strtolower($idOrName)) {
-                    return $activity;
-                }
-            }
-
-            throw new RuneScapeException("No activity with that name found.");
-        }
-    }
-
-
-    /**
      * @return Activity[]
      */
     public static function getActivities(): array
     {
         return self::$activities;
+    }
+
+    /**
+     * @param int $id
+     * @return Skill
+     * @throws RuneScapeException
+     */
+    public static function getSkill(int $id): Skill
+    {
+        return self::getSkills()[$id];
+    }
+
+    /**
+     * @param int $id
+     * @return Activity
+     * @throws RuneScapeException
+     */
+    public static function getActivity(int $id): Activity
+    {
+        return self::getActivities()[$id];
     }
 }
 

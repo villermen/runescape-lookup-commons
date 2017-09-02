@@ -23,18 +23,18 @@ class PlayerTest extends TestCase
 
         foreach($highscore as $item) {
             if ($item instanceof HighscoreSkill) {
-                if ($item->getSkill() === Constants::getSkill("invention")) {
+                if ($item->getSkill()->getId() === Constants::SKILL_INVENTION) {
                     self::assertEquals(120, $item->getLevel());
                 }
 
-                if ($item->getSkill() === Constants::getSkill("smithing")) {
+                if ($item->getSkill()->getId() === Constants::SKILL_SMITHING) {
                     self::assertEquals(99, $item->getLevel());
                     self::assertGreaterThan(99, $item->getLevel(true));
                 }
             }
 
             if ($item instanceof HighscoreActivity) {
-                if ($item->getActivity() === Constants::getActivity("dominion tower")) {
+                if ($item->getActivity()->getId() === Constants::ACTIVITY_DOMINION_TOWER) {
                     self::assertGreaterThan(1300000, $item->getScore());
                 }
             }
