@@ -123,36 +123,28 @@ class Highscore implements Iterator
         return $result;
     }
 
-    public function compareTo(Highscore $highscore)
+    /**
+     * @param Highscore $highscore
+     * @return array
+     * @throws RuneScapeException
+     */
+    public function compareTo(Highscore $highscore): array
     {
-        // TODO: Implement compareTo()
-        throw new RuneScapeException("Not implemented.");
+        $comparisons = [];
 
-        $result = [];
-
-        foreach($this->data["skills"] as $skillId => $skill1)
-        {
-            if (!isset($stats->data["skills"][$skillId]) ||
-                $skill1["level"] == -1 ||
-                $stats->data["skills"][$skillId]["level"] == -1)
-            {
-                $result[$skillId] = [
-                    "level" => false,
-                    "xp" => false,
-                    "rank" => false
-                ];
-
-                continue;
+        foreach($this->getSkills() as $skill) {
+            if ($otherSkill = $highscore->getSkill($skill->getSkill()->getId())) {
+                $comparisons[] = $skill->compareTo($otherSkill);
             }
-
-            $skill2 = $stats->data["skills"][$skillId];
-
-            $result[$skillId]["level"] = $skill1["level"] - $skill2["level"];
-            $result[$skillId]["xp"] = $skill1["xp"] - $skill2["xp"];
-            $result[$skillId]["rank"] = $skill2["rank"] - $skill1["rank"];
         }
 
-        return $result;
+        foreach($this->getActivities() as $activity) {
+            if ($otherActivity = $highscore->getActivity($activity->getActivity()->getId())) {
+                $comparisons[] = $activity->compareTo($otherActivity);
+            }
+        }
+
+        return $comparisons;
     }
 
     /**
@@ -204,34 +196,64 @@ class Highscore implements Iterator
     }
 
     /**
+     * @param $id
+     * @return HighscoreSkill|null
+     */
+    public function getSkill($id): HighscoreSkill
+    {
+        foreach($this->getSkills() as $skill) {
+            if ($skill->getSkill()->getId() === $id)  {
+                return $skill;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param $id
+     * @return HighscoreActivity|null
+     */
+    public function getActivity($id): HighscoreActivity
+    {
+        foreach($this->getActivities() as $activity) {
+            if ($activity->getActivity()->getId() === $id)  {
+                return $activity;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * @inheritdoc
      * @return HighscoreEntry
      */
-    public function current()
+    public function current(): HighscoreEntry
     {
         return $this->getEntries()[$this->iteratorKey];
     }
 
     /** @inheritdoc */
-    public function next()
+    public function next(): void
     {
         $this->iteratorKey++;
     }
 
     /** @inheritdoc */
-    public function key()
+    public function key(): int
     {
         return $this->iteratorKey;
     }
 
     /** @inheritdoc */
-    public function valid()
+    public function valid(): bool
     {
         return isset($this->getEntries()[$this->iteratorKey]);
     }
 
     /** @inheritdoc */
-    public function rewind()
+    public function rewind(): void
     {
         $this->iteratorKey = 0;
     }
