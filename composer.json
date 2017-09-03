@@ -1,6 +1,6 @@
 {
-    "name": "villermen/runescape-commons",
-    "description": "PHP library of common RuneScape functionality.",
+    "name": "villermen/runescape-lookup-commons",
+    "description": "A PHP library containing RuneScape lookup components.",
     "type": "library",
     "license": "MIT",
     "require": {
