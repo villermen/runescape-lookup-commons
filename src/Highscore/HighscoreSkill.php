@@ -1,6 +1,8 @@
 <?php
 
-namespace Villermen\RuneScape;
+namespace Villermen\RuneScape\Highscore;
+
+use Villermen\RuneScape\Skill;
 
 /**
  * A skill entry of a player's highscore.
@@ -126,5 +128,18 @@ class HighscoreSkill extends HighscoreEntry
         $this->xp = $xp;
 
         return $this;
+    }
+
+    /**
+     * @param HighscoreEntry $entry
+     * @return HighscoreEntryComparison
+     */
+    public function compareTo(HighscoreEntry $entry): HighscoreEntryComparison
+    {
+        if ($entry instanceof HighscoreSkill) {
+            return new HighscoreSkillComparison($this, $entry);
+        }
+
+        return parent::compareTo($entry);
     }
 }

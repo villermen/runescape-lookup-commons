@@ -1,6 +1,6 @@
 <?php
 
-namespace Villermen\RuneScape;
+namespace Villermen\RuneScape\ActivityFeed;
 
 use DateTime;
 

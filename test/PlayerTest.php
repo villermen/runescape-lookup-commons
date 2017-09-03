@@ -1,25 +1,25 @@
 <?php
 
 use Villermen\RuneScape\Constants;
-use Villermen\RuneScape\HighscoreActivity;
-use Villermen\RuneScape\HighscoreSkill;
+use Villermen\RuneScape\Highscore\HighscoreActivity;
+use Villermen\RuneScape\Highscore\HighscoreSkill;
 use Villermen\RuneScape\Player;
 use PHPUnit\Framework\TestCase;
 
 class PlayerTest extends TestCase
 {
     /** @var Player */
-    private $player;
+    private static $player;
 
     /** @inheritdoc */
-    protected function setUp()
+    public static function setUpBeforeClass()
     {
-        $this->player = new Player("Villermen");
+        self::$player = new Player("Villermen");
     }
 
     public function testGetHighscore()
     {
-        $highscore = $this->player->getHighscore();
+        $highscore = self::$player->getHighscore();
 
         foreach($highscore as $item) {
             if ($item instanceof HighscoreSkill) {
@@ -40,4 +40,8 @@ class PlayerTest extends TestCase
             }
         }
     }
+
+    // TODO: Test comparing
+    // TODO: Test combat level generation
+    // TODO: Test activity feed somehow
 }

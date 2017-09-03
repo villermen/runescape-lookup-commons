@@ -1,6 +1,6 @@
 <?php
 
-namespace Villermen\RuneScape;
+namespace Villermen\RuneScape\Highscore;
 
 /**
  * Represents a skill or activity in a highscore.
@@ -30,7 +30,7 @@ abstract class HighscoreEntry
      *
      * @return HighscoreEntry
      */
-    public function setRank($rank): HighscoreEntry
+    private function setRank($rank): HighscoreEntry
     {
         if (!is_int($rank) || $rank < 1) {
             $rank = false;
@@ -47,5 +47,14 @@ abstract class HighscoreEntry
     public function getRank()
     {
         return $this->rank;
+    }
+
+    /**
+     * @param HighscoreEntry $entry
+     * @return HighscoreEntryComparison
+     */
+    public function compareTo(HighscoreEntry $entry): HighscoreEntryComparison
+    {
+        return new HighscoreEntryComparison($this, $entry);
     }
 }

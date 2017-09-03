@@ -2,8 +2,8 @@
 
 namespace Villermen\RuneScape;
 
-use DateTime;
-use SimpleXmlElement;
+use Villermen\RuneScape\ActivityFeed\ActivityFeed;
+use Villermen\RuneScape\Highscore\Highscore;
 
 class Player
 {
@@ -79,17 +79,17 @@ class Player
      * Returns the activities currently displayed on the player's activity feed.
      *
      * @param int $timeout
-     * @return ActivityFeedItem[]
+     * @return ActivityFeed
      * @throws RuneScapeException If the player's activity feed is inaccessible or unparsable.
      */
-    public function getActivityFeed(int $timeout = 5): array
+    public function getActivityFeed(int $timeout = 5): ActivityFeed
     {
         $curl = curl_init($this->getActivityFeedUrl());
         curl_setopt_array($curl, [
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_TIMEOUT => $timeout
         ]);
-        $rawFeed = curl_exec($curl);
+        $feedData = curl_exec($curl);
         $statusCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         curl_close($curl);
 
@@ -97,25 +97,7 @@ class Player
             throw new RuneScapeException("Activity feed page returned with status " . $statusCode);
         }
 
-        try {
-            $feed = new SimpleXmlElement($rawFeed);
-            $feedItems = $feed->xpath("//item");
-
-            $result = [];
-
-            foreach ($feedItems as $feedItem) {
-                $id = trim((string)$feedItem->guid);
-                $id = substr($id, strripos($id, "id=") + 3);
-                $feedTime = new DateTime($feedItem->pubDate);
-
-                $result[] = new ActivityFeedItem($id, $feedTime, trim((string)$feedItem->title),
-                    trim((string)$feedItem->description));
-            }
-
-            return $result;
-        } catch (\Exception $ex) {
-            throw new RuneScapeException("Could not parse player's activity feed.", 0, $ex);
-        }
+        return new ActivityFeed($this, $feedData);
     }
 
     /**

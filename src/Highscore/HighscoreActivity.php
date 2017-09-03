@@ -1,6 +1,8 @@
 <?php
 
-namespace Villermen\RuneScape;
+namespace Villermen\RuneScape\Highscore;
+
+use Villermen\RuneScape\Activity;
 
 class HighscoreActivity extends HighscoreEntry
 {

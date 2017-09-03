@@ -1,8 +1,12 @@
 <?php
 
-namespace Villermen\RuneScape;
+namespace Villermen\RuneScape\Highscore;
+
 use DateTime;
 use Iterator;
+use Villermen\RuneScape\Constants;
+use Villermen\RuneScape\Player;
+use Villermen\RuneScape\RuneScapeException;
 
 /**
  * Represents a player's highscore at a specific moment in time.
@@ -121,30 +125,6 @@ class Highscore implements Iterator
         $result[2] = $result[0] - $result[1];
 
         return $result;
-    }
-
-    /**
-     * @param Highscore $highscore
-     * @return array
-     * @throws RuneScapeException
-     */
-    public function compareTo(Highscore $highscore): array
-    {
-        $comparisons = [];
-
-        foreach($this->getSkills() as $skill) {
-            if ($otherSkill = $highscore->getSkill($skill->getSkill()->getId())) {
-                $comparisons[] = $skill->compareTo($otherSkill);
-            }
-        }
-
-        foreach($this->getActivities() as $activity) {
-            if ($otherActivity = $highscore->getActivity($activity->getActivity()->getId())) {
-                $comparisons[] = $activity->compareTo($otherActivity);
-            }
-        }
-
-        return $comparisons;
     }
 
     /**
