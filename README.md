@@ -25,4 +25,4 @@ $uncappedAttackLevel = $currentOldSchoolHighscore->getSkill(Constants::SKILL_ATT
 
 ## Installation
 
-_Will be added when released_
+`composer require villermen/runescape-lookup-commons`
