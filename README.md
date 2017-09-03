@@ -2,7 +2,7 @@
 
 #### A PHP library containing RuneScape lookup components.
 
-[![CircleCI](https://circleci.com/gh/villermen/runescape-commons.svg?style=svg)](https://circleci.com/gh/villermen/runescape-commons)
+[![CircleCI](https://circleci.com/gh/villermen/runescape-lookup-commons.svg?style=svg)](https://circleci.com/gh/villermen/runescape-lookup-commons)
 
 ## Features
 
