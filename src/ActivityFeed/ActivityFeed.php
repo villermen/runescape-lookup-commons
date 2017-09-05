@@ -9,7 +9,11 @@ use Villermen\RuneScape\RuneScapeException;
 
 class ActivityFeed
 {
+    /** @var Player */
     private $player;
+
+    /** @var ActivityFeedItem[] */
+    private $items = [];
 
     public function __construct(Player $player, string $data)
     {
@@ -19,20 +23,53 @@ class ActivityFeed
             $feed = new SimpleXmlElement($data);
             $feedItems = $feed->xpath("//item");
 
-            $result = [];
-
             foreach ($feedItems as $feedItem) {
                 $id = trim((string)$feedItem->guid);
                 $id = substr($id, strripos($id, "id=") + 3);
                 $feedTime = new DateTime($feedItem->pubDate);
 
-                $result[] = new ActivityFeedItem($id, $feedTime, trim((string)$feedItem->title),
+                $this->items[] = new ActivityFeedItem($id, $feedTime, trim((string)$feedItem->title),
                     trim((string)$feedItem->description));
             }
-
-            return $result;
         } catch (\Exception $ex) {
             throw new RuneScapeException("Could not parse player's activity feed.", 0, $ex);
         }
+    }
+
+    /**
+     * @return Player
+     */
+    public function getPlayer(): Player
+    {
+        return $this->player;
+    }
+
+    /**
+     * @return ActivityFeedItem[]
+     */
+    public function getItems(): array
+    {
+        return $this->items;
+    }
+
+    /**
+     * Returns all feed items in this feed that occur after the given item.
+     *
+     * @param string $lastId
+     * @return ActivityFeedItem[]
+     */
+    public function getNewerItems(string $lastId): array
+    {
+        $newerItems = [];
+
+        foreach($this->getItems() as $item) {
+            if ($lastId == $item->getId()) {
+                break;
+            }
+
+            $newerItems[] = $item;
+        }
+
+        return $newerItems;
     }
 }
