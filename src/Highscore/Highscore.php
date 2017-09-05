@@ -90,41 +90,36 @@ class Highscore implements Iterator
     }
 
     /**
-     * @return array 0: Combat level, 1: Combat level without summoning, 2: Summoning addition.
+     * Returns the combat level of this highscore.
+     *
+     * @param bool $includeSummoning Whether to include the summoning skill while calculating the combat level.
+     * @param bool $uncapped
+     * @return int
      */
-    public function getCombatLevel()
+    public function getCombatLevel($includeSummoning = true, $uncapped = false): int
     {
-        // TODO: Implement getCombatLevel()
-        throw new RuneScapeException("Not implemented.");
+        $attackLevel = $this->getSkill(Constants::SKILL_ATTACK)->getLevel($uncapped);
+        $defenceLevel = $this->getSkill(Constants::SKILL_DEFENCE)->getLevel($uncapped);
+        $strengthLevel = $this->getSkill(Constants::SKILL_STRENGTH)->getLevel($uncapped);
+        $constitutionLevel = $this->getSkill(Constants::SKILL_CONSTITUTION)->getLevel($uncapped);
+        $rangedLevel = $this->getSkill(Constants::SKILL_RANGED)->getLevel($uncapped);
+        $prayerLevel = $this->getSkill(Constants::SKILL_PRAYER)->getLevel($uncapped);
+        $magicLevel = $this->getSkill(Constants::SKILL_MAGIC)->getLevel($uncapped);
 
-        $attackLevel = max($this->data["skills"][1]["level"], 1);
-        $defenceLevel = max($this->data["skills"][2]["level"], 1);
-        $strengthLevel = max($this->data["skills"][3]["level"], 1);
-        $constitutionLevel = max($this->data["skills"][4]["level"], 10);
-        $rangedLevel = max($this->data["skills"][5]["level"], 1);
-        $prayerLevel = max($this->data["skills"][6]["level"], 1);
-        $magicLevel = max($this->data["skills"][7]["level"], 1);
+        $summoningSkill = $this->getSkill(Constants::SKILL_SUMMONING);
 
-        if (!isset($this->data["skills"][24]))
+        if ($includeSummoning && $summoningSkill) {
+            $summoningLevel = $summoningSkill->getLevel($uncapped);
+        } else {
             $summoningLevel = 1;
-        else
-            $summoningLevel = max($this->data["skills"][24]["level"], 1);
+        }
 
-        $summoningAddition = 0.25 * floor(0.5 * $summoningLevel);
 
-        $result = [
-            0 => 0,
-            1 => 0,
-            2 => 0
-        ];
-
-        $result[0] = (int) floor(0.25 * (floor(13 / 10 * max($attackLevel + $strengthLevel, 2 * $magicLevel, 2 * $rangedLevel)) +
-                $defenceLevel + $constitutionLevel + floor(0.5 * $prayerLevel) + floor(0.5 * $summoningLevel)));
-        $result[1] = (int) floor(0.25 * (floor(13 / 10 * max($attackLevel + $strengthLevel, 2 * $magicLevel, 2 * $rangedLevel)) +
-                $defenceLevel + $constitutionLevel + floor(0.5 * $prayerLevel)));
-        $result[2] = $result[0] - $result[1];
-
-        return $result;
+        return (int)((
+            max($attackLevel + $strengthLevel, $magicLevel * 2, $rangedLevel * 2) * 1.3 +
+            $defenceLevel + $constitutionLevel +
+            floor($prayerLevel / 2) + floor($summoningLevel / 2)
+        ) / 4);
     }
 
     /**
