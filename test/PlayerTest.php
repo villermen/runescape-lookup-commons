@@ -13,5 +13,7 @@ class PlayerTest extends TestCase
     {
         // Use static so that caching works across tests
         self::$player = new Player("Villermen");
+
+        self::markTestSkipped();
     }
 }
