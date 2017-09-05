@@ -1,13 +1,13 @@
 <?php
 
-namespace Villermen\RuneScape\Highscore;
+namespace Villermen\RuneScape\HighScore;
 
-class HighscoreEntryComparison
+class HighScoreEntryComparison
 {
     /** @var int|false */
     private $rankDifference = false;
 
-    public function __construct(HighscoreEntry $entry1, HighscoreEntry $entry2)
+    public function __construct(HighScoreEntry $entry1, HighScoreEntry $entry2)
     {
         if ($entry1->getRank() !== false && $entry2->getRank() !== false) {
             $this->rankDifference = $entry2->getRank() - $entry1->getRank();

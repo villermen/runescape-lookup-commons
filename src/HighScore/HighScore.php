@@ -1,6 +1,6 @@
 <?php
 
-namespace Villermen\RuneScape\Highscore;
+namespace Villermen\RuneScape\HighScore;
 
 use DateTime;
 use Iterator;
@@ -9,9 +9,9 @@ use Villermen\RuneScape\Player;
 use Villermen\RuneScape\RuneScapeException;
 
 /**
- * Represents a player's highscore at a specific moment in time.
+ * Represents a player's high score at a specific moment in time.
  */
-class Highscore implements Iterator
+class HighScore implements Iterator
 {
     /** @var Player|null*/
     private $player;
@@ -19,10 +19,10 @@ class Highscore implements Iterator
     /** @var string */
     private $rawData;
 
-    /** @var HighscoreSkill[]  */
+    /** @var HighScoreSkill[]  */
     private $skills = [];
 
-    /** @var HighscoreActivity[] */
+    /** @var HighScoreActivity[] */
     private $activities = [];
 
     /** @var DateTime */
@@ -32,7 +32,7 @@ class Highscore implements Iterator
     private $iteratorKey;
 
     /**
-     * Creates a Highscore object from a raw high score data response.
+     * Creates a HighScore object from a raw high score data response.
      *
      * @param Player|null $player
      * @param string $rawData Data as returned from Jagex's lookup API.
@@ -66,7 +66,7 @@ class Highscore implements Iterator
                 list($rank, $level, $xp) = $entryArray;
 
                 if (isset($skills[$skillId])) {
-                    $this->skills[] = new HighscoreSkill($skills[$skillId], $rank, $level, $xp);
+                    $this->skills[] = new HighScoreSkill($skills[$skillId], $rank, $level, $xp);
                 }
 
                 $skillId++;
@@ -75,22 +75,22 @@ class Highscore implements Iterator
                 list($rank, $score) = $entryArray;
 
                 if (isset($activities[$activityId])) {
-                    $this->activities[] = new HighscoreActivity($activities[$activityId], $rank, $score);
+                    $this->activities[] = new HighScoreActivity($activities[$activityId], $rank, $score);
                 }
 
                 $activityId++;
             } else {
-                throw new RuneScapeException("Invalid highscore data supplied.");
+                throw new RuneScapeException("Invalid high score data supplied.");
             }
         }
 
         if (!$skillId) {
-            throw new RuneScapeException("No highscore obtained from data.");
+            throw new RuneScapeException("No high score obtained from data.");
         }
     }
 
     /**
-     * Returns the combat level of this highscore.
+     * Returns the combat level of this high score.
      *
      * @param bool $includeSummoning Whether to include the summoning skill while calculating the combat level.
      * @param bool $uncapped
@@ -147,7 +147,7 @@ class Highscore implements Iterator
     }
 
     /**
-     * @return HighscoreEntry[]
+     * @return HighScoreEntry[]
      */
     public function getEntries(): array
     {
@@ -155,7 +155,7 @@ class Highscore implements Iterator
     }
 
     /**
-     * @return HighscoreSkill[]
+     * @return HighScoreSkill[]
      */
     public function getSkills(): array
     {
@@ -163,7 +163,7 @@ class Highscore implements Iterator
     }
 
     /**
-     * @return HighscoreActivity[]
+     * @return HighScoreActivity[]
      */
     public function getActivities(): array
     {
@@ -172,9 +172,9 @@ class Highscore implements Iterator
 
     /**
      * @param $id
-     * @return HighscoreSkill|null
+     * @return HighScoreSkill|null
      */
-    public function getSkill($id): HighscoreSkill
+    public function getSkill($id): HighScoreSkill
     {
         foreach($this->getSkills() as $skill) {
             if ($skill->getSkill()->getId() === $id)  {
@@ -187,9 +187,9 @@ class Highscore implements Iterator
 
     /**
      * @param $id
-     * @return HighscoreActivity|null
+     * @return HighScoreActivity|null
      */
-    public function getActivity($id): HighscoreActivity
+    public function getActivity($id): HighScoreActivity
     {
         foreach($this->getActivities() as $activity) {
             if ($activity->getActivity()->getId() === $id)  {
@@ -202,9 +202,9 @@ class Highscore implements Iterator
 
     /**
      * @inheritdoc
-     * @return HighscoreEntry
+     * @return HighScoreEntry
      */
-    public function current(): HighscoreEntry
+    public function current(): HighScoreEntry
     {
         return $this->getEntries()[$this->iteratorKey];
     }

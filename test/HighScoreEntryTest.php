@@ -2,17 +2,17 @@
 
 use Villermen\RuneScape\Constants;
 use PHPUnit\Framework\TestCase;
-use Villermen\RuneScape\Highscore\HighscoreActivity;
-use Villermen\RuneScape\Highscore\HighscoreSkill;
+use Villermen\RuneScape\HighScore\HighScoreActivity;
+use Villermen\RuneScape\HighScore\HighScoreSkill;
 
-class HighscoreEntryTest extends TestCase
+class HighScoreEntryTest extends TestCase
 {
     public function testCompareTo()
     {
-        $attack1 = new HighscoreSkill(Constants::getSkill(Constants::SKILL_ATTACK), -1, -1, -1);
-        $attack2 = new HighscoreSkill(Constants::getSkill(Constants::SKILL_ATTACK), 1000000, 34, 21856);
-        $crucible1 = new HighscoreActivity(Constants::getActivity(Constants::ACTIVITY_CRUCIBLE), 10000, 20);
-        $crucible2 = new HighscoreActivity(Constants::getActivity(Constants::ACTIVITY_CRUCIBLE), 34000, 5);
+        $attack1 = new HighScoreSkill(Constants::getSkill(Constants::SKILL_ATTACK), -1, -1, -1);
+        $attack2 = new HighScoreSkill(Constants::getSkill(Constants::SKILL_ATTACK), 1000000, 34, 21856);
+        $crucible1 = new HighScoreActivity(Constants::getActivity(Constants::ACTIVITY_CRUCIBLE), 10000, 20);
+        $crucible2 = new HighScoreActivity(Constants::getActivity(Constants::ACTIVITY_CRUCIBLE), 34000, 5);
 
         $comparison1 = $attack1->compareTo($attack2);
         self::assertEquals(false, $comparison1->getRankDifference());

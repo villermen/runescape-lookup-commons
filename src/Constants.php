@@ -3,7 +3,7 @@
 namespace Villermen\RuneScape;
 
 /**
- * Highscore related constants and functions for handling them.
+ * High score related constants and functions for handling them.
  */
 abstract class Constants
 {

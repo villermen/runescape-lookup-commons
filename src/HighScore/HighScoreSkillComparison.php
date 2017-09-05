@@ -1,8 +1,8 @@
 <?php
 
-namespace Villermen\RuneScape\Highscore;
+namespace Villermen\RuneScape\HighScore;
 
-class HighscoreSkillComparison extends HighscoreEntryComparison
+class HighScoreSkillComparison extends HighScoreEntryComparison
 {
     /** @var int */
     private $levelDifference = false;
@@ -10,7 +10,7 @@ class HighscoreSkillComparison extends HighscoreEntryComparison
     /** @var int */
     private $xpDifference = false;
 
-    public function __construct(HighscoreSkill $activity1, HighscoreSkill $activity2, bool $uncapped = false)
+    public function __construct(HighScoreSkill $activity1, HighScoreSkill $activity2, bool $uncapped = false)
     {
         parent::__construct($activity1, $activity2);
 

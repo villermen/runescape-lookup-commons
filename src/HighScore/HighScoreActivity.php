@@ -1,10 +1,10 @@
 <?php
 
-namespace Villermen\RuneScape\Highscore;
+namespace Villermen\RuneScape\HighScore;
 
 use Villermen\RuneScape\Activity;
 
-class HighscoreActivity extends HighscoreEntry
+class HighScoreActivity extends HighScoreEntry
 {
     /** @var Activity */
     private $activity;
@@ -49,7 +49,7 @@ class HighscoreActivity extends HighscoreEntry
     /**
      * @param int $score
      *
-     * @return HighscoreActivity
+     * @return HighScoreActivity
      */
     private function setScore(int $score)
     {
@@ -63,13 +63,13 @@ class HighscoreActivity extends HighscoreEntry
     }
 
     /**
-     * @param HighscoreEntry $entry
-     * @return HighscoreEntryComparison|HighscoreActivityComparison
+     * @param HighScoreEntry $entry
+     * @return HighScoreEntryComparison|HighScoreActivityComparison
      */
-    public function compareTo(HighscoreEntry $entry): HighscoreEntryComparison
+    public function compareTo(HighScoreEntry $entry): HighScoreEntryComparison
     {
-        if ($entry instanceof HighscoreActivity) {
-            return new HighscoreActivityComparison($this, $entry);
+        if ($entry instanceof HighScoreActivity) {
+            return new HighScoreActivityComparison($this, $entry);
         }
 
         return parent::compareTo($entry);

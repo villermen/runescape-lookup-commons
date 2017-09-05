@@ -1,13 +1,13 @@
 <?php
 
-namespace Villermen\RuneScape\Highscore;
+namespace Villermen\RuneScape\HighScore;
 
-class HighscoreActivityComparison extends HighscoreEntryComparison
+class HighScoreActivityComparison extends HighScoreEntryComparison
 {
     /** @var int */
     private $scoreDifference = false;
 
-    public function __construct(HighscoreActivity $activity1, HighscoreActivity $activity2)
+    public function __construct(HighScoreActivity $activity1, HighScoreActivity $activity2)
     {
         parent::__construct($activity1, $activity2);
 

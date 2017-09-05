@@ -7,7 +7,7 @@
 ## Features
 
 Contains properly structured classes for looking up:
-- Player highscores (including oldschool)
+- Player high scores (including old school)
 - Player activity feeds
 
 ## Usage
@@ -19,8 +19,8 @@ use Villermen\RuneScape\Player;
 use Villermen\RuneScape\Constants;
 
 $player = new Player("Villermen");
-$currentOldSchoolHighscore = $player->getHighscore(true);
-$uncappedAttackLevel = $currentOldSchoolHighscore->getSkill(Constants::SKILL_ATTACK)->getLevel(true);
+$currentOldSchoolHighScore = $player->getHighScore(true);
+$uncappedAttackLevel = $currentOldSchoolHighScore->getSkill(Constants::SKILL_ATTACK)->getLevel(true);
 ```
 
 ## Installation

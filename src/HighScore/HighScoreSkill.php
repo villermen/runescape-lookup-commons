@@ -1,13 +1,13 @@
 <?php
 
-namespace Villermen\RuneScape\Highscore;
+namespace Villermen\RuneScape\HighScore;
 
 use Villermen\RuneScape\Skill;
 
 /**
- * A skill entry of a player's highscore.
+ * A skill entry of a player's high score.
  */
-class HighscoreSkill extends HighscoreEntry
+class HighScoreSkill extends HighScoreEntry
 {
     /** @var Skill */
     private $skill;
@@ -101,9 +101,9 @@ class HighscoreSkill extends HighscoreEntry
     /**
      * @param int $level
      *
-     * @return HighscoreSkill
+     * @return HighScoreSkill
      */
-    private function setLevel(int $level): HighscoreSkill
+    private function setLevel(int $level): HighScoreSkill
     {
         if ($level < 1) {
             $level = $this->getSkill()->getMinimumLevel();
@@ -117,9 +117,9 @@ class HighscoreSkill extends HighscoreEntry
     /**
      * @param int $xp
      *
-     * @return HighscoreSkill
+     * @return HighScoreSkill
      */
-    private function setXp(int $xp): HighscoreSkill
+    private function setXp(int $xp): HighScoreSkill
     {
         if ($xp < 0) {
             $xp = 0;
@@ -131,13 +131,13 @@ class HighscoreSkill extends HighscoreEntry
     }
 
     /**
-     * @param HighscoreEntry $entry
-     * @return HighscoreEntryComparison|HighscoreSkillComparison
+     * @param HighScoreEntry $entry
+     * @return HighScoreEntryComparison|HighScoreSkillComparison
      */
-    public function compareTo(HighscoreEntry $entry): HighscoreEntryComparison
+    public function compareTo(HighScoreEntry $entry): HighScoreEntryComparison
     {
-        if ($entry instanceof HighscoreSkill) {
-            return new HighscoreSkillComparison($this, $entry);
+        if ($entry instanceof HighScoreSkill) {
+            return new HighScoreSkillComparison($this, $entry);
         }
 
         return parent::compareTo($entry);

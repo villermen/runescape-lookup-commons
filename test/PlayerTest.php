@@ -15,10 +15,10 @@ class PlayerTest extends TestCase
         self::$player = new Player("Villermen");
     }
 
-    public function testGetHighscore()
+    public function testGetHighScore()
     {
-        self::$player->getHighscore();
-        self::$player->getHighscore(true);
+        self::$player->getHighScore();
+        self::$player->getHighScore(true);
 
         // Will prevent this test from being marked as risky for having no assertions
         $this->addToAssertionCount(1);

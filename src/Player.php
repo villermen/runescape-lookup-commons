@@ -3,19 +3,19 @@
 namespace Villermen\RuneScape;
 
 use Villermen\RuneScape\ActivityFeed\ActivityFeed;
-use Villermen\RuneScape\Highscore\Highscore;
+use Villermen\RuneScape\HighScore\HighScore;
 
 class Player
 {
-    const HIGHSCORE_URL = "http://services.runescape.com/m=hiscore/index_lite.ws?player=%s";
-    const HIGHSCORE_URL_OLD_SCHOOL = "http://services.runescape.com/m=hiscore_oldschool/index_lite.ws?player=%s";
+    const HIGH_SCORE_URL = "http://services.runescape.com/m=hiscore/index_lite.ws?player=%s";
+    const HIGH_SCORE_URL_OLD_SCHOOL = "http://services.runescape.com/m=hiscore_oldschool/index_lite.ws?player=%s";
     const ADVENTURERS_LOG_URL = "https://apps.runescape.com/runemetrics/app/overview/player/%s";
     const ACTIVITY_FEED_URL = "http://services.runescape.com/m=adventurers-log/a=13/rssfeed?searchName=%s";
     const CHAT_HEAD_URL = "https://secure.runescape.com/m=avatar-rs/%s/chat.gif";
     const FULL_BODY_URL = "https://secure.runescape.com/m=avatar-rs/%s/full.gif";
 
-    /** @var Highscore */
-    private $cachedHighscores;
+    /** @var HighScore */
+    private $cachedHighScore;
 
     /** @var string */
     private $name;
@@ -44,21 +44,21 @@ class Player
     }
 
     /**
-     * Returns the live highscore of the player from the official highscores (expect a delay).
+     * Returns the live high score of the player from the official high scores (expect a delay).
      * Subsequent calls will not cause a request.
      *
      * @param bool $oldSchool If true, oldschool stats will be queried.
-     * @param int $timeout Timeout of the highscore request in seconds.
-     * @return Highscore
+     * @param int $timeout Timeout of the high score request in seconds.
+     * @return HighScore
      * @throws RuneScapeException
      */
-    public function getHighscore(bool $oldSchool = false, int $timeout = 5): Highscore
+    public function getHighScore(bool $oldSchool = false, int $timeout = 5): HighScore
     {
-        if ($this->cachedHighscores) {
-            return $this->cachedHighscores;
+        if ($this->cachedHighScore) {
+            return $this->cachedHighScore;
         }
 
-        $requestUrl = sprintf($oldSchool ? self::HIGHSCORE_URL_OLD_SCHOOL : self::HIGHSCORE_URL, urlencode($this->getName()));
+        $requestUrl = sprintf($oldSchool ? self::HIGH_SCORE_URL_OLD_SCHOOL : self::HIGH_SCORE_URL, urlencode($this->getName()));
 
         $context = stream_context_create([
             "http" => [
@@ -72,7 +72,7 @@ class Player
             throw new RuneScapeException("Could not obtain player stats from RuneScape high scores.");
         }
 
-        return $this->cachedHighscores = new Highscore($this, $data);
+        return $this->cachedHighScore = new HighScore($this, $data);
     }
 
     /**
