@@ -4,32 +4,32 @@ namespace Villermen\RuneScape\Highscore;
 
 class HighscoreSkillComparison extends HighscoreEntryComparison
 {
-    /** @var int|false */
+    /** @var int */
     private $levelDifference = false;
 
-    /** @var int|false */
+    /** @var int */
     private $xpDifference = false;
 
-    public function __construct(HighscoreSkill $skill1, HighscoreSkill $skill2, bool $uncapped = false)
+    public function __construct(HighscoreSkill $activity1, HighscoreSkill $activity2, bool $uncapped = false)
     {
-        parent::__construct($skill1, $skill2);
+        parent::__construct($activity1, $activity2);
 
-        $this->levelDifference = $skill1->getLevel($uncapped) - $skill2->getLevel($uncapped);
-        $this->xpDifference = $skill1->getXp() - $skill2->getXp();
+        $this->levelDifference = $activity1->getLevel($uncapped) - $activity2->getLevel($uncapped);
+        $this->xpDifference = $activity1->getXp() - $activity2->getXp();
     }
 
     /**
-     * @return false|int
+     * @return int
      */
-    public function getLevelDifference()
+    public function getLevelDifference(): int
     {
         return $this->levelDifference;
     }
 
     /**
-     * @return false|int
+     * @return int
      */
-    public function getXpDifference()
+    public function getXpDifference(): int
     {
         return $this->xpDifference;
     }

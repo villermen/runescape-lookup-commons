@@ -61,4 +61,17 @@ class HighscoreActivity extends HighscoreEntry
 
         return $this;
     }
+
+    /**
+     * @param HighscoreEntry $entry
+     * @return HighscoreEntryComparison|HighscoreActivityComparison
+     */
+    public function compareTo(HighscoreEntry $entry): HighscoreEntryComparison
+    {
+        if ($entry instanceof HighscoreActivity) {
+            return new HighscoreActivityComparison($this, $entry);
+        }
+
+        return parent::compareTo($entry);
+    }
 }

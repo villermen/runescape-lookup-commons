@@ -30,6 +30,4 @@ class HighscoreTest extends TestCase
         self::assertEquals(126, $this->highscore->getCombatLevel(false));
         self::assertEquals(155, $this->highscore->getCombatLevel(true, true));
     }
-
-    // TODO: Test comparison
 }

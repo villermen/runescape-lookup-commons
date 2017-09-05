@@ -132,7 +132,7 @@ class HighscoreSkill extends HighscoreEntry
 
     /**
      * @param HighscoreEntry $entry
-     * @return HighscoreEntryComparison
+     * @return HighscoreEntryComparison|HighscoreSkillComparison
      */
     public function compareTo(HighscoreEntry $entry): HighscoreEntryComparison
     {
