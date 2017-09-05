@@ -106,7 +106,7 @@ class HighscoreSkill extends HighscoreEntry
     private function setLevel(int $level): HighscoreSkill
     {
         if ($level < 1) {
-            $level = 1;
+            $level = $this->getSkill()->getMinimumLevel();
         }
 
         $this->level = $level;

@@ -16,18 +16,22 @@ class Skill
     /** @var bool */
     private $elite;
 
+    /** @var int */
+    private $minimumLevel;
+
     /**
      * @param int $id
      * @param string $name
      * @param bool $highLevelCap
      * @param bool $elite
      */
-    public function __construct(int $id, string $name, bool $highLevelCap = false, bool $elite = false)
+    public function __construct(int $id, string $name, bool $highLevelCap = false, bool $elite = false, int $minimumLevel = 1)
     {
         $this->id = $id;
         $this->name = $name;
         $this->highLevelCap = $highLevelCap;
         $this->elite = $elite;
+        $this->minimumLevel = $minimumLevel;
     }
 
     /**
@@ -117,5 +121,13 @@ class Skill
     public function getId(): int
     {
         return $this->id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMinimumLevel(): int
+    {
+        return $this->minimumLevel;
     }
 }

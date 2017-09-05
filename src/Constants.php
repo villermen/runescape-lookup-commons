@@ -358,7 +358,7 @@ abstract class Constants
             self::SKILL_ATTACK => new Skill(self::SKILL_ATTACK, "Attack"),
             self::SKILL_DEFENCE => new Skill(self::SKILL_DEFENCE, "Defence"),
             self::SKILL_STRENGTH => new Skill(self::SKILL_STRENGTH, "Strength"),
-            self::SKILL_CONSTITUTION => new Skill(self::SKILL_CONSTITUTION, "Constitution"),
+            self::SKILL_CONSTITUTION => new Skill(self::SKILL_CONSTITUTION, "Constitution", false, false, 10),
             self::SKILL_RANGED => new Skill(self::SKILL_RANGED, "Ranged"),
             self::SKILL_PRAYER => new Skill(self::SKILL_PRAYER, "Prayer"),
             self::SKILL_MAGIC => new Skill(self::SKILL_MAGIC, "Magic"),
