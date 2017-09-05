@@ -23,6 +23,4 @@ class PlayerTest extends TestCase
         // Will prevent this test from being marked as risky for having no assertions
         $this->addToAssertionCount(1);
     }
-
-    // TODO: Testing getActivityFeed() would be desired, but the feed vanishes when membership expires
 }
