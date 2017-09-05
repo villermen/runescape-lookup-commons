@@ -22,6 +22,6 @@ class ActivityFeedTest extends TestCase
 
     public function testGetNewerItems()
     {
-        self::assertCount(3, $this->activityFeed->getNewerItems("-346652923"));
+        self::assertCount(3, $this->activityFeed->getNewerItems($this->activityFeed->getItems()[3]));
     }
 }

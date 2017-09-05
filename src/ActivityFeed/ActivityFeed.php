@@ -55,15 +55,15 @@ class ActivityFeed
     /**
      * Returns all feed items in this feed that occur after the given item.
      *
-     * @param string $lastId
+     * @param ActivityFeedItem $lastItem
      * @return ActivityFeedItem[]
      */
-    public function getNewerItems(string $lastId): array
+    public function getNewerItems(ActivityFeedItem $lastItem): array
     {
         $newerItems = [];
 
         foreach($this->getItems() as $item) {
-            if ($lastId == $item->getId()) {
+            if ($lastItem->getId() == $item->getId()) {
                 break;
             }
 
