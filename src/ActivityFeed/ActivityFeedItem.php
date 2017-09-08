@@ -7,16 +7,16 @@ use DateTime;
 class ActivityFeedItem
 {
     /** @var string */
-    private $id;
+    protected $id;
 
     /** @var DateTime */
-    private $time;
+    protected $time;
 
     /** @var string */
-    private $title;
+    protected $title;
 
     /** @var string */
-    private $description;
+    protected $description;
 
     /**
      * @param string $id

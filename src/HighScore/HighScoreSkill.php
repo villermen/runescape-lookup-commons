@@ -10,13 +10,13 @@ use Villermen\RuneScape\Skill;
 class HighScoreSkill extends HighScoreEntry
 {
     /** @var Skill */
-    private $skill;
+    protected $skill;
 
     /** @var int */
-    private $level;
+    protected $level;
 
     /** @var int */
-    private $xp;
+    protected $xp;
 
     public function __construct(Skill $skill, int $rank, int $level, int $xp)
     {

@@ -62,10 +62,10 @@ abstract class Constants
     const ACTIVITY_APRIL_FOOLS_2015_RAT_KILLS = 23;
 
     /** @var Skill[] */
-    private static $skills;
+    protected static $skills;
 
     /** @var Activity[] */
-    private static $activities;
+    protected static $activities;
 
     /** @var int[] */
     const XP_TABLE = [

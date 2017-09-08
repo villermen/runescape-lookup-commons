@@ -8,7 +8,7 @@ namespace Villermen\RuneScape\HighScore;
 abstract class HighScoreEntry
 {
     /** @var int|false */
-    private $rank;
+    protected $rank;
 
     /**
      * @param int|false $rank

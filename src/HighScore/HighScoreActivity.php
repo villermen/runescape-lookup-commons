@@ -7,10 +7,10 @@ use Villermen\RuneScape\Activity;
 class HighScoreActivity extends HighScoreEntry
 {
     /** @var Activity */
-    private $activity;
+    protected $activity;
 
     /** @var int */
-    private $score;
+    protected $score;
 
     public function __construct(Activity $activity, int $rank, int $score)
     {

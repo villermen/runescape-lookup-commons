@@ -10,10 +10,10 @@ use Villermen\RuneScape\RuneScapeException;
 class ActivityFeed
 {
     /** @var Player */
-    private $player;
+    protected $player;
 
     /** @var ActivityFeedItem[] */
-    private $items = [];
+    protected $items = [];
 
     public function __construct(Player $player, string $data)
     {

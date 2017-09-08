@@ -5,19 +5,19 @@ namespace Villermen\RuneScape;
 class Skill
 {
     /** @var int */
-    private $id;
+    protected $id;
 
     /** @var string */
-    private $name;
+    protected $name;
 
     /** @var bool */
-    private $highLevelCap;
+    protected $highLevelCap;
 
     /** @var bool */
-    private $elite;
+    protected $elite;
 
     /** @var int */
-    private $minimumLevel;
+    protected $minimumLevel;
 
     /**
      * @param int $id

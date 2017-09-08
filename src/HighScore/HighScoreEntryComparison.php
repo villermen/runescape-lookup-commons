@@ -5,7 +5,7 @@ namespace Villermen\RuneScape\HighScore;
 class HighScoreEntryComparison
 {
     /** @var int|false */
-    private $rankDifference = false;
+    protected $rankDifference = false;
 
     public function __construct(HighScoreEntry $entry1, HighScoreEntry $entry2)
     {

@@ -5,7 +5,7 @@ namespace Villermen\RuneScape\HighScore;
 class HighScoreActivityComparison extends HighScoreEntryComparison
 {
     /** @var int */
-    private $scoreDifference = false;
+    protected $scoreDifference = false;
 
     public function __construct(HighScoreActivity $activity1, HighScoreActivity $activity2)
     {

@@ -18,7 +18,7 @@ class Player
     private $cachedHighScore;
 
     /** @var string */
-    private $name;
+    protected $name;
 
     /**
      * Returns whether the given name is a valid RuneScape player name.

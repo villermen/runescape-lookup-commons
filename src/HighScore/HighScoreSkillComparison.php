@@ -5,10 +5,10 @@ namespace Villermen\RuneScape\HighScore;
 class HighScoreSkillComparison extends HighScoreEntryComparison
 {
     /** @var int */
-    private $levelDifference = false;
+    protected $levelDifference = false;
 
     /** @var int */
-    private $xpDifference = false;
+    protected $xpDifference = false;
 
     public function __construct(HighScoreSkill $activity1, HighScoreSkill $activity2, bool $uncapped = false)
     {

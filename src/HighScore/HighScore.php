@@ -14,22 +14,22 @@ use Villermen\RuneScape\RuneScapeException;
 class HighScore implements Iterator
 {
     /** @var Player|null*/
-    private $player;
+    protected $player;
 
     /** @var string */
-    private $rawData;
+    protected $rawData;
 
     /** @var HighScoreSkill[]  */
-    private $skills = [];
+    protected $skills = [];
 
     /** @var HighScoreActivity[] */
-    private $activities = [];
+    protected $activities = [];
 
     /** @var DateTime */
-    private $time;
+    protected $time;
 
     /** @var int */
-    private $iteratorKey;
+    protected $iteratorKey;
 
     /**
      * Creates a HighScore object from a raw high score data response.

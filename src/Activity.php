@@ -5,10 +5,10 @@ namespace Villermen\RuneScape;
 class Activity
 {
     /** @var int */
-    private $id;
+    protected $id;
 
     /** @var string */
-    private $name;
+    protected $name;
 
     /**
      * @param int $id
