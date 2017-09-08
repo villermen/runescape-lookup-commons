@@ -72,7 +72,7 @@ class Player
             throw new RuneScapeException("Could not obtain player stats from RuneScape high scores.");
         }
 
-        return $this->cachedHighScore = new HighScore($this, $data);
+        return $this->cachedHighScore = new HighScore($data);
     }
 
     /**
@@ -97,7 +97,7 @@ class Player
             throw new RuneScapeException("Activity feed page returned with status " . $statusCode);
         }
 
-        return new ActivityFeed($this, $feedData);
+        return new ActivityFeed($feedData);
     }
 
     /**

@@ -9,16 +9,11 @@ use Villermen\RuneScape\RuneScapeException;
 
 class ActivityFeed
 {
-    /** @var Player */
-    protected $player;
-
     /** @var ActivityFeedItem[] */
     protected $items = [];
 
-    public function __construct(Player $player, string $data)
+    public function __construct(string $data)
     {
-        $this->player = $player;
-
         try {
             $feed = new SimpleXmlElement($data);
             $feedItems = $feed->xpath("//item");
@@ -34,14 +29,6 @@ class ActivityFeed
         } catch (\Exception $ex) {
             throw new RuneScapeException("Could not parse player's activity feed.", 0, $ex);
         }
-    }
-
-    /**
-     * @return Player
-     */
-    public function getPlayer(): Player
-    {
-        return $this->player;
     }
 
     /**

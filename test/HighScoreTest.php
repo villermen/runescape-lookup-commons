@@ -12,7 +12,7 @@ class HighScoreTest extends TestCase
 
     public function setUp()
     {
-        $this->highScore = new HighScore(new Player("Villermen"), file_get_contents(__DIR__ . "/fixtures/high-score.csv"));
+        $this->highScore = new HighScore(file_get_contents(__DIR__ . "/fixtures/high-score.csv"));
     }
 
     public function testEntries()

@@ -2,10 +2,8 @@
 
 namespace Villermen\RuneScape\HighScore;
 
-use DateTime;
 use Iterator;
 use Villermen\RuneScape\Constants;
-use Villermen\RuneScape\Player;
 use Villermen\RuneScape\RuneScapeException;
 
 /**
@@ -13,9 +11,6 @@ use Villermen\RuneScape\RuneScapeException;
  */
 class HighScore implements Iterator
 {
-    /** @var Player|null*/
-    protected $player;
-
     /** @var string */
     protected $rawData;
 
@@ -25,30 +20,18 @@ class HighScore implements Iterator
     /** @var HighScoreActivity[] */
     protected $activities = [];
 
-    /** @var DateTime */
-    protected $time;
-
     /** @var int */
     protected $iteratorKey;
 
     /**
      * Creates a HighScore object from a raw high score data response.
      *
-     * @param Player|null $player
      * @param string $rawData Data as returned from Jagex's lookup API.
-     * @param DateTime|null $time
      * @throws RuneScapeException
      */
-    public function __construct(Player $player, string $rawData, DateTime $time = null)
+    public function __construct(string $rawData)
     {
-        $this->player = $player;
         $this->rawData = $rawData;
-
-        if ($time) {
-            $this->time = $time;
-        } else {
-            $this->time = new DateTime();
-        }
 
         $entries = explode("\n", trim($rawData));
 
@@ -128,22 +111,6 @@ class HighScore implements Iterator
     public function getRawData(): string
     {
         return $this->rawData;
-    }
-
-    /**
-     * @return DateTime
-     */
-    public function getTime(): DateTime
-    {
-        return $this->time;
-    }
-
-    /**
-     * @return Player|null
-     */
-    public function getPlayer(): Player
-    {
-        return $this->player;
     }
 
     /**
