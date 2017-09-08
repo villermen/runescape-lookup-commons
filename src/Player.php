@@ -15,7 +15,7 @@ class Player
     const FULL_BODY_URL = "https://secure.runescape.com/m=avatar-rs/%s/full.gif";
 
     /** @var HighScore */
-    private $cachedHighScore;
+    private $cachedHighScoreData;
 
     /** @var string */
     protected $name;
@@ -48,21 +48,26 @@ class Player
      * Subsequent calls will not cause a request.
      *
      * @param bool $oldSchool If true, oldschool stats will be queried.
-     * @param int $timeout Timeout of the high score request in seconds.
+     * @param int $timeOut Timeout of the high score request in seconds.
      * @return HighScore
      * @throws RuneScapeException
      */
-    public function getHighScore(bool $oldSchool = false, int $timeout = 5): HighScore
+    public function getHighScore(bool $oldSchool = false, int $timeOut = 5): HighScore
     {
-        if ($this->cachedHighScore) {
-            return $this->cachedHighScore;
+        return new HighScore($this->getHighScoreData($oldSchool, $timeOut));
+    }
+
+    protected function getHighScoreData(bool $oldSchool = false, int $timeOut = 5): string
+    {
+        if ($this->cachedHighScoreData) {
+            return $this->cachedHighScoreData;
         }
 
         $requestUrl = sprintf($oldSchool ? self::HIGH_SCORE_URL_OLD_SCHOOL : self::HIGH_SCORE_URL, urlencode($this->getName()));
 
         $context = stream_context_create([
             "http" => [
-                "timeout" => $timeout,
+                "timeout" => $timeOut,
             ]
         ]);
 
@@ -72,22 +77,33 @@ class Player
             throw new RuneScapeException("Could not obtain player stats from RuneScape high scores.");
         }
 
-        return $this->cachedHighScore = new HighScore($data);
+        return $this->cachedHighScoreData = $data;
     }
 
     /**
      * Returns the activities currently displayed on the player's activity feed.
      *
-     * @param int $timeout
+     * @param int $timeOut
      * @return ActivityFeed
-     * @throws RuneScapeException If the player's activity feed is inaccessible or unparsable.
      */
-    public function getActivityFeed(int $timeout = 5): ActivityFeed
+    public function getActivityFeed(int $timeOut = 5): ActivityFeed
+    {
+        return new ActivityFeed($this->getActivityFeedData($timeOut));
+    }
+
+    /**
+     * Returns the raw activity feed data.
+     *
+     * @param int $timeOut
+     * @return string
+     * @throws RuneScapeException
+     */
+    protected function getActivityFeedData(int $timeOut = 5): string
     {
         $curl = curl_init($this->getActivityFeedUrl());
         curl_setopt_array($curl, [
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT => $timeout
+            CURLOPT_TIMEOUT => $timeOut
         ]);
         $feedData = curl_exec($curl);
         $statusCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
@@ -97,7 +113,7 @@ class Player
             throw new RuneScapeException("Activity feed page returned with status " . $statusCode);
         }
 
-        return new ActivityFeed($feedData);
+        return $feedData;
     }
 
     /**
