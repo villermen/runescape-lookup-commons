@@ -11,9 +11,6 @@ use Villermen\RuneScape\RuneScapeException;
  */
 class HighScore implements Iterator
 {
-    /** @var string */
-    protected $rawData;
-
     /** @var HighScoreSkill[]  */
     protected $skills = [];
 
@@ -26,14 +23,12 @@ class HighScore implements Iterator
     /**
      * Creates a HighScore object from a raw high score data response.
      *
-     * @param string $rawData Data as returned from Jagex's lookup API.
+     * @param string $data Data as returned from Jagex's lookup API.
      * @throws RuneScapeException
      */
-    public function __construct(string $rawData)
+    public function __construct(string $data)
     {
-        $this->rawData = $rawData;
-
-        $entries = explode("\n", trim($rawData));
+        $entries = explode("\n", trim($data));
 
         $skillId = 0;
         $activityId = 0;
@@ -103,14 +98,6 @@ class HighScore implements Iterator
             $defenceLevel + $constitutionLevel +
             floor($prayerLevel / 2) + floor($summoningLevel / 2)
         ) / 4);
-    }
-
-    /**
-     * @return string
-     */
-    public function getRawData(): string
-    {
-        return $this->rawData;
     }
 
     /**
