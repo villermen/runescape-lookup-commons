@@ -2,6 +2,8 @@
 
 namespace Villermen\RuneScape\HighScore;
 
+use Villermen\RuneScape\RuneScapeException;
+
 class HighScoreSkillComparison extends HighScoreEntryComparison
 {
     /** @var int */
@@ -10,12 +12,16 @@ class HighScoreSkillComparison extends HighScoreEntryComparison
     /** @var int */
     protected $xpDifference = false;
 
-    public function __construct(HighScoreSkill $activity1, HighScoreSkill $activity2, bool $uncapped = false)
+    public function __construct(HighScoreSkill $skill1, HighScoreSkill $skill2, bool $uncapped = false)
     {
-        parent::__construct($activity1, $activity2);
+        if ($skill1->getSkill() !== $skill2->getSkill()) {
+            throw new RuneScapeException("Can't compare two different highscore skills.");
+        }
 
-        $this->levelDifference = $activity1->getLevel($uncapped) - $activity2->getLevel($uncapped);
-        $this->xpDifference = $activity1->getXp() - $activity2->getXp();
+        parent::__construct($skill1, $skill2);
+
+        $this->levelDifference = $skill1->getLevel($uncapped) - $skill2->getLevel($uncapped);
+        $this->xpDifference = $skill1->getXp() - $skill2->getXp();
     }
 
     /**
