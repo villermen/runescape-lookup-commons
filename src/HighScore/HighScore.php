@@ -4,6 +4,7 @@ namespace Villermen\RuneScape\HighScore;
 
 use Iterator;
 use Villermen\RuneScape\Constants;
+use Villermen\RuneScape\Player;
 use Villermen\RuneScape\RuneScapeException;
 
 /**
@@ -11,6 +12,9 @@ use Villermen\RuneScape\RuneScapeException;
  */
 class HighScore implements Iterator
 {
+    /** @var Player */
+    protected $player;
+
     /** @var HighScoreSkill[]  */
     protected $skills = [];
 
@@ -23,10 +27,11 @@ class HighScore implements Iterator
     /**
      * Creates a HighScore object from a raw high score data response.
      *
+     * @param Player $player
      * @param string $data Data as returned from Jagex's lookup API.
      * @throws RuneScapeException
      */
-    public function __construct(string $data)
+    public function __construct(Player $player, string $data)
     {
         $entries = explode("\n", trim($data));
 
@@ -185,5 +190,13 @@ class HighScore implements Iterator
     public function rewind(): void
     {
         $this->iteratorKey = 0;
+    }
+
+    /**
+     * @return Player
+     */
+    public function getPlayer(): Player
+    {
+        return $this->player;
     }
 }

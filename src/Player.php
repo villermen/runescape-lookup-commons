@@ -54,7 +54,7 @@ class Player
      */
     public function getHighScore(bool $oldSchool = false, int $timeOut = 5): HighScore
     {
-        return new HighScore($this->getHighScoreData($oldSchool, $timeOut));
+        return new HighScore($this, $this->getHighScoreData($oldSchool, $timeOut));
     }
 
     protected function getHighScoreData(bool $oldSchool = false, int $timeOut = 5): string

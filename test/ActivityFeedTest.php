@@ -11,7 +11,7 @@ class ActivityFeedTest extends TestCase
 
     public function setUp()
     {
-        $this->activityFeed = new ActivityFeed(file_get_contents(__DIR__ . "/fixtures/activity-feed.xml"));
+        $this->activityFeed = new ActivityFeed(new Player("Ardanwen"), file_get_contents(__DIR__ . "/fixtures/activity-feed.xml"));
     }
 
     public function testGetItems()

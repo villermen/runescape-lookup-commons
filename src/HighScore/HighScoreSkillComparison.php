@@ -16,6 +16,7 @@ class HighScoreSkillComparison extends HighScoreEntryComparison
     /** @var Skill */
     protected $skill;
 
+    // TODO: Change
     public function __construct(HighScoreSkill $skill1, HighScoreSkill $skill2, bool $uncapped = false)
     {
         if ($skill1->getSkill() !== $skill2->getSkill()) {
