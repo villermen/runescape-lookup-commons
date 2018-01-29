@@ -97,7 +97,6 @@ class HighScore implements Iterator
             $summoningLevel = 1;
         }
 
-
         return (int)((
             max($attackLevel + $strengthLevel, $magicLevel * 2, $rangedLevel * 2) * 1.3 +
             $defenceLevel + $constitutionLevel +
@@ -133,7 +132,7 @@ class HighScore implements Iterator
      * @param $id
      * @return HighScoreSkill|null
      */
-    public function getSkill($id): HighScoreSkill
+    public function getSkill($id)
     {
         foreach($this->getSkills() as $skill) {
             if ($skill->getSkill()->getId() === $id)  {
