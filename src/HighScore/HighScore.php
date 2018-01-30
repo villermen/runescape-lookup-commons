@@ -3,9 +3,10 @@
 namespace Villermen\RuneScape\HighScore;
 
 use Iterator;
-use Villermen\RuneScape\Constants;
+use Villermen\RuneScape\Activity;
 use Villermen\RuneScape\Player;
 use Villermen\RuneScape\RuneScapeException;
+use Villermen\RuneScape\Skill;
 
 /**
  * Represents a player's high score at a specific moment in time.
@@ -38,27 +39,26 @@ class HighScore implements Iterator
         $skillId = 0;
         $activityId = 0;
 
-        $skills = Constants::getSkills();
-        $activities = Constants::getActivities();
-
         foreach($entries as $entry) {
             $entryArray = explode(",", $entry);
 
             if (count($entryArray) == 3) {
                 // Skill
-                list($rank, $level, $xp) = $entryArray;
-
-                if (isset($skills[$skillId])) {
-                    $this->skills[] = new HighScoreSkill($skills[$skillId], $rank, $level, $xp);
+                try {
+                    $skill = Skill::getSkill($skillId);
+                    list($rank, $level, $xp) = $entryArray;
+                    $this->skills[$skillId] = new HighScoreSkill($skill, $rank, $level, $xp);
+                } catch (RuneScapeException $exception) {
                 }
 
                 $skillId++;
             } elseif (count($entryArray) == 2) {
                 // Activity
-                list($rank, $score) = $entryArray;
-
-                if (isset($activities[$activityId])) {
-                    $this->activities[] = new HighScoreActivity($activities[$activityId], $rank, $score);
+                try {
+                    $activity = Activity::getActivity($activityId);
+                    list($rank, $score) = $entryArray;
+                    $this->activities[$activityId] = new HighScoreActivity($activity, $rank, $score);
+                } catch (RuneScapeException $exception) {
                 }
 
                 $activityId++;
@@ -81,15 +81,15 @@ class HighScore implements Iterator
      */
     public function getCombatLevel($includeSummoning = true, $uncapped = false): int
     {
-        $attackLevel = $this->getSkill(Constants::SKILL_ATTACK)->getLevel($uncapped);
-        $defenceLevel = $this->getSkill(Constants::SKILL_DEFENCE)->getLevel($uncapped);
-        $strengthLevel = $this->getSkill(Constants::SKILL_STRENGTH)->getLevel($uncapped);
-        $constitutionLevel = $this->getSkill(Constants::SKILL_CONSTITUTION)->getLevel($uncapped);
-        $rangedLevel = $this->getSkill(Constants::SKILL_RANGED)->getLevel($uncapped);
-        $prayerLevel = $this->getSkill(Constants::SKILL_PRAYER)->getLevel($uncapped);
-        $magicLevel = $this->getSkill(Constants::SKILL_MAGIC)->getLevel($uncapped);
+        $attackLevel = $this->getSkill(Skill::SKILL_ATTACK)->getLevel($uncapped);
+        $defenceLevel = $this->getSkill(Skill::SKILL_DEFENCE)->getLevel($uncapped);
+        $strengthLevel = $this->getSkill(Skill::SKILL_STRENGTH)->getLevel($uncapped);
+        $constitutionLevel = $this->getSkill(Skill::SKILL_CONSTITUTION)->getLevel($uncapped);
+        $rangedLevel = $this->getSkill(Skill::SKILL_RANGED)->getLevel($uncapped);
+        $prayerLevel = $this->getSkill(Skill::SKILL_PRAYER)->getLevel($uncapped);
+        $magicLevel = $this->getSkill(Skill::SKILL_MAGIC)->getLevel($uncapped);
 
-        $summoningSkill = $this->getSkill(Constants::SKILL_SUMMONING);
+        $summoningSkill = $this->getSkill(Skill::SKILL_SUMMONING);
 
         if ($includeSummoning && $summoningSkill) {
             $summoningLevel = $summoningSkill->getLevel($uncapped);
@@ -134,28 +134,26 @@ class HighScore implements Iterator
      */
     public function getSkill($id)
     {
-        foreach($this->getSkills() as $skill) {
-            if ($skill->getSkill()->getId() === $id)  {
-                return $skill;
-            }
+        if (!isset($this->skills[$id])) {
+            return null;
         }
 
-        return null;
+        return $this->skills[$id];
     }
 
     /**
+     *
+     *
      * @param $id
      * @return HighScoreActivity|null
      */
-    public function getActivity($id): HighScoreActivity
+    public function getActivity($id)
     {
-        foreach($this->getActivities() as $activity) {
-            if ($activity->getActivity()->getId() === $id)  {
-                return $activity;
-            }
+        if (!isset($this->activities[$id])) {
+            return null;
         }
 
-        return null;
+        return $this->activities[$id];
     }
 
     /**
