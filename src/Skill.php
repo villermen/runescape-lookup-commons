@@ -189,7 +189,7 @@ class Skill
             return false;
         }
 
-        return $this->getXpTable()[$level];
+        return $xpTable[$level];
     }
 
     /**

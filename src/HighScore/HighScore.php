@@ -21,9 +21,6 @@ class HighScore
     /** @var HighScoreActivity[] */
     protected $activities = [];
 
-    /** @var int */
-    protected $iteratorKey;
-
     /**
      * Creates a HighScore object from a raw high score data response.
      *

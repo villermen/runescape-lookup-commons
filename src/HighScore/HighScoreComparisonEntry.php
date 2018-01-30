@@ -23,6 +23,9 @@ abstract class HighScoreComparisonEntry
         if (!$entry1 && !$entry2) {
             throw new RuneScapeException("At least one of the entries must be given in a comparison.");
         }
+
+        $this->entry1 = $entry1;
+        $this->entry2 = $entry2;
     }
 
     /**

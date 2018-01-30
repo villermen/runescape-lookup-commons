@@ -88,7 +88,8 @@ class HighScoreSkill extends HighScoreEntry
      */
     public function getLevel(bool $uncapped = false): int
     {
-        if ($uncapped) {
+        // Total level cannot be uncapped as it does not map to an XP table
+        if ($uncapped && $this->skill->getId() !== Skill::SKILL_TOTAL) {
             return $this->getSkill()->getLevel($this->getXp(), true);
         }
 
