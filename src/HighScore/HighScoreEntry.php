@@ -11,11 +11,15 @@ abstract class HighScoreEntry
     protected $rank;
 
     /**
-     * @param int|false $rank
+     * @param int $rank
      */
-    public function __construct($rank)
+    protected function __construct(int $rank)
     {
-        $this->setRank($rank);
+        if ($rank < 1) {
+            $rank = false;
+        }
+
+        $this->rank = $rank;
     }
 
     /**
@@ -26,35 +30,10 @@ abstract class HighScoreEntry
     abstract public function getName(): string;
 
     /**
-     * @param int|false $rank
-     *
-     * @return HighScoreEntry
-     */
-    private function setRank($rank): HighScoreEntry
-    {
-        if (!is_int($rank) || $rank < 1) {
-            $rank = false;
-        }
-
-        $this->rank = $rank;
-
-        return $this;
-    }
-
-    /**
      * @return int|false
      */
     public function getRank()
     {
         return $this->rank;
-    }
-
-    /**
-     * @param HighScoreEntry $entry
-     * @return HighScoreEntryComparison
-     */
-    public function compareTo(HighScoreEntry $entry): HighScoreEntryComparison
-    {
-        return new HighScoreEntryComparison($this, $entry);
     }
 }

@@ -17,7 +17,12 @@ class HighScoreActivity extends HighScoreEntry
         parent::__construct($rank);
 
         $this->activity = $activity;
-        $this->setScore($score);
+
+        if ($score < 0) {
+            $score = 0;
+        }
+
+        $this->score = $score;
     }
 
     /**
@@ -47,31 +52,11 @@ class HighScoreActivity extends HighScoreEntry
     }
 
     /**
-     * @param int $score
-     *
-     * @return HighScoreActivity
+     * @param HighScoreActivity $otherActivity
+     * @return HighScoreComparisonActivity
      */
-    private function setScore(int $score)
+    public function compareTo(HighScoreActivity $otherActivity): HighScoreComparisonActivity
     {
-        if ($score < 0) {
-            $score = 0;
-        }
-
-        $this->score = $score;
-
-        return $this;
-    }
-
-    /**
-     * @param HighScoreEntry $entry
-     * @return HighScoreEntryComparison|HighScoreActivityComparison
-     */
-    public function compareTo(HighScoreEntry $entry): HighScoreEntryComparison
-    {
-        if ($entry instanceof HighScoreActivity) {
-            return new HighScoreActivityComparison($this, $entry);
-        }
-
-        return parent::compareTo($entry);
+        return new HighScoreComparisonActivity($this, $otherActivity);
     }
 }

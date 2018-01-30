@@ -2,7 +2,6 @@
 
 namespace Villermen\RuneScape\HighScore;
 
-use Iterator;
 use Villermen\RuneScape\Activity;
 use Villermen\RuneScape\Player;
 use Villermen\RuneScape\RuneScapeException;
@@ -11,7 +10,7 @@ use Villermen\RuneScape\Skill;
 /**
  * Represents a player's high score at a specific moment in time.
  */
-class HighScore implements Iterator
+class HighScore
 {
     /** @var Player */
     protected $player;
@@ -105,14 +104,6 @@ class HighScore implements Iterator
     }
 
     /**
-     * @return HighScoreEntry[]
-     */
-    public function getEntries(): array
-    {
-        return array_merge($this->getSkills(), $this->getActivities());
-    }
-
-    /**
      * @return HighScoreSkill[]
      */
     public function getSkills(): array
@@ -142,8 +133,6 @@ class HighScore implements Iterator
     }
 
     /**
-     *
-     *
      * @param $id
      * @return HighScoreActivity|null
      */
@@ -157,43 +146,22 @@ class HighScore implements Iterator
     }
 
     /**
-     * @inheritdoc
-     * @return HighScoreEntry
-     */
-    public function current(): HighScoreEntry
-    {
-        return $this->getEntries()[$this->iteratorKey];
-    }
-
-    /** @inheritdoc */
-    public function next(): void
-    {
-        $this->iteratorKey++;
-    }
-
-    /** @inheritdoc */
-    public function key(): int
-    {
-        return $this->iteratorKey;
-    }
-
-    /** @inheritdoc */
-    public function valid(): bool
-    {
-        return isset($this->getEntries()[$this->iteratorKey]);
-    }
-
-    /** @inheritdoc */
-    public function rewind(): void
-    {
-        $this->iteratorKey = 0;
-    }
-
-    /**
      * @return Player
      */
     public function getPlayer(): Player
     {
         return $this->player;
+    }
+
+    /**
+     * Creates a comparison between this high score and the given high score.
+     *
+     * @param HighScore $otherHighScore
+     * @param bool $uncapped
+     * @return HighScoreComparison
+     */
+    public function compareTo(HighScore $otherHighScore, bool $uncapped = false): HighScoreComparison
+    {
+        return new HighScoreComparison($this, $otherHighScore, $uncapped);
     }
 }
