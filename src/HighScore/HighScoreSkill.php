@@ -61,8 +61,9 @@ class HighScoreSkill extends HighScoreEntry
      */
     public function getProgressToNextLevel()
     {
-        $currentLevelXp = $this->getSkill()->getXp($this->getLevel(true));
-        $nextLevelXp = $this->getXpToNextLevel();
+        $level = $this->getLevel(true);
+        $currentLevelXp = $this->getSkill()->getXp($level);
+        $nextLevelXp = $this->getSkill()->getXp($level + 1);
 
         if (!$nextLevelXp) {
             return false;
@@ -71,7 +72,7 @@ class HighScoreSkill extends HighScoreEntry
         $totalXpInLevel = $nextLevelXp - $currentLevelXp;
         $xpInLevel = $this->getXp() - $currentLevelXp;
 
-        return 1 / $totalXpInLevel * $xpInLevel;
+        return $xpInLevel / $totalXpInLevel;
     }
 
     /**

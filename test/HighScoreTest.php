@@ -32,6 +32,8 @@ class HighScoreTest extends TestCase
         self::assertEquals(2402334, $invSkill->getXpToNextLevel());
         self::assertEquals(29334, $invSkill->getRank());
         self::assertSame(Skill::getSkill(Skill::SKILL_INVENTION), $invSkill->getSkill());
+        self::assertEquals(2402334, $invSkill->getXpToNextLevel());
+        self::assertEquals(0.1846, round($invSkill->getProgressToNextLevel(), 4));
 
         // Activity
         self::assertEquals(1362803, $this->highScore->getActivity(Activity::ACTIVITY_DOMINION_TOWER)->getScore());
