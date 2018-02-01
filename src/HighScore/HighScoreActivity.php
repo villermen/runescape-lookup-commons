@@ -3,6 +3,7 @@
 namespace Villermen\RuneScape\HighScore;
 
 use Villermen\RuneScape\Activity;
+use Villermen\RuneScape\RuneScapeException;
 
 class HighScoreActivity extends HighScoreEntry
 {
@@ -54,6 +55,7 @@ class HighScoreActivity extends HighScoreEntry
     /**
      * @param HighScoreActivity $otherActivity
      * @return HighScoreComparisonActivity
+     * @throws RuneScapeException
      */
     public function compareTo(HighScoreActivity $otherActivity): HighScoreComparisonActivity
     {

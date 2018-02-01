@@ -16,11 +16,11 @@ class HighScoreComparison
     /** @var HighScoreComparisonActivity[] */
     private $activities = [];
 
+    /** @noinspection PhpDocMissingThrowsInspection */
     /**
      * HighScoreComparison constructor.
      * @param HighScore $highScore1
      * @param HighScore $highScore2
-     * @param bool $uncapped
      */
     public function __construct(HighScore $highScore1, HighScore $highScore2)
     {
@@ -30,6 +30,7 @@ class HighScoreComparison
         ));
 
         foreach($skillIds as $skillId) {
+            /** @noinspection PhpUnhandledExceptionInspection */
             $this->skills[$skillId] = new HighScoreComparisonSkill(
                 $highScore1->getSkill($skillId),
                 $highScore2->getSkill($skillId)
@@ -42,6 +43,7 @@ class HighScoreComparison
         ));
 
         foreach($activityIds as $activityId) {
+            /** @noinspection PhpUnhandledExceptionInspection */
             $this->activities[$activityId] = new HighScoreComparisonActivity(
                 $highScore1->getActivity($activityId),
                 $highScore2->getActivity($activityId)

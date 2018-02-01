@@ -114,6 +114,7 @@ class HighScoreSkill extends HighScoreEntry
     /**
      * @param HighScoreSkill $otherSkill
      * @return HighScoreComparisonSkill
+     * @throws RuneScapeException
      */
     public function compareTo(HighScoreSkill $otherSkill): HighScoreComparisonSkill
     {

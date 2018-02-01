@@ -14,8 +14,14 @@ class Player
     const CHAT_HEAD_URL = "https://secure.runescape.com/m=avatar-rs/%s/chat.gif";
     const FULL_BODY_URL = "https://secure.runescape.com/m=avatar-rs/%s/full.gif";
 
-    /** @var HighScore */
-    private $cachedHighScoreData;
+    /** @var HighScore|null */
+    private $cachedHighScore;
+
+    /** @var HighScore|null */
+    private $cachedOldSchoolHighScore;
+
+    /** @var ActivityFeed|null */
+    private $cachedActivityFeed;
 
     /** @var string */
     protected $name;
@@ -31,6 +37,10 @@ class Player
         return preg_match("/^[a-z0-9 -_]{1,12}$/i", $name);
     }
 
+    /**
+     * @param string $name
+     * @throws RuneScapeException
+     */
     public function __construct(string $name)
     {
         $name = trim($name);
@@ -47,20 +57,19 @@ class Player
      * Returns the live high score of the player from the official high scores (expect a delay).
      * Subsequent calls will not cause a request.
      *
-     * @param bool $oldSchool If true, oldschool stats will be queried.
+     * @param bool $oldSchool If true, old school stats will be queried.
      * @param int $timeOut Timeout of the high score request in seconds.
      * @return HighScore
      * @throws RuneScapeException
      */
     public function getHighScore(bool $oldSchool = false, int $timeOut = 5): HighScore
     {
-        return new HighScore($this, $this->getHighScoreData($oldSchool, $timeOut));
-    }
+        if (!$oldSchool && $this->cachedHighScore) {
+            return $this->cachedHighScore;
+        }
 
-    protected function getHighScoreData(bool $oldSchool = false, int $timeOut = 5): string
-    {
-        if ($this->cachedHighScoreData) {
-            return $this->cachedHighScoreData;
+        if ($oldSchool && $this->cachedOldSchoolHighScore) {
+            return $this->cachedOldSchoolHighScore;
         }
 
         $requestUrl = sprintf($oldSchool ? self::HIGH_SCORE_URL_OLD_SCHOOL : self::HIGH_SCORE_URL, urlencode($this->getName()));
@@ -74,10 +83,18 @@ class Player
         $data = @file_get_contents($requestUrl, false, $context);
 
         if (!$data) {
-            throw new RuneScapeException("Could not obtain player stats from RuneScape high scores.");
+            throw new RuneScapeException("Could not obtain player stats from the RuneScape high scores.");
         }
 
-        return $this->cachedHighScoreData = $data;
+        $highScore = new HighScore($this, $data);
+
+        if (!$oldSchool) {
+            $this->cachedHighScore = $highScore;
+        } else {
+            $this->cachedOldSchoolHighScore = $highScore;
+        }
+
+        return $highScore;
     }
 
     /**
@@ -85,27 +102,20 @@ class Player
      *
      * @param int $timeOut
      * @return ActivityFeed
+     * @throws RuneScapeException
      */
     public function getActivityFeed(int $timeOut = 5): ActivityFeed
     {
-        return new ActivityFeed($this->getActivityFeedData($timeOut));
-    }
+        if ($this->cachedActivityFeed) {
+            return $this->cachedActivityFeed;
+        }
 
-    /**
-     * Returns the raw activity feed data.
-     *
-     * @param int $timeOut
-     * @return string
-     * @throws RuneScapeException
-     */
-    protected function getActivityFeedData(int $timeOut = 5): string
-    {
         $curl = curl_init($this->getActivityFeedUrl());
         curl_setopt_array($curl, [
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_TIMEOUT => $timeOut
         ]);
-        $feedData = curl_exec($curl);
+        $data = curl_exec($curl);
         $statusCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         curl_close($curl);
 
@@ -113,7 +123,11 @@ class Player
             throw new RuneScapeException("Activity feed page returned with status " . $statusCode);
         }
 
-        return $feedData;
+        $activityFeed = ActivityFeed::fromData($this, $data);
+
+        $this->cachedActivityFeed = $activityFeed;
+
+        return $activityFeed;
     }
 
     /**

@@ -21,14 +21,29 @@ class HighScore
     /** @var HighScoreActivity[] */
     protected $activities = [];
 
+    /** @var string */
+    protected $data;
+
     /**
-     * Creates a HighScore object from a raw high score data response.
+     * Creates a HighScore object from raw high score data.
      *
      * @param Player $player
      * @param string $data Data as returned from Jagex's lookup API.
      * @throws RuneScapeException
      */
     public function __construct(Player $player, string $data)
+    {
+        $this->player = $player;
+        $this->data = $data;
+
+        $this->parseData($data);
+    }
+
+    /**
+     * @param string $data
+     * @throws RuneScapeException
+     */
+    private function parseData(string $data)
     {
         $entries = explode("\n", trim($data));
 
@@ -151,14 +166,13 @@ class HighScore
     }
 
     /**
-     * Creates a comparison between this high score and the given high score.
+     * Creates a HighScoreComparison between this high score and the given high score.
      *
      * @param HighScore $otherHighScore
-     * @param bool $uncapped
      * @return HighScoreComparison
      */
-    public function compareTo(HighScore $otherHighScore, bool $uncapped = false): HighScoreComparison
+    public function compareTo(HighScore $otherHighScore): HighScoreComparison
     {
-        return new HighScoreComparison($this, $otherHighScore, $uncapped);
+        return new HighScoreComparison($this, $otherHighScore);
     }
 }
