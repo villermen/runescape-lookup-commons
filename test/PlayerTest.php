@@ -6,21 +6,30 @@ use PHPUnit\Framework\TestCase;
 class PlayerTest extends TestCase
 {
     /** @var Player */
-    private static $player;
+    private $player;
 
-    /** @inheritdoc */
-    public static function setUpBeforeClass()
+    public function setUp()
     {
-        // Use static so that caching works across tests
-        self::$player = new Player("Villermen");
+        // Excl should have lifetime membership due to winning the first Machinima competition
+        // Now let's hope they don't turn their adventurer's log to private
+        $this->player = new Player("Excl");
     }
 
     public function testGetHighScore()
     {
-        self::$player->getHighScore();
-        self::$player->getHighScore(true);
+        $highScore = $this->player->getHighScore(false, 10);
+        $oldSchoolHighScore = $this->player->getHighScore(true, 10);
 
-        // Will prevent this test from being marked as risky for having no assertions
-        $this->addToAssertionCount(1);
+        // Test caching
+        self::assertSame($highScore, $this->player->getHighScore());
+        self::assertSame($oldSchoolHighScore, $this->player->getHighScore(true));
+    }
+
+    public function testGetActivityFeed()
+    {
+        $activityFeed = $this->player->getActivityFeed(10);
+
+        // Test caching
+        self::assertSame($activityFeed, $this->player->getActivityFeed());
     }
 }
