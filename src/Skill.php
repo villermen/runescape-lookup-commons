@@ -2,6 +2,8 @@
 
 namespace Villermen\RuneScape;
 
+use Villermen\RuneScape\Exception\RuneScapeException;
+
 class Skill
 {
     const SKILL_TOTAL = 0;

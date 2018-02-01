@@ -2,85 +2,34 @@
 
 namespace Villermen\RuneScape\HighScore;
 
-use Villermen\RuneScape\Activity;
-use Villermen\RuneScape\Player;
-use Villermen\RuneScape\RuneScapeException;
 use Villermen\RuneScape\Skill;
 
-/**
- * Represents a player's high score at a specific moment in time.
- */
 class HighScore
 {
-    /** @var Player */
-    protected $player;
-
     /** @var HighScoreSkill[]  */
     protected $skills = [];
 
     /** @var HighScoreActivity[] */
     protected $activities = [];
 
-    /** @var string */
-    protected $data;
-
     /**
      * Creates a HighScore object from raw high score data.
      *
-     * @param Player $player
-     * @param string $data Data as returned from Jagex's lookup API.
-     * @throws RuneScapeException
+     * @param HighScoreSkill[] $skills
+     * @param HighScoreActivity[] $activities
      */
-    public function __construct(Player $player, string $data)
+    public function __construct(array $skills, array $activities)
     {
-        $this->player = $player;
-        $this->data = $data;
+        // Ensure that skill and activities have their id as array key
+        array_walk($skills, function(HighscoreSkill $skill, &$key) {
+            $key = $skill->getSkill()->getId();
+        });
+        array_walk($activities, function(HighScoreActivity $activity, &$key) {
+            $key = $activity->getActivity()->getId();
+        });
 
-        $this->parseData($data);
-    }
-
-    /**
-     * @param string $data
-     * @throws RuneScapeException
-     */
-    private function parseData(string $data)
-    {
-        $entries = explode("\n", trim($data));
-
-        $skillId = 0;
-        $activityId = 0;
-
-        foreach($entries as $entry) {
-            $entryArray = explode(",", $entry);
-
-            if (count($entryArray) == 3) {
-                // Skill
-                try {
-                    $skill = Skill::getSkill($skillId);
-                    list($rank, $level, $xp) = $entryArray;
-                    $this->skills[$skillId] = new HighScoreSkill($skill, $rank, $level, $xp);
-                } catch (RuneScapeException $exception) {
-                }
-
-                $skillId++;
-            } elseif (count($entryArray) == 2) {
-                // Activity
-                try {
-                    $activity = Activity::getActivity($activityId);
-                    list($rank, $score) = $entryArray;
-                    $this->activities[$activityId] = new HighScoreActivity($activity, $rank, $score);
-                } catch (RuneScapeException $exception) {
-                }
-
-                $activityId++;
-            } else {
-                throw new RuneScapeException("Invalid high score data supplied.");
-            }
-        }
-
-        if (!$skillId) {
-            throw new RuneScapeException("No high score obtained from data.");
-        }
+        $this->skills = $skills;
+        $this->activities = $activities;
     }
 
     /**
@@ -155,14 +104,6 @@ class HighScore
         }
 
         return $this->activities[$id];
-    }
-
-    /**
-     * @return Player
-     */
-    public function getPlayer(): Player
-    {
-        return $this->player;
     }
 
     /**

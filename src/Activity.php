@@ -2,6 +2,8 @@
 
 namespace Villermen\RuneScape;
 
+use Villermen\RuneScape\Exception\RuneScapeException;
+
 class Activity
 {
     const ACTIVITY_BOUNTY_HUNTER = 0;

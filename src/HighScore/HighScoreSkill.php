@@ -2,7 +2,7 @@
 
 namespace Villermen\RuneScape\HighScore;
 
-use Villermen\RuneScape\RuneScapeException;
+use Villermen\RuneScape\Exception\RuneScapeException;
 use Villermen\RuneScape\Skill;
 
 /**

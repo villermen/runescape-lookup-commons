@@ -3,7 +3,7 @@
 namespace Villermen\RuneScape\HighScore;
 
 use Villermen\RuneScape\Activity;
-use Villermen\RuneScape\RuneScapeException;
+use Villermen\RuneScape\Exception\RuneScapeException;
 
 class HighScoreActivity extends HighScoreEntry
 {

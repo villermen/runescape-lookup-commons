@@ -3,25 +3,18 @@
 namespace Villermen\RuneScape;
 
 use Villermen\RuneScape\ActivityFeed\ActivityFeed;
+use Villermen\RuneScape\Exception\RuneScapeException;
 use Villermen\RuneScape\HighScore\HighScore;
+use Villermen\RuneScape\Exception\FetchFailedException;
 
 class Player
 {
-    const HIGH_SCORE_URL = "http://services.runescape.com/m=hiscore/index_lite.ws?player=%s";
-    const HIGH_SCORE_URL_OLD_SCHOOL = "http://services.runescape.com/m=hiscore_oldschool/index_lite.ws?player=%s";
-    const ADVENTURERS_LOG_URL = "https://apps.runescape.com/runemetrics/app/overview/player/%s";
-    const ACTIVITY_FEED_URL = "http://services.runescape.com/m=adventurers-log/a=13/rssfeed?searchName=%s";
+    const RUNEMETRICS_URL = "https://apps.runescape.com/runemetrics/app/overview/player/%s";
     const CHAT_HEAD_URL = "https://secure.runescape.com/m=avatar-rs/%s/chat.gif";
     const FULL_BODY_URL = "https://secure.runescape.com/m=avatar-rs/%s/full.gif";
 
-    /** @var HighScore|null */
-    private $cachedHighScore;
-
-    /** @var HighScore|null */
-    private $cachedOldSchoolHighScore;
-
-    /** @var ActivityFeed|null */
-    private $cachedActivityFeed;
+    /** @var PlayerDataFetcher */
+    protected $dataFetcher;
 
     /** @var string */
     protected $name;
@@ -39,10 +32,13 @@ class Player
 
     /**
      * @param string $name
+     * @param PlayerDataFetcher|null $dataFetcher
      * @throws RuneScapeException
      */
-    public function __construct(string $name)
+    public function __construct(string $name, PlayerDataFetcher $dataFetcher = null)
     {
+        $this->dataFetcher = $dataFetcher ?: new PlayerDataFetcher();
+
         $name = trim($name);
 
         // Validate that name adheres to RS policies
@@ -54,80 +50,40 @@ class Player
     }
 
     /**
-     * Returns the live high score of the player from the official high scores (expect a delay).
-     * Subsequent calls will not cause a request.
-     *
-     * @param bool $oldSchool If true, old school stats will be queried.
-     * @param int $timeOut Timeout of the high score request in seconds.
-     * @return HighScore
-     * @throws RuneScapeException
+     * @throws FetchFailedException
      */
-    public function getHighScore(bool $oldSchool = false, int $timeOut = 5): HighScore
+    public function fixName()
     {
-        if (!$oldSchool && $this->cachedHighScore) {
-            return $this->cachedHighScore;
-        }
+        $this->name = $this->getDataFetcher()->fetchRealName($this);
+    }
 
-        if ($oldSchool && $this->cachedOldSchoolHighScore) {
-            return $this->cachedOldSchoolHighScore;
-        }
+    /**
+     * @return HighScore
+     * @throws FetchFailedException
+     */
+    public function getHighScore(): HighScore
+    {
+        return $this->getDataFetcher()->fetchHighScore($this);
+    }
 
-        $requestUrl = sprintf($oldSchool ? self::HIGH_SCORE_URL_OLD_SCHOOL : self::HIGH_SCORE_URL, urlencode($this->getName()));
-
-        $context = stream_context_create([
-            "http" => [
-                "timeout" => $timeOut,
-            ]
-        ]);
-
-        $data = @file_get_contents($requestUrl, false, $context);
-
-        if (!$data) {
-            throw new RuneScapeException("Could not obtain player stats from the RuneScape high scores.");
-        }
-
-        $highScore = new HighScore($this, $data);
-
-        if (!$oldSchool) {
-            $this->cachedHighScore = $highScore;
-        } else {
-            $this->cachedOldSchoolHighScore = $highScore;
-        }
-
-        return $highScore;
+    /**
+     * @return HighScore
+     * @throws FetchFailedException
+     */
+    public function getOldSchoolHighScore(): HighScore
+    {
+        return $this->getDataFetcher()->fetchOldSchoolHighScore($this);
     }
 
     /**
      * Returns the activities currently displayed on the player's activity feed.
      *
-     * @param int $timeOut
      * @return ActivityFeed
-     * @throws RuneScapeException
+     * @throws FetchFailedException
      */
-    public function getActivityFeed(int $timeOut = 5): ActivityFeed
+    public function getActivityFeed(): ActivityFeed
     {
-        if ($this->cachedActivityFeed) {
-            return $this->cachedActivityFeed;
-        }
-
-        $curl = curl_init($this->getActivityFeedUrl());
-        curl_setopt_array($curl, [
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT => $timeOut
-        ]);
-        $data = curl_exec($curl);
-        $statusCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-        curl_close($curl);
-
-        if ($statusCode !== 200) {
-            throw new RuneScapeException("Activity feed page returned with status " . $statusCode);
-        }
-
-        $activityFeed = ActivityFeed::fromData($this, $data);
-
-        $this->cachedActivityFeed = $activityFeed;
-
-        return $activityFeed;
+        return $this->getDataFetcher()->fetchActivityFeed($this);
     }
 
     /**
@@ -157,16 +113,16 @@ class Player
     /**
      * @return string
      */
-    public function getAdventurersLogUrl(): string
+    public function getRuneMetricsUrl(): string
     {
-        return sprintf(self::ADVENTURERS_LOG_URL, $this->getName());
+        return sprintf(self::RUNEMETRICS_URL, $this->getName());
     }
 
     /**
-     * @return string
+     * @return PlayerDataFetcher
      */
-    public function getActivityFeedUrl(): string
+    public function getDataFetcher(): PlayerDataFetcher
     {
-        return sprintf(self::ACTIVITY_FEED_URL, $this->getName());
+        return $this->dataFetcher;
     }
 }

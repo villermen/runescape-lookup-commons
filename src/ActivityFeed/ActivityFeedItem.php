@@ -6,6 +6,7 @@ use DateTime;
 
 class ActivityFeedItem
 {
+    // TODO: Remove id
     /** @var string */
     protected $id;
 
