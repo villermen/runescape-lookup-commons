@@ -54,11 +54,11 @@ class HighScoreActivity extends HighScoreEntry
 
     /**
      * @param HighScoreActivity $otherActivity
-     * @return HighScoreComparisonActivity
+     * @return HighScoreActivityComparison
      * @throws RuneScapeException
      */
-    public function compareTo(HighScoreActivity $otherActivity): HighScoreComparisonActivity
+    public function compareTo(HighScoreActivity $otherActivity): HighScoreActivityComparison
     {
-        return new HighScoreComparisonActivity($this, $otherActivity);
+        return new HighScoreActivityComparison($this, $otherActivity);
     }
 }

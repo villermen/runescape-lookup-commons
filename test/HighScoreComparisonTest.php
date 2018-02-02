@@ -1,21 +1,21 @@
 <?php
 
 use Villermen\RuneScape\Activity;
-use Villermen\RuneScape\HighScore\HighScore;
+use Villermen\RuneScape\HighScore\SkillHighScore;
 use PHPUnit\Framework\TestCase;
-use Villermen\RuneScape\HighScore\HighScoreComparison;
+use Villermen\RuneScape\HighScore\SkillHighScoreComparison;
 use Villermen\RuneScape\Player;
 use Villermen\RuneScape\Skill;
 
 class HighScoreComparisonTest extends TestCase
 {
-    /** @var HighScoreComparison */
+    /** @var SkillHighScoreComparison */
     private $comparison;
 
     public function setUp()
     {
-        $highScore1 = new HighScore(new Player("Villermen"), file_get_contents(__DIR__ . "/fixtures/high-score1.csv"));
-        $highScore2 = new HighScore(new Player("Chloronium"), file_get_contents(__DIR__ . "/fixtures/high-score2.csv"));
+        $highScore1 = new SkillHighScore(new Player("Villermen"), file_get_contents(__DIR__ . "/fixtures/high-score1.csv"));
+        $highScore2 = new SkillHighScore(new Player("Chloronium"), file_get_contents(__DIR__ . "/fixtures/high-score2.csv"));
 
         $this->comparison = $highScore1->compareTo($highScore2);
     }

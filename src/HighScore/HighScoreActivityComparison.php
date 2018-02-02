@@ -5,7 +5,7 @@ namespace Villermen\RuneScape\HighScore;
 use Villermen\RuneScape\Activity;
 use Villermen\RuneScape\Exception\RuneScapeException;
 
-class HighScoreComparisonActivity extends HighScoreComparisonEntry
+class HighScoreActivityComparison extends HighScoreEntryComparison
 {
     /** @var HighScoreActivity */
     protected $activity1;

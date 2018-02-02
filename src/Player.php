@@ -4,7 +4,7 @@ namespace Villermen\RuneScape;
 
 use Villermen\RuneScape\ActivityFeed\ActivityFeed;
 use Villermen\RuneScape\Exception\RuneScapeException;
-use Villermen\RuneScape\HighScore\HighScore;
+use Villermen\RuneScape\HighScore\SkillHighScore;
 use Villermen\RuneScape\Exception\FetchFailedException;
 
 class Player
@@ -58,21 +58,21 @@ class Player
     }
 
     /**
-     * @return HighScore
+     * @return SkillHighScore
      * @throws FetchFailedException
      */
-    public function getHighScore(): HighScore
+    public function getHighScore(): SkillHighScore
     {
-        return $this->getDataFetcher()->fetchHighScore($this);
+        return $this->getDataFetcher()->fetchSkillHighScore($this);
     }
 
     /**
-     * @return HighScore
+     * @return SkillHighScore
      * @throws FetchFailedException
      */
-    public function getOldSchoolHighScore(): HighScore
+    public function getOldSchoolHighScore(): SkillHighScore
     {
-        return $this->getDataFetcher()->fetchOldSchoolHighScore($this);
+        return $this->getDataFetcher()->fetchOldSchoolSkillHighScore($this);
     }
 
     /**

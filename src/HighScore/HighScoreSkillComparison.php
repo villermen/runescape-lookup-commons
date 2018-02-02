@@ -5,7 +5,7 @@ namespace Villermen\RuneScape\HighScore;
 use Villermen\RuneScape\Exception\RuneScapeException;
 use Villermen\RuneScape\Skill;
 
-class HighScoreComparisonSkill extends HighScoreComparisonEntry
+class HighScoreSkillComparison extends HighScoreEntryComparison
 {
     /** @var int */
     protected $rankDifference;

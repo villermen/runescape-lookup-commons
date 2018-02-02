@@ -13,24 +13,26 @@ class PlayerTest extends TestCase
     {
         // Excl should have lifetime membership due to winning the first Machinima competition
         // Now let's hope they don't turn their adventurer's log to private
-        $this->player = new Player("Excl", new PlayerDataFetcher(10));
+        $this->player = new Player("excl", new PlayerDataFetcher(10));
     }
 
-    public function testGetHighScore()
+    public function testPlayer()
     {
         $highScore = $this->player->getHighScore();
-        $oldSchoolHighScore = $this->player->getOldSchoolHighScore();
-
-        // Test caching
         self::assertSame($highScore, $this->player->getHighScore());
-        self::assertSame($oldSchoolHighScore, $this->player->getOldSchoolHighScore());
-    }
 
-    public function testGetActivityFeed()
-    {
         $activityFeed = $this->player->getActivityFeed();
-
-        // Test caching
         self::assertSame($activityFeed, $this->player->getActivityFeed());
+
+        $oldSchoolHighScore = $this->player->getOldSchoolHighScore();
+        self::assertSame($oldSchoolHighScore, $this->player->getOldSchoolHighScore());
+
+        $this->player->fixName();
+        self::assertEquals("Excl", $this->player->getName());
+
+
+        // TODO: HighScore wrong index for skills
+
+        // TODO: Test certain properties of objects (activityfeed latest date, highscore xp above x, oldschool dito)
     }
 }

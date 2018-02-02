@@ -31,6 +31,14 @@ class Activity
     const ACTIVITY_APRIL_FOOLS_2015_COW_TIPPING = 22;
     const ACTIVITY_APRIL_FOOLS_2015_RAT_KILLS = 23;
 
+    const ACTIVITY_EASY_CLUE_SCROLLS = 1000;
+    const ACTIVITY_MEDIUM_CLUE_SCROLLS = 1001;
+    const ACTIVITY_ALL_CLUE_SCROLLS = 1002;
+    const ACTIVITY_HARD_CLUE_SCROLLS = 1005;
+    const ACTIVITY_LAST_MAN_STANDING = 1006;
+    const ACTIVITY_ELITE_CLUE_SCROLLS = 1007;
+    const ACTIVITY_MASTER_CLUE_SCROLLS = 1008;
+
     /** @var Activity[] */
     private static $activities;
 
@@ -68,7 +76,14 @@ class Activity
             self::ACTIVITY_HEIST_ROBBER => new Activity(self::ACTIVITY_HEIST_ROBBER, "Heist Robber Level"),
             self::ACTIVITY_CABBAGE_FACEPUNCH_BONANZA => new Activity(self::ACTIVITY_CABBAGE_FACEPUNCH_BONANZA, "Cabbage Facepunch Bonanza: 5 Game Average"),
             self::ACTIVITY_APRIL_FOOLS_2015_COW_TIPPING => new Activity(self::ACTIVITY_APRIL_FOOLS_2015_COW_TIPPING, "April Fools 2015: Cow Tipping"),
-            self::ACTIVITY_APRIL_FOOLS_2015_RAT_KILLS => new Activity(self::ACTIVITY_APRIL_FOOLS_2015_RAT_KILLS, "April Fools 2015: Rat Kills")
+            self::ACTIVITY_APRIL_FOOLS_2015_RAT_KILLS => new Activity(self::ACTIVITY_APRIL_FOOLS_2015_RAT_KILLS, "April Fools 2015: Rat Kills"),
+            self::ACTIVITY_EASY_CLUE_SCROLLS => new Activity(self::ACTIVITY_EASY_CLUE_SCROLLS, "Clue Scrolls (easy)"),
+            self::ACTIVITY_MEDIUM_CLUE_SCROLLS => new Activity(self::ACTIVITY_MEDIUM_CLUE_SCROLLS, "Clue Scrolls (hard)"),
+            self::ACTIVITY_ALL_CLUE_SCROLLS => new Activity(self::ACTIVITY_ALL_CLUE_SCROLLS, "Clue Scrolls (all)"),
+            self::ACTIVITY_HARD_CLUE_SCROLLS => new Activity(self::ACTIVITY_ALL_CLUE_SCROLLS, "Clue Scrolls (hard)"),
+            self::ACTIVITY_LAST_MAN_STANDING => new Activity(self::ACTIVITY_LAST_MAN_STANDING, "Last Man Standing"),
+            self::ACTIVITY_ELITE_CLUE_SCROLLS => new Activity(self::ACTIVITY_ELITE_CLUE_SCROLLS, "Clue Scrolls (elite)"),
+            self::ACTIVITY_MASTER_CLUE_SCROLLS => new Activity(self::ACTIVITY_MASTER_CLUE_SCROLLS, "Clue Scrolls (master)")
         ];
     }
 

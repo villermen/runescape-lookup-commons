@@ -31,6 +31,8 @@ class ActivityFeed
      */
     public function getItemsAfter(ActivityFeedItem $targetItem): array
     {
+        // TODO: Work with date, title and description instead of id
+        // TODO: Duplicate entries are skipped this way? Yes.
         $newerItems = [];
 
         foreach($this->getItems() as $item) {

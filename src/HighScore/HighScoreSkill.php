@@ -113,11 +113,11 @@ class HighScoreSkill extends HighScoreEntry
 
     /**
      * @param HighScoreSkill $otherSkill
-     * @return HighScoreComparisonSkill
+     * @return HighScoreSkillComparison
      * @throws RuneScapeException
      */
-    public function compareTo(HighScoreSkill $otherSkill): HighScoreComparisonSkill
+    public function compareTo(HighScoreSkill $otherSkill): HighScoreSkillComparison
     {
-        return new HighScoreComparisonSkill($this, $otherSkill);
+        return new HighScoreSkillComparison($this, $otherSkill);
     }
 }

@@ -4,7 +4,7 @@ namespace Villermen\RuneScape\HighScore;
 
 use Villermen\RuneScape\Exception\RuneScapeException;
 
-abstract class HighScoreComparisonEntry
+abstract class HighScoreEntryComparison
 {
     /** @var HighScoreEntry */
     private $entry1;

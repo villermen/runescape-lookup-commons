@@ -1,19 +1,19 @@
 <?php
 
 use Villermen\RuneScape\Activity;
-use Villermen\RuneScape\HighScore\HighScore;
+use Villermen\RuneScape\HighScore\SkillHighScore;
 use PHPUnit\Framework\TestCase;
 use Villermen\RuneScape\Player;
 use Villermen\RuneScape\Skill;
 
 class HighScoreTest extends TestCase
 {
-    /** @var HighScore */
+    /** @var SkillHighScore */
     private $highScore;
 
     public function setUp()
     {
-        $this->highScore = new HighScore(new Player("Villermen"), file_get_contents(__DIR__ . "/fixtures/high-score1.csv"));
+        $this->highScore = new SkillHighScore(new Player("Villermen"), file_get_contents(__DIR__ . "/fixtures/high-score1.csv"));
     }
 
     public function testEntries()
