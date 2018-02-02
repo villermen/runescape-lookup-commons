@@ -4,6 +4,7 @@ namespace Villermen\RuneScape;
 
 use Villermen\RuneScape\ActivityFeed\ActivityFeed;
 use Villermen\RuneScape\Exception\RuneScapeException;
+use Villermen\RuneScape\HighScore\ActivityHighScore;
 use Villermen\RuneScape\HighScore\SkillHighScore;
 use Villermen\RuneScape\Exception\FetchFailedException;
 
@@ -32,7 +33,7 @@ class Player
 
     /**
      * @param string $name
-     * @param PlayerDataFetcher|null $dataFetcher
+     * @param PlayerDataFetcher|null $dataFetcher Use the same data fetcher instance for all players to have them share the same cache.
      * @throws RuneScapeException
      */
     public function __construct(string $name, PlayerDataFetcher $dataFetcher = null)
@@ -54,25 +55,43 @@ class Player
      */
     public function fixName()
     {
-        $this->name = $this->getDataFetcher()->fetchRealName($this);
+        $this->name = $this->getDataFetcher()->fetchRealName($this->getName());
     }
 
     /**
      * @return SkillHighScore
      * @throws FetchFailedException
      */
-    public function getHighScore(): SkillHighScore
+    public function getSkillHighScore(): SkillHighScore
     {
-        return $this->getDataFetcher()->fetchSkillHighScore($this);
+        return $this->getDataFetcher()->fetchSkillHighScore($this->getName());
     }
 
     /**
      * @return SkillHighScore
      * @throws FetchFailedException
      */
-    public function getOldSchoolHighScore(): SkillHighScore
+    public function getOldSchoolSkillHighScore(): SkillHighScore
     {
-        return $this->getDataFetcher()->fetchOldSchoolSkillHighScore($this);
+        return $this->getDataFetcher()->fetchOldSchoolSkillHighScore($this->getName());
+    }
+
+    /**
+     * @return ActivityHighScore
+     * @throws FetchFailedException
+     */
+    public function getActivityHighScore(): ActivityHighScore
+    {
+        return $this->getDataFetcher()->fetchActivityHighScore($this->getName());
+    }
+
+    /**
+     * @return ActivityHighScore
+     * @throws FetchFailedException
+     */
+    public function getOldSchoolActivityHighScore(): ActivityHighScore
+    {
+        return $this->getDataFetcher()->fetchOldSchoolActivityHighScore($this->getName());
     }
 
     /**
@@ -83,7 +102,7 @@ class Player
      */
     public function getActivityFeed(): ActivityFeed
     {
-        return $this->getDataFetcher()->fetchActivityFeed($this);
+        return $this->getDataFetcher()->fetchActivityFeed($this->getName());
     }
 
     /**

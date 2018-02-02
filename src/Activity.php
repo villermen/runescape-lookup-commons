@@ -7,7 +7,7 @@ use Villermen\RuneScape\Exception\RuneScapeException;
 class Activity
 {
     const ACTIVITY_BOUNTY_HUNTER = 0;
-    const ACTIVITY_BOUNTY_HUNTER_ROGUES = 1;
+    const ACTIVITY_BOUNTY_HUNTER_ROGUE = 1;
     const ACTIVITY_DOMINION_TOWER = 2;
     const ACTIVITY_CRUCIBLE = 3;
     const ACTIVITY_CASTLE_WARS = 4;
@@ -31,13 +31,15 @@ class Activity
     const ACTIVITY_APRIL_FOOLS_2015_COW_TIPPING = 22;
     const ACTIVITY_APRIL_FOOLS_2015_RAT_KILLS = 23;
 
-    const ACTIVITY_EASY_CLUE_SCROLLS = 1000;
-    const ACTIVITY_MEDIUM_CLUE_SCROLLS = 1001;
-    const ACTIVITY_ALL_CLUE_SCROLLS = 1002;
-    const ACTIVITY_HARD_CLUE_SCROLLS = 1005;
-    const ACTIVITY_LAST_MAN_STANDING = 1006;
-    const ACTIVITY_ELITE_CLUE_SCROLLS = 1007;
-    const ACTIVITY_MASTER_CLUE_SCROLLS = 1008;
+    const ACTIVITY_OLD_SCHOOL_EASY_CLUE_SCROLLS = 1000;
+    const ACTIVITY_OLD_SCHOOL_MEDIUM_CLUE_SCROLLS = 1001;
+    const ACTIVITY_OLD_SCHOOL_ALL_CLUE_SCROLLS = 1002;
+    const ACTIVITY_OLD_SCHOOL_BOUNTY_HUNTER_ROGUE = 1003;
+    const ACTIVITY_OLD_SCHOOL_BOUNTY_HUNTER = 1004;
+    const ACTIVITY_OLD_SCHOOL_HARD_CLUE_SCROLLS = 1005;
+    const ACTIVITY_OLD_SCHOOL_LAST_MAN_STANDING = 1006;
+    const ACTIVITY_OLD_SCHOOL_ELITE_CLUE_SCROLLS = 1007;
+    const ACTIVITY_OLD_SCHOOL_MASTER_CLUE_SCROLLS = 1008;
 
     /** @var Activity[] */
     private static $activities;
@@ -53,8 +55,8 @@ class Activity
         }
 
         self::$activities = [
-            self::ACTIVITY_BOUNTY_HUNTER => new Activity(self::ACTIVITY_BOUNTY_HUNTER, "Bounty Hunters"),
-            self::ACTIVITY_BOUNTY_HUNTER_ROGUES => new Activity(self::ACTIVITY_BOUNTY_HUNTER_ROGUES, "Bounty Hunters Rogues"),
+            self::ACTIVITY_BOUNTY_HUNTER => new Activity(self::ACTIVITY_BOUNTY_HUNTER, "Bounty Hunter: Bounty Kills"),
+            self::ACTIVITY_BOUNTY_HUNTER_ROGUE => new Activity(self::ACTIVITY_BOUNTY_HUNTER_ROGUE, "Bounty Hunter: Rogue Kills"),
             self::ACTIVITY_DOMINION_TOWER => new Activity(self::ACTIVITY_DOMINION_TOWER, "Dominion Tower"),
             self::ACTIVITY_CRUCIBLE => new Activity(self::ACTIVITY_CRUCIBLE, "The Crucible"),
             self::ACTIVITY_CASTLE_WARS => new Activity(self::ACTIVITY_CASTLE_WARS, "Castle Wars Games"),
@@ -77,13 +79,15 @@ class Activity
             self::ACTIVITY_CABBAGE_FACEPUNCH_BONANZA => new Activity(self::ACTIVITY_CABBAGE_FACEPUNCH_BONANZA, "Cabbage Facepunch Bonanza: 5 Game Average"),
             self::ACTIVITY_APRIL_FOOLS_2015_COW_TIPPING => new Activity(self::ACTIVITY_APRIL_FOOLS_2015_COW_TIPPING, "April Fools 2015: Cow Tipping"),
             self::ACTIVITY_APRIL_FOOLS_2015_RAT_KILLS => new Activity(self::ACTIVITY_APRIL_FOOLS_2015_RAT_KILLS, "April Fools 2015: Rat Kills"),
-            self::ACTIVITY_EASY_CLUE_SCROLLS => new Activity(self::ACTIVITY_EASY_CLUE_SCROLLS, "Clue Scrolls (easy)"),
-            self::ACTIVITY_MEDIUM_CLUE_SCROLLS => new Activity(self::ACTIVITY_MEDIUM_CLUE_SCROLLS, "Clue Scrolls (hard)"),
-            self::ACTIVITY_ALL_CLUE_SCROLLS => new Activity(self::ACTIVITY_ALL_CLUE_SCROLLS, "Clue Scrolls (all)"),
-            self::ACTIVITY_HARD_CLUE_SCROLLS => new Activity(self::ACTIVITY_ALL_CLUE_SCROLLS, "Clue Scrolls (hard)"),
-            self::ACTIVITY_LAST_MAN_STANDING => new Activity(self::ACTIVITY_LAST_MAN_STANDING, "Last Man Standing"),
-            self::ACTIVITY_ELITE_CLUE_SCROLLS => new Activity(self::ACTIVITY_ELITE_CLUE_SCROLLS, "Clue Scrolls (elite)"),
-            self::ACTIVITY_MASTER_CLUE_SCROLLS => new Activity(self::ACTIVITY_MASTER_CLUE_SCROLLS, "Clue Scrolls (master)")
+            self::ACTIVITY_OLD_SCHOOL_EASY_CLUE_SCROLLS => new Activity(self::ACTIVITY_OLD_SCHOOL_EASY_CLUE_SCROLLS, "Clue Scrolls (easy)"),
+            self::ACTIVITY_OLD_SCHOOL_MEDIUM_CLUE_SCROLLS => new Activity(self::ACTIVITY_OLD_SCHOOL_MEDIUM_CLUE_SCROLLS, "Clue Scrolls (hard)"),
+            self::ACTIVITY_OLD_SCHOOL_ALL_CLUE_SCROLLS => new Activity(self::ACTIVITY_OLD_SCHOOL_ALL_CLUE_SCROLLS, "Clue Scrolls (all)"),
+            self::ACTIVITY_OLD_SCHOOL_BOUNTY_HUNTER_ROGUE => new Activity(self::ACTIVITY_OLD_SCHOOL_BOUNTY_HUNTER_ROGUE, "Bounty Hunter: Rogue Kills"),
+            self::ACTIVITY_OLD_SCHOOL_BOUNTY_HUNTER => new Activity(self::ACTIVITY_OLD_SCHOOL_BOUNTY_HUNTER, "Bounty Hunter: Bounty Kills"),
+            self::ACTIVITY_OLD_SCHOOL_HARD_CLUE_SCROLLS => new Activity(self::ACTIVITY_OLD_SCHOOL_ALL_CLUE_SCROLLS, "Clue Scrolls (hard)"),
+            self::ACTIVITY_OLD_SCHOOL_LAST_MAN_STANDING => new Activity(self::ACTIVITY_OLD_SCHOOL_LAST_MAN_STANDING, "Last Man Standing"),
+            self::ACTIVITY_OLD_SCHOOL_ELITE_CLUE_SCROLLS => new Activity(self::ACTIVITY_OLD_SCHOOL_ELITE_CLUE_SCROLLS, "Clue Scrolls (elite)"),
+            self::ACTIVITY_OLD_SCHOOL_MASTER_CLUE_SCROLLS => new Activity(self::ACTIVITY_OLD_SCHOOL_MASTER_CLUE_SCROLLS, "Clue Scrolls (master)")
         ];
     }
 

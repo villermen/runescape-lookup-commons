@@ -2,27 +2,24 @@
 
 namespace Villermen\RuneScape\HighScore;
 
-class ActivityHighScore extends HighScore
+class ActivityHighScore
 {
     /** @var HighScoreActivity[] */
-    protected $activities = [];
+    protected $activities;
 
     /**
      * Creates a HighScore object from raw high score data.
      *
      * @param HighScoreActivity[] $activities
-     * @param bool $oldSchool
      */
-    public function __construct(array $activities, bool $oldSchool)
+    public function __construct(array $activities)
     {
-        parent::__construct($oldSchool);
+        $this->activities = [];
+        foreach($activities as $activity) {
+            $this->activities[$activity->getActivity()->getId()] = $activity;
+        }
 
-        // Ensure that activities have their id as array key
-        array_walk($activities, function(HighScoreActivity $activity, &$key) {
-            $key = $activity->getActivity()->getId();
-        });
-
-        $this->activities = $activities;
+        ksort($this->activities);
     }
 
     /**

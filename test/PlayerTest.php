@@ -1,38 +1,62 @@
 <?php
 
-use Villermen\RuneScape\Player;
 use PHPUnit\Framework\TestCase;
+use Villermen\RuneScape\Activity;
+use Villermen\RuneScape\Exception\FetchFailedException;
+use Villermen\RuneScape\Player;
 use Villermen\RuneScape\PlayerDataFetcher;
+use Villermen\RuneScape\Skill;
+
 
 class PlayerTest extends TestCase
 {
+    /**
+     * Excl should have lifetime membership due to winning the first Machinima competition.
+     * Now let's hope they don't turn their adventurer's log to private.
+     */
+    const PLAYER_NAME = "excl";
+    const NONEXISTENT_PLAYER_NAME = "ifugMERWzm5G";
+
+    /** @var PlayerDataFetcher */
+    protected $dataFetcher;
+
     /** @var Player */
-    private $player;
+    protected $player;
 
     public function setUp()
     {
-        // Excl should have lifetime membership due to winning the first Machinima competition
-        // Now let's hope they don't turn their adventurer's log to private
-        $this->player = new Player("excl", new PlayerDataFetcher(10));
+        $this->dataFetcher = new PlayerDataFetcher(10);
+        $this->player = new Player(self::PLAYER_NAME, $this->dataFetcher);
     }
 
-    public function testPlayer()
+    public function testDataFetchingAndCaching()
     {
-        $highScore = $this->player->getHighScore();
-        self::assertSame($highScore, $this->player->getHighScore());
+        $highScore = $this->player->getSkillHighScore();
+        self::assertSame($highScore, $this->player->getSkillHighScore());
+        self::assertGreaterThanOrEqual(1929, $highScore->getSkill(Skill::SKILL_TOTAL)->getLevel());
+        self::assertGreaterThanOrEqual(9, $highScore->getSkill(Skill::SKILL_DIVINATION)->getLevel());
 
         $activityFeed = $this->player->getActivityFeed();
         self::assertSame($activityFeed, $this->player->getActivityFeed());
+        self::assertGreaterThan(new DateTime("2018-01-30"), $activityFeed->getItems()[0]->getTime());
 
-        $oldSchoolHighScore = $this->player->getOldSchoolHighScore();
-        self::assertSame($oldSchoolHighScore, $this->player->getOldSchoolHighScore());
+        $oldSchoolActivityHighScore = $this->player->getOldSchoolActivityHighScore();
+        self::assertSame($oldSchoolActivityHighScore, $this->player->getOldSchoolActivityHighScore());
+        self::assertGreaterThanOrEqual(0, $oldSchoolActivityHighScore->getActivity(Activity::ACTIVITY_OLD_SCHOOL_MASTER_CLUE_SCROLLS)->getScore());
 
         $this->player->fixName();
         self::assertEquals("Excl", $this->player->getName());
+    }
 
+    public function testNonExistentPlayer()
+    {
+        try {
+            $player = new Player(self::NONEXISTENT_PLAYER_NAME, $this->dataFetcher);
+            $player->fixName();
 
-        // TODO: HighScore wrong index for skills
-
-        // TODO: Test certain properties of objects (activityfeed latest date, highscore xp above x, oldschool dito)
+            self::fail();
+        } catch (FetchFailedException $exception) {
+            self::addToAssertionCount(1);
+        }
     }
 }

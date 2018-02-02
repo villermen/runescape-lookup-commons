@@ -3,19 +3,39 @@
 use Villermen\RuneScape\ActivityFeed\ActivityFeed;
 use PHPUnit\Framework\TestCase;
 use Villermen\RuneScape\Player;
+use Villermen\RuneScape\PlayerDataConverter;
 
 class ActivityFeedTest extends TestCase
 {
-    /** @var ActivityFeed */
-    private $activityFeed1;
+    /** @var string */
+    protected $realName1;
 
     /** @var ActivityFeed */
-    private $activityFeed2;
+    protected $activityFeed1;
+
+    /** @var string */
+    protected $realName2;
+
+    /** @var ActivityFeed */
+    protected $activityFeed2;
 
     public function setUp()
     {
-        $this->activityFeed1 = ActivityFeed::fromData(new Player("Ardanwen"), file_get_contents(__DIR__ . "/fixtures/activity-feed1.xml"));
-        $this->activityFeed2 = ActivityFeed::fromData(new Player("Ardanwen"), file_get_contents(__DIR__ . "/fixtures/activity-feed2.xml"));
+        $dataConverter = new PlayerDataConverter();
+
+        $convertedData1 = $dataConverter->convertAdventurersLog(file_get_contents(__DIR__ . "/fixtures/activity-feed-test-adventurers-log.xml"));
+        $this->realName1 = $convertedData1[PlayerDataConverter::KEY_REAL_NAME];
+        $this->activityFeed1 = $convertedData1[PlayerDataConverter::KEY_ACTIVITY_FEED];
+
+        $convertedData2 = $dataConverter->convertRuneMetrics(file_get_contents(__DIR__ . "/fixtures/activity-feed-test-runemetrics.json"));
+        $this->realName2 = $convertedData2[PlayerDataConverter::KEY_REAL_NAME];
+        $this->activityFeed2 = $convertedData2[PlayerDataConverter::KEY_ACTIVITY_FEED];
+    }
+
+    public function testRealName()
+    {
+        self::assertEquals("Ardanwen", $this->realName1);
+        self::assertEquals("Ardanwen", $this->realName2);
     }
 
     public function testGetItems()
@@ -26,7 +46,6 @@ class ActivityFeedTest extends TestCase
         self::assertEquals("Quest complete: The Jack of Spades", $this->activityFeed1->getItems()[19]->getTitle());
         self::assertStringStartsWith("I've", $this->activityFeed1->getItems()[19]->getDescription());
         self::assertEquals(new DateTime("2017-08-17 0:00", new DateTimeZone("UTC")), $this->activityFeed1->getItems()[19]->getTime());
-        self::assertEquals("787487639", $this->activityFeed1->getItems()[19]->getId());
     }
 
     public function testGetItemsAfter()

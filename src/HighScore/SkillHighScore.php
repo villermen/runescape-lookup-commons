@@ -4,27 +4,24 @@ namespace Villermen\RuneScape\HighScore;
 
 use Villermen\RuneScape\Skill;
 
-class SkillHighScore extends HighScore
+class SkillHighScore
 {
     /** @var HighScoreSkill[]  */
-    protected $skills = [];
+    protected $skills;
 
     /**
      * Creates a HighScore object from raw high score data.
      *
      * @param HighScoreSkill[] $skills
-     * @param bool $oldSchool
      */
-    public function __construct(array $skills, bool $oldSchool)
+    public function __construct(array $skills)
     {
-        parent::__construct($oldSchool);
+        $this->skills = [];
+        foreach($skills as $skill) {
+            $this->skills[$skill->getSkill()->getId()] = $skill;
+        }
 
-        // Ensure that skills have their id as array key
-        array_walk($skills, function(HighscoreSkill $skill, &$key) {
-            $key = $skill->getSkill()->getId();
-        });
-
-        $this->skills = $skills;
+        ksort($this->skills);
     }
 
     /**
