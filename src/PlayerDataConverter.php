@@ -148,7 +148,7 @@ class PlayerDataConverter
         /** @noinspection PhpUnhandledExceptionInspection */
         $skills[] = new HighScoreSkill(
             Skill::getSkill(Skill::SKILL_TOTAL),
-            str_replace(",", "", $data->rank),
+            $data->rank ? str_replace(",", "", $data->rank) : 0,
             $data->totalskill, $data->totalxp
         );
 
