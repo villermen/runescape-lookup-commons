@@ -139,7 +139,7 @@ class PlayerDataConverter
                 $skill = Skill::getSkill($skillId);
                 $xp = (int)($skillvalue->xp / 10);
 
-                $skills[] = new HighScoreSkill($skill, $skillvalue->rank, $skillvalue->level, $xp);
+                $skills[] = new HighScoreSkill($skill, $skillvalue->rank ?? 0, $skillvalue->level, $xp);
             } catch (RuneScapeException $exception) {
             }
         }
