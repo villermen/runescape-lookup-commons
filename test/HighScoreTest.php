@@ -54,6 +54,10 @@ class HighScoreTest extends TestCase
         self::assertEquals(2402334, $invSkill->getXpToNextLevel());
         self::assertEquals(0.1846, round($invSkill->getProgressToNextLevel(), 4));
 
+
+        // Test division of XP for RuneMetrics
+        self::assertEquals(2497610, $this->skillHighScore2->getSkill(Skill::SKILL_AGILITY)->getXp());
+
         // Activity
         self::assertEquals(1362803, $this->activityHighScore1->getActivity(Activity::ACTIVITY_DOMINION_TOWER)->getScore());
         self::assertNull($this->activityHighScore1->getActivity(200));
