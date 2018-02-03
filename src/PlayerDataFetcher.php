@@ -224,11 +224,11 @@ class PlayerDataFetcher
         // Try available strategies until the value is available
         $firstException = null;
         foreach($fetchStrategies as $url => $conversionMethod) {
-            $url = sprintf($url, urlencode($playerName));
-
-            $data = $this->fetchUrl($url);
-
             try {
+                $url = sprintf($url, urlencode($playerName));
+
+                $data = $this->fetchUrl($url);
+
                 $result = call_user_func([$this->dataConverter, $conversionMethod], $data);
 
                 // Cache resulting object(s) if they haven't been cached yet

@@ -2,10 +2,9 @@
 
 namespace Villermen\RuneScape\Exception;
 
-use Exception;
 use Throwable;
 
-class DataConversionException extends Exception
+class DataConversionException extends RuneScapeException
 {
     public function __construct($message = "", $code = 0, Throwable $previous = null)
     {

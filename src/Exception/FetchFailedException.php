@@ -2,10 +2,9 @@
 
 namespace Villermen\RuneScape\Exception;
 
-use Exception;
 use Throwable;
 
-class FetchFailedException extends Exception
+class FetchFailedException extends RuneScapeException
 {
     public function __construct($message = "", $code = 0, Throwable $previous = null)
     {
