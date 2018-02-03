@@ -7,7 +7,6 @@ use Villermen\RuneScape\Player;
 use Villermen\RuneScape\PlayerDataFetcher;
 use Villermen\RuneScape\Skill;
 
-
 class PlayerTest extends TestCase
 {
     /**

@@ -52,10 +52,14 @@ class Player
 
     /**
      * @throws FetchFailedException
+     *
+     * @return Player
      */
     public function fixName()
     {
         $this->name = $this->getDataFetcher()->fetchRealName($this->getName());
+
+        return $this;
     }
 
     /**
@@ -147,6 +151,7 @@ class Player
 
     /**
      * @param PlayerDataFetcher $dataFetcher
+     *
      * @return Player
      */
     public function setDataFetcher(PlayerDataFetcher $dataFetcher): Player

@@ -2,7 +2,6 @@
 
 use Villermen\RuneScape\ActivityFeed\ActivityFeed;
 use PHPUnit\Framework\TestCase;
-use Villermen\RuneScape\Player;
 use Villermen\RuneScape\PlayerDataConverter;
 
 class ActivityFeedTest extends TestCase

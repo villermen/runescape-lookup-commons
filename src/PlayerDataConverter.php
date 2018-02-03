@@ -158,7 +158,7 @@ class PlayerDataConverter
         }
 
         return [
-            self::KEY_SKILL_HIGH_SCORE => new SkillHighScore($skills, false),
+            self::KEY_SKILL_HIGH_SCORE => new SkillHighScore($skills),
             self::KEY_ACTIVITY_FEED => new ActivityFeed($activities),
             self::KEY_REAL_NAME => $data->name
         ];

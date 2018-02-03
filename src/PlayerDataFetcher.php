@@ -4,7 +4,6 @@ namespace Villermen\RuneScape;
 
 use Exception;
 use Villermen\RuneScape\ActivityFeed\ActivityFeed;
-use Villermen\RuneScape\ActivityFeed\ActivityFeedItem;
 use Villermen\RuneScape\Exception\DataConversionException;
 use Villermen\RuneScape\Exception\FetchFailedException;
 use Villermen\RuneScape\HighScore\ActivityHighScore;
@@ -203,6 +202,7 @@ class PlayerDataFetcher
         return $this->cache[$cacheKey][$playerCacheKey];
     }
 
+    /** @noinspection PhpDocMissingThrowsInspection */
     /**
      * Fetches an item from cache, or obtains it freshly using the given functions.
      *
@@ -253,6 +253,7 @@ class PlayerDataFetcher
                         $firstException = $exception;
                     }
                 } else {
+                    /** @noinspection PhpUnhandledExceptionInspection */
                     throw $exception;
                 }
             }
