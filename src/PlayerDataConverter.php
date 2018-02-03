@@ -24,7 +24,7 @@ class PlayerDataConverter
     const KEY_SKILL_HIGH_SCORE = "skillHighScore";
     const KEY_OLD_SCHOOL_SKILL_HIGH_SCORE = "oldSchoolSkillHighScore";
     const KEY_ACTIVITY_HIGH_SCORE = "activityHighScore";
-    const KEY_OLDSCHOOL_ACTIVITY_HIGH_SCORE = "oldSchoolActivityHighScore";
+    const KEY_OLD_SCHOOL_ACTIVITY_HIGH_SCORE = "oldSchoolActivityHighScore";
     const KEY_ACTIVITY_FEED = "activityFeed";
 
     /**
@@ -101,7 +101,7 @@ class PlayerDataConverter
         }
 
         $skillHighScoreKey = $oldSchool ? self::KEY_OLD_SCHOOL_SKILL_HIGH_SCORE : self::KEY_SKILL_HIGH_SCORE;
-        $activityHighScoreKey = $oldSchool ? self::KEY_OLDSCHOOL_ACTIVITY_HIGH_SCORE : self::KEY_ACTIVITY_HIGH_SCORE;
+        $activityHighScoreKey = $oldSchool ? self::KEY_OLD_SCHOOL_ACTIVITY_HIGH_SCORE : self::KEY_ACTIVITY_HIGH_SCORE;
 
         return [
             $skillHighScoreKey => new SkillHighScore($skills),

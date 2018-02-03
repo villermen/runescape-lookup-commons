@@ -144,4 +144,15 @@ class Player
     {
         return $this->dataFetcher;
     }
+
+    /**
+     * @param PlayerDataFetcher $dataFetcher
+     * @return Player
+     */
+    public function setDataFetcher(PlayerDataFetcher $dataFetcher): Player
+    {
+        $this->dataFetcher = $dataFetcher;
+
+        return $this;
+    }
 }

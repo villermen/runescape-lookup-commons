@@ -4,6 +4,7 @@ namespace Villermen\RuneScape;
 
 use Exception;
 use Villermen\RuneScape\ActivityFeed\ActivityFeed;
+use Villermen\RuneScape\ActivityFeed\ActivityFeedItem;
 use Villermen\RuneScape\Exception\DataConversionException;
 use Villermen\RuneScape\Exception\FetchFailedException;
 use Villermen\RuneScape\HighScore\ActivityHighScore;
@@ -47,6 +48,17 @@ class PlayerDataFetcher
     }
 
     /**
+     * Returns an string from cache, or null if it isn't cached.
+     *
+     * @param string $playerName
+     * @return string|null
+     */
+    public function getCachedRealName(string $playerName)
+    {
+        return $this->getCached($playerName, PlayerDataConverter::KEY_REAL_NAME);
+    }
+
+    /**
      * @param string $playerName
      * @return SkillHighScore
      * @throws FetchFailedException
@@ -57,6 +69,17 @@ class PlayerDataFetcher
             self::RUNEMETRICS_URL => "convertRuneMetrics",
             self::INDEX_LITE_URL => "convertIndexLite"
         ]);
+    }
+
+    /**
+     * Returns a SkillHighScore from cache, or null if it isn't cached.
+     *
+     * @param string $playerName
+     * @return SkillHighScore|null
+     */
+    public function getCachedSkillHighScore(string $playerName)
+    {
+        return $this->getCached($playerName, PlayerDataConverter::KEY_SKILL_HIGH_SCORE);
     }
 
     /**
@@ -72,6 +95,17 @@ class PlayerDataFetcher
     }
 
     /**
+     * Returns a SkillHighScore from cache, or null if it isn't cached.
+     *
+     * @param string $playerName
+     * @return SkillHighScore|null
+     */
+    public function getCachedOldSchoolSkillHighScore(string $playerName)
+    {
+        return $this->getCached($playerName, PlayerDataConverter::KEY_OLD_SCHOOL_SKILL_HIGH_SCORE);
+    }
+
+    /**
      * @param string $playerName
      * @return ActivityHighScore
      * @throws FetchFailedException
@@ -84,15 +118,37 @@ class PlayerDataFetcher
     }
 
     /**
+     * Returns an ActivityHighScore from cache, or null if it isn't cached.
+     *
+     * @param string $playerName
+     * @return ActivityHighScore|null
+     */
+    public function getCachedActivityHighScore(string $playerName)
+    {
+        return $this->getCached($playerName, PlayerDataConverter::KEY_ACTIVITY_HIGH_SCORE);
+    }
+
+    /**
      * @param string $playerName
      * @return ActivityHighScore
      * @throws FetchFailedException
      */
     public function fetchOldSchoolActivityHighScore(string $playerName): ActivityHighScore
     {
-        return $this->fetch($playerName, PlayerDataConverter::KEY_OLDSCHOOL_ACTIVITY_HIGH_SCORE, [
+        return $this->fetch($playerName, PlayerDataConverter::KEY_OLD_SCHOOL_ACTIVITY_HIGH_SCORE, [
             self::OLD_SCHOOL_INDEX_LITE_URL => "convertOldSchoolIndexLite"
         ]);
+    }
+
+    /**
+     * Returns an ActivityHighScore from cache, or null if it isn't cached.
+     *
+     * @param string $playerName
+     * @return ActivityHighScore|null
+     */
+    public function getCachedOldSchoolActivityHighScore(string $playerName)
+    {
+        return $this->getCached($playerName, PlayerDataConverter::KEY_OLD_SCHOOL_ACTIVITY_HIGH_SCORE);
     }
 
     /**
@@ -109,6 +165,17 @@ class PlayerDataFetcher
     }
 
     /**
+     * Returns an ActivityFeed from cache, or null if it isn't cached.
+     *
+     * @param string $playerName
+     * @return ActivityFeed|null
+     */
+    public function getCachedActivityFeed(string $playerName)
+    {
+        return $this->getCached($playerName, PlayerDataConverter::KEY_ACTIVITY_FEED);
+    }
+
+    /**
      * Set the timeOut used for every external request.
      *
      * @param int $seconds
@@ -116,6 +183,24 @@ class PlayerDataFetcher
     public function setTimeOut(int $seconds)
     {
         $this->timeOut = $seconds;
+    }
+
+    /**
+     * Returns an object from cache, or null if it isn't cached.
+     *
+     * @param string $playerName
+     * @param string $cacheKey
+     * @return mixed|null
+     */
+    public function getCached(string $playerName, string $cacheKey)
+    {
+        $playerCacheKey = strtolower($playerName);
+
+        if (!isset($this->cache[$cacheKey][$playerCacheKey])) {
+            return null;
+        }
+
+        return $this->cache[$cacheKey][$playerCacheKey];
     }
 
     /**

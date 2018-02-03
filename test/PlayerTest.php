@@ -59,4 +59,6 @@ class PlayerTest extends TestCase
             self::addToAssertionCount(1);
         }
     }
+
+    // TODO: Test getFromCache
 }
