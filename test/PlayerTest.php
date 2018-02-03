@@ -36,7 +36,10 @@ class PlayerTest extends TestCase
         self::assertGreaterThanOrEqual(1929, $highScore->getSkill(Skill::SKILL_TOTAL)->getLevel());
         self::assertGreaterThanOrEqual(9, $highScore->getSkill(Skill::SKILL_DIVINATION)->getLevel());
 
-        $activityFeed = $this->player->getActivityFeed();
+        $activityFeed = $this->dataFetcher->getCachedActivityFeed(self::PLAYER_NAME);
+        self::assertNotNull($activityFeed);
+        self::assertNotNull($this->dataFetcher->getCachedRealName(self::PLAYER_NAME));
+
         self::assertSame($activityFeed, $this->player->getActivityFeed());
         self::assertGreaterThan(new DateTime("2018-01-30"), $activityFeed->getItems()[0]->getTime());
 
@@ -59,6 +62,4 @@ class PlayerTest extends TestCase
             self::addToAssertionCount(1);
         }
     }
-
-    // TODO: Test getFromCache
 }

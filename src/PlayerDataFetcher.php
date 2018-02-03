@@ -192,7 +192,7 @@ class PlayerDataFetcher
      * @param string $cacheKey
      * @return mixed|null
      */
-    public function getCached(string $playerName, string $cacheKey)
+    protected function getCached(string $playerName, string $cacheKey)
     {
         $playerCacheKey = strtolower($playerName);
 
