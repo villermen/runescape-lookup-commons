@@ -6,11 +6,8 @@ use Villermen\RuneScape\Exception\RuneScapeException;
 
 abstract class HighScoreEntryComparison
 {
-    /** @var HighScoreEntry */
-    private $entry1;
-
-    /** @var HighScoreEntry */
-    private $entry2;
+    /** @var int|false */
+    protected $rankDifference;
 
     /**
      *
@@ -24,22 +21,21 @@ abstract class HighScoreEntryComparison
             throw new RuneScapeException("At least one of the entries must be given in a comparison.");
         }
 
-        $this->entry1 = $entry1;
-        $this->entry2 = $entry2;
+        if ($entry1 && $entry2 && $entry1->getRank() && $entry2->getRank()) {
+            $this->rankDifference = $entry2->getRank() - $entry1->getRank();
+        } else {
+            $this->rankDifference = false;
+        }
     }
 
     /**
      * Difference in rank between the two entries.
      * False when either one of them does not have a rank.
      *
-     * @return false|int
+     * @return int|false
      */
     public function getRankDifference()
     {
-        if (!$this->entry1 || !$this->entry1->getRank() || !$this->entry2 || !$this->entry2->getRank()) {
-            return false;
-        }
-
-        return $this->entry2->getRank() - $this->entry1->getRank();
+        return $this->rankDifference;
     }
 }

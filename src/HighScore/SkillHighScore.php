@@ -28,23 +28,22 @@ class SkillHighScore
      * Returns the combat level of this high score.
      *
      * @param bool $includeSummoning Whether to include the summoning skill while calculating the combat level.
-     * @param bool $uncapped
      * @return int
      */
-    public function getCombatLevel($includeSummoning = true, $uncapped = false): int
+    public function getCombatLevel($includeSummoning = true): int
     {
-        $attackLevel = $this->getSkill(Skill::SKILL_ATTACK)->getLevel($uncapped);
-        $defenceLevel = $this->getSkill(Skill::SKILL_DEFENCE)->getLevel($uncapped);
-        $strengthLevel = $this->getSkill(Skill::SKILL_STRENGTH)->getLevel($uncapped);
-        $constitutionLevel = $this->getSkill(Skill::SKILL_CONSTITUTION)->getLevel($uncapped);
-        $rangedLevel = $this->getSkill(Skill::SKILL_RANGED)->getLevel($uncapped);
-        $prayerLevel = $this->getSkill(Skill::SKILL_PRAYER)->getLevel($uncapped);
-        $magicLevel = $this->getSkill(Skill::SKILL_MAGIC)->getLevel($uncapped);
+        $attackLevel = $this->getSkill(Skill::SKILL_ATTACK)->getLevel();
+        $defenceLevel = $this->getSkill(Skill::SKILL_DEFENCE)->getLevel();
+        $strengthLevel = $this->getSkill(Skill::SKILL_STRENGTH)->getLevel();
+        $constitutionLevel = $this->getSkill(Skill::SKILL_CONSTITUTION)->getLevel();
+        $rangedLevel = $this->getSkill(Skill::SKILL_RANGED)->getLevel();
+        $prayerLevel = $this->getSkill(Skill::SKILL_PRAYER)->getLevel();
+        $magicLevel = $this->getSkill(Skill::SKILL_MAGIC)->getLevel();
 
         $summoningSkill = $this->getSkill(Skill::SKILL_SUMMONING);
 
         if ($includeSummoning && $summoningSkill) {
-            $summoningLevel = $summoningSkill->getLevel($uncapped);
+            $summoningLevel = $summoningSkill->getLevel();
         } else {
             $summoningLevel = 1;
         }

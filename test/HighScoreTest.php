@@ -40,13 +40,13 @@ class HighScoreTest extends TestCase
         // Skill
         self::assertEquals(120, $this->skillHighScore1->getSkill(Skill::SKILL_INVENTION)->getLevel());
         self::assertEquals(99, $this->skillHighScore1->getSkill(Skill::SKILL_SMITHING)->getLevel());
-        self::assertEquals(106, $this->skillHighScore1->getSkill(Skill::SKILL_SMITHING)->getLevel(true));
-        self::assertEquals(2733, $this->skillHighScore1->getSkill(Skill::SKILL_TOTAL)->getLevel(true));
+        self::assertEquals(106, $this->skillHighScore1->getSkill(Skill::SKILL_SMITHING)->getVirtualLevel());
+        self::assertEquals(2733, $this->skillHighScore1->getSkill(Skill::SKILL_TOTAL)->getVirtualLevel());
         self::assertNull($this->skillHighScore1->getSkill(200));
 
         $invSkill = $this->skillHighScore1->getSkill(Skill::SKILL_INVENTION);
         self::assertEquals(120, $invSkill->getLevel());
-        self::assertEquals(123, $invSkill->getLevel(true));
+        self::assertEquals(123, $invSkill->getVirtualLevel());
         self::assertEquals(89610570, $invSkill->getXp());
         self::assertEquals(2402334, $invSkill->getXpToNextLevel());
         self::assertEquals(29334, $invSkill->getRank());
@@ -70,7 +70,6 @@ class HighScoreTest extends TestCase
     {
         self::assertEquals(138, $this->skillHighScore1->getCombatLevel());
         self::assertEquals(126, $this->skillHighScore1->getCombatLevel(false));
-        self::assertEquals(157, $this->skillHighScore1->getCombatLevel(true, true));
     }
 
     public function testComparison()
@@ -90,7 +89,7 @@ class HighScoreTest extends TestCase
         self::assertFalse($invComparison->getRankDifference());
 
         // Uncapped level
-        self::assertEquals(122, $invComparison->getLevelDifference(true));
+        self::assertEquals(122, $invComparison->getVirtualLevelDifference());
 
         $activityComparison = $this->activityHighScore1->compareTo($this->activityHighScore2);
 

@@ -43,8 +43,11 @@ class HighScoreSkill extends HighScoreEntry
      */
     public function getXpToNextLevel()
     {
-        $level = $this->getLevel(true);
+        if ($this->isTotal()) {
+            return false;
+        }
 
+        $level = $this->getVirtualLevel();
         $nextXp = $this->getSkill()->getXp($level + 1);
 
         if (!$nextXp) {
@@ -61,7 +64,11 @@ class HighScoreSkill extends HighScoreEntry
      */
     public function getProgressToNextLevel()
     {
-        $level = $this->getLevel(true);
+        if ($this->isTotal()) {
+            return false;
+        }
+
+        $level = $this->getVirtualLevel();
         $currentLevelXp = $this->getSkill()->getXp($level);
         $nextLevelXp = $this->getSkill()->getXp($level + 1);
 
@@ -84,17 +91,24 @@ class HighScoreSkill extends HighScoreEntry
     }
 
     /**
-     * @param bool $uncapped
      * @return int
      */
-    public function getLevel(bool $uncapped = false): int
+    public function getLevel(): int
     {
-        // Total level cannot be uncapped as it does not map to an XP table
-        if ($uncapped && $this->skill->getId() !== Skill::SKILL_TOTAL) {
-            return $this->getSkill()->getLevel($this->getXp(), true);
+        return $this->level;
+    }
+
+    /**
+     * @return int
+     */
+    public function getVirtualLevel(): int
+    {
+        // Total level does not do virtual levelling
+        if ($this->isTotal()) {
+            return $this->level;
         }
 
-        return $this->level;
+        return $this->getSkill()->getVirtualLevel($this->getXp());
     }
 
     /**
@@ -109,6 +123,14 @@ class HighScoreSkill extends HighScoreEntry
     public function getName(): string
     {
         return $this->getSkill()->getName();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isTotal(): bool
+    {
+        return $this->skill->getId() === Skill::SKILL_TOTAL;
     }
 
     /**

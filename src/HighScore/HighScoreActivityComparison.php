@@ -2,16 +2,12 @@
 
 namespace Villermen\RuneScape\HighScore;
 
-use Villermen\RuneScape\Activity;
 use Villermen\RuneScape\Exception\RuneScapeException;
 
 class HighScoreActivityComparison extends HighScoreEntryComparison
 {
-    /** @var HighScoreActivity */
-    protected $activity1;
-
-    /** @var HighScoreActivity */
-    protected $activity2;
+    /** @var int */
+    protected $scoreDifference;
 
     /**
      * HighScoreComparisonActivity constructor.
@@ -35,8 +31,7 @@ class HighScoreActivityComparison extends HighScoreEntryComparison
             throw new RuneScapeException("Can't compare two different activities.");
         }
 
-        $this->activity1 = $activity1;
-        $this->activity2 = $activity2;
+        $this->scoreDifference = $activity1->getScore() - $activity2->getScore();
     }
 
     /**
@@ -44,14 +39,6 @@ class HighScoreActivityComparison extends HighScoreEntryComparison
      */
     public function getScoreDifference(): int
     {
-        return $this->activity1->getScore() - $this->activity2->getScore();
-    }
-
-    /**
-     * @return Activity
-     */
-    public function getActivity(): Activity
-    {
-        return $this->activity1->getActivity();
+        return $this->scoreDifference;
     }
 }

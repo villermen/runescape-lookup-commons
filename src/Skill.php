@@ -150,10 +150,28 @@ class Skill
      * Returns the level in this skill for the given XP.
      *
      * @param int $xp
-     * @param bool $uncapped
      * @return int
      */
-    public function getLevel(int $xp, bool $uncapped = false): int
+    public function getLevel(int $xp): int
+    {
+        $level = $this->getVirtualLevel($xp);
+
+        $levelCap = $this->isHighLevelCap() ? 120 : 99;
+
+        if ($level > $levelCap) {
+            $level = $levelCap;
+        }
+
+        return $level;
+    }
+
+    /**
+     * Returns the level in this skill for the given XP, disregarding the maximum level in the skill.
+     *
+     * @param int $xp
+     * @return int
+     */
+    public function getVirtualLevel(int $xp): int
     {
         $xpTable = $this->getXpTable();
 
@@ -161,15 +179,6 @@ class Skill
             if ($xpTable[$level] > $xp) {
                 $level--;
                 break;
-            }
-        }
-
-        // Cap
-        if (!$uncapped) {
-            $levelCap = $this->isHighLevelCap() ? 120 : 99;
-
-            if ($level > $levelCap) {
-                $level = $levelCap;
             }
         }
 

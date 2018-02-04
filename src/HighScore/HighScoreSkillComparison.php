@@ -3,24 +3,17 @@
 namespace Villermen\RuneScape\HighScore;
 
 use Villermen\RuneScape\Exception\RuneScapeException;
-use Villermen\RuneScape\Skill;
 
 class HighScoreSkillComparison extends HighScoreEntryComparison
 {
     /** @var int */
-    protected $rankDifference;
-
-    /** @var int */
     protected $levelDifference;
 
     /** @var int */
+    protected $virtualLevelDifference;
+
+    /** @var int */
     protected $xpDifference;
-
-    /** @var HighScoreSkill */
-    protected $skill1;
-
-    /** @var HighScoreSkill */
-    protected $skill2;
 
     /**
      * HighScoreComparisonSkill constructor.
@@ -44,17 +37,25 @@ class HighScoreSkillComparison extends HighScoreEntryComparison
             throw new RuneScapeException("Can't compare two different skills.");
         }
 
-        $this->skill1 = $skill1;
-        $this->skill2 = $skill2;
+        $this->xpDifference = $skill1->getXp() - $skill2->getXp();
+        $this->levelDifference = $skill1->getLevel() - $skill2->getLevel();
+        $this->virtualLevelDifference = $skill1->getVirtualLevel() - $skill2->getVirtualLevel();
     }
 
     /**
-     * @param bool $uncapped
      * @return int
      */
-    public function getLevelDifference(bool $uncapped = false): int
+    public function getLevelDifference(): int
     {
-        return $this->skill1->getLevel($uncapped) - $this->skill2->getLevel($uncapped);
+        return $this->levelDifference;
+    }
+
+    /**
+     * @return int
+     */
+    public function getVirtualLevelDifference(): int
+    {
+        return $this->virtualLevelDifference;
     }
 
     /**
@@ -62,14 +63,6 @@ class HighScoreSkillComparison extends HighScoreEntryComparison
      */
     public function getXpDifference(): int
     {
-        return $this->skill1->getXp() - $this->skill2->getXp();
-    }
-
-    /**
-     * @return Skill
-     */
-    public function getSkill(): Skill
-    {
-        return $this->skill1->getSkill();
+        return $this->xpDifference;
     }
 }
