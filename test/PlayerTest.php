@@ -46,7 +46,7 @@ class PlayerTest extends TestCase
         self::assertSame($oldSchoolActivityHighScore, $this->player->getOldSchoolActivityHighScore());
         self::assertGreaterThanOrEqual(0, $oldSchoolActivityHighScore->getActivity(Activity::ACTIVITY_OLD_SCHOOL_MASTER_CLUE_SCROLLS)->getScore());
 
-        $this->player->fixName();
+        $this->player->fixNameIfCached();
         self::assertEquals("Excl", $this->player->getName());
     }
 

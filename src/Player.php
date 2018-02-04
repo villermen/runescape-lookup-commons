@@ -55,9 +55,23 @@ class Player
      *
      * @return Player
      */
-    public function fixName()
+    public function fixName(): Player
     {
         $this->name = $this->getDataFetcher()->fetchRealName($this->getName());
+
+        return $this;
+    }
+
+    /** @noinspection PhpDocMissingThrowsInspection */
+    /**
+     * @return Player
+     */
+    public function fixNameIfCached(): Player
+    {
+        if ($this->getDataFetcher()->getCachedRealName($this->getName())) {
+            /** @noinspection PhpUnhandledExceptionInspection */
+            $this->fixName();
+        }
 
         return $this;
     }
