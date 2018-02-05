@@ -48,10 +48,9 @@ class SkillHighScore
             $summoningLevel = 1;
         }
 
-        return (int)((
+        return (int)max(3, (
             max($attackLevel + $strengthLevel, $magicLevel * 2, $rangedLevel * 2) * 1.3 +
-            $defenceLevel + $constitutionLevel +
-            floor($prayerLevel / 2) + floor($summoningLevel / 2)
+            $defenceLevel + $constitutionLevel + floor($prayerLevel / 2) + floor($summoningLevel / 2)
         ) / 4);
     }
 
