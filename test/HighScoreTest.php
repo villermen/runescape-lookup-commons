@@ -2,6 +2,7 @@
 
 use Villermen\RuneScape\Activity;
 use Villermen\RuneScape\HighScore\ActivityHighScore;
+use Villermen\RuneScape\HighScore\HighScoreSkill;
 use Villermen\RuneScape\HighScore\SkillHighScore;
 use PHPUnit\Framework\TestCase;
 use Villermen\RuneScape\PlayerDataConverter;
@@ -21,6 +22,9 @@ class HighScoreTest extends TestCase
     /** @var ActivityHighScore */
     protected $activityHighScore2;
 
+    /** @var SkillHighScore */
+    protected $skillHighScore3;
+
     public function setUp()
     {
         $dataConverter = new PlayerDataConverter();
@@ -33,6 +37,11 @@ class HighScoreTest extends TestCase
 
         $convertedData3 = $dataConverter->convertIndexLite(file_get_contents(__DIR__ . "/fixtures/high-score-test-index-lite2.csv"));
         $this->activityHighScore2 = $convertedData3[PlayerDataConverter::KEY_ACTIVITY_HIGH_SCORE];
+
+        $this->skillHighScore3 = new SkillHighScore([
+            new HighScoreSkill(Skill::getSkill(Skill::SKILL_ATTACK), -1, -1, -1),
+            new HighScoreSkill(Skill::getSkill(Skill::SKILL_CONSTITUTION), -1, -1, -1)
+        ]);
     }
 
     public function testEntries()
@@ -41,6 +50,7 @@ class HighScoreTest extends TestCase
         self::assertEquals(120, $this->skillHighScore1->getSkill(Skill::SKILL_INVENTION)->getLevel());
         self::assertEquals(99, $this->skillHighScore1->getSkill(Skill::SKILL_SMITHING)->getLevel());
         self::assertEquals(106, $this->skillHighScore1->getSkill(Skill::SKILL_SMITHING)->getVirtualLevel());
+        self::assertEquals(2733, $this->skillHighScore1->getSkill(Skill::SKILL_TOTAL)->getLevel());
         self::assertEquals(2733, $this->skillHighScore1->getSkill(Skill::SKILL_TOTAL)->getVirtualLevel());
         self::assertNull($this->skillHighScore1->getSkill(200));
 
@@ -54,7 +64,6 @@ class HighScoreTest extends TestCase
         self::assertEquals(2402334, $invSkill->getXpToNextLevel());
         self::assertEquals(0.1846, round($invSkill->getProgressToNextLevel(), 4));
 
-
         // Test division of XP for RuneMetrics
         self::assertEquals(2497610, $this->skillHighScore2->getSkill(Skill::SKILL_AGILITY)->getXp());
 
@@ -64,12 +73,18 @@ class HighScoreTest extends TestCase
         self::assertFalse($this->activityHighScore1->getActivity(Activity::ACTIVITY_GIELINOR_GAMES_RESOURCE_RACE)->getRank());
         self::assertEquals(0, $this->activityHighScore1->getActivity(Activity::ACTIVITY_WORLD_EVENT_2_BANDOS_KILLS)->getScore());
 
+        // Constitution initialized with no level
+        self::assertEquals(10, $this->skillHighScore3->getSkill(Skill::SKILL_CONSTITUTION)->getLevel());
+
     }
 
     public function testCombatLevel()
     {
         self::assertEquals(138, $this->skillHighScore1->getCombatLevel());
         self::assertEquals(126, $this->skillHighScore1->getCombatLevel(false));
+
+        // With only attack and constitution set
+        self::assertEquals(3, $this->skillHighScore3->getCombatLevel());
     }
 
     public function testComparison()

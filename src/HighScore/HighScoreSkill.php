@@ -24,18 +24,8 @@ class HighScoreSkill extends HighScoreEntry
         parent::__construct($rank);
 
         $this->skill = $skill;
-
-        if ($level < 1) {
-            $level = $skill->getMinimumLevel();
-        }
-
-        $this->level = $level;
-
-        if ($xp < 0) {
-            $xp = 0;
-        }
-
-        $this->xp = $xp;
+        $this->level = max(1, $level);
+        $this->xp = max(0, $xp);
     }
 
     /**
@@ -95,7 +85,11 @@ class HighScoreSkill extends HighScoreEntry
      */
     public function getLevel(): int
     {
-        return $this->level;
+        if ($this->isTotal()) {
+            return $this->level;
+        }
+
+        return $this->getSkill()->getLevel($this->getXp());
     }
 
     /**
@@ -103,11 +97,10 @@ class HighScoreSkill extends HighScoreEntry
      */
     public function getVirtualLevel(): int
     {
-        // Total level does not do virtual levelling
         if ($this->isTotal()) {
             return $this->level;
         }
-
+        
         return $this->getSkill()->getVirtualLevel($this->getXp());
     }
 
