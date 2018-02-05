@@ -75,7 +75,7 @@ class HighScoreTest extends TestCase
 
         // Constitution initialized with no level
         self::assertEquals(10, $this->skillHighScore3->getSkill(Skill::SKILL_CONSTITUTION)->getLevel());
-
+        self::assertEquals(1154, $this->skillHighScore3->getSkill(Skill::SKILL_CONSTITUTION)->getXp());
     }
 
     public function testCombatLevel()

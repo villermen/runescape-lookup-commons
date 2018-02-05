@@ -89,7 +89,7 @@ class HighScoreSkill extends HighScoreEntry
             return $this->level;
         }
 
-        return $this->getSkill()->getLevel($this->getXp());
+        return $this->getSkill()->getLevel($this->xp);
     }
 
     /**
@@ -100,8 +100,8 @@ class HighScoreSkill extends HighScoreEntry
         if ($this->isTotal()) {
             return $this->level;
         }
-        
-        return $this->getSkill()->getVirtualLevel($this->getXp());
+
+        return $this->getSkill()->getVirtualLevel($this->xp);
     }
 
     /**
@@ -109,6 +109,11 @@ class HighScoreSkill extends HighScoreEntry
      */
     public function getXp(): int
     {
+        // Match minimum XP required if skill has a higher minimum level
+        if (!$this->xp && $this->getLevel() > 1) {
+            return $this->getSkill()->getXp($this->getLevel());
+        }
+
         return $this->xp;
     }
 

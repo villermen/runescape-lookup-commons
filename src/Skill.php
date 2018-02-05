@@ -154,7 +154,10 @@ class Skill
      */
     public function getLevel(int $xp): int
     {
-        return min($this->getVirtualLevel($xp), $this->isHighLevelCap() ? 120 : 99);
+        $level = $this->getVirtualLevel($xp);
+        $cap = $this->isHighLevelCap() ? 120 : 99;
+
+        return min($level, $cap);
     }
 
     /**
