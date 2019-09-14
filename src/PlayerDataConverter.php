@@ -2,9 +2,6 @@
 
 namespace Villermen\RuneScape;
 
-use DateTime;
-use Exception;
-use SimpleXMLElement;
 use Villermen\RuneScape\ActivityFeed\ActivityFeed;
 use Villermen\RuneScape\ActivityFeed\ActivityFeedItem;
 use Villermen\RuneScape\Exception\DataConversionException;
@@ -52,8 +49,6 @@ class PlayerDataConverter
     }
 
     /**
-     * @param string $data
-     * @param bool $oldSchool
      * @return mixed[]
      * @throws DataConversionException
      */
@@ -155,7 +150,14 @@ class PlayerDataConverter
         // ActivityFeed
         $activities = [];
         foreach($data->activities as $activity) {
-            $activities[] = new ActivityFeedItem(new DateTime($activity->date), $activity->text, $activity->details);
+            $time = new \DateTime($activity->date);
+            $time->setTimezone(new \DateTimeZone('UTC'));
+
+            $activities[] = new ActivityFeedItem(
+                $time,
+                trim($activity->text),
+                trim($activity->details)
+            );
         }
 
         return [
@@ -178,8 +180,8 @@ class PlayerDataConverter
         $feedItems = [];
 
         try {
-            $feed = new SimpleXmlElement($data);
-        } catch (Exception $exception) {
+            $feed = new \SimpleXmlElement($data);
+        } catch (\Exception $exception) {
             throw new DataConversionException("Could not parse the activity feed as XML.");
         }
 
@@ -190,14 +192,15 @@ class PlayerDataConverter
         }
 
         foreach ($itemElements as $itemElement) {
-            $time = new DateTime($itemElement->pubDate);
+            $time = new \DateTime($itemElement->pubDate);
+            $time->setTimezone(new \DateTimeZone('UTC'));
             $title = trim((string)$itemElement->title);
             $description = trim((string)$itemElement->description);
 
-            if (!$time || !$title || !$description) {
+            if (!$title || !$description) {
                 throw new DataConversionException(sprintf(
                     "Could not parse one of the activity feed items. (time: %s, title: %s, description: %s)",
-                    $time ? $time->format("j-n-Y") : "", $title, $description
+                    $time->format("j-n-Y"), $title, $description
                 ));
             }
 

@@ -15,7 +15,7 @@ use Villermen\RuneScape\HighScore\SkillHighScore;
 class PlayerDataFetcher
 {
     const INDEX_LITE_URL = "http://services.runescape.com/m=hiscore/index_lite.ws?player=%s";
-    const OLD_SCHOOL_INDEX_LITE_URL = "http://services.runescape.com/m=hiscore_oldschool/index_lite.ws?player=%s";
+    const OLD_SCHOOL_INDEX_LITE_URL = "https://secure.runescape.com/m=hiscore_oldschool/a=13/index_lite.ws?player=%s";
     const ADVENTURERS_LOG_URL = "http://services.runescape.com/m=adventurers-log/a=13/rssfeed?searchName=%s";
     const RUNEMETRICS_URL = "https://apps.runescape.com/runemetrics/profile/profile?user=%s&activities=20";
 
