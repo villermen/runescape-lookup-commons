@@ -33,12 +33,17 @@ class ActivityHighScoreComparison
         return $this->activities;
     }
 
+    public function hasActivity(int $id): bool
+    {
+        return isset($this->activities[$id]);
+    }
+
     /**
      * @param int $id One of the {@see Activity}::ACTIVITY_* constants.
      */
     public function getActivity(int $id): HighScoreActivityComparison
     {
-        if (!isset($this->activities[$id])) {
+        if (!$this->hasActivity($id)) {
             throw new \InvalidArgumentException("Neither of the high scores contains the requested activity.");
         }
 

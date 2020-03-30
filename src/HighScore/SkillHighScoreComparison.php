@@ -30,9 +30,14 @@ class SkillHighScoreComparison
         return $this->skills;
     }
 
+    public function hasSkill(int $id): bool
+    {
+        return isset($this->skills[$id]);
+    }
+
     public function getSkill(int $id): HighScoreSkillComparison
     {
-        if (!isset($this->skills[$id])) {
+        if (!$this->hasSkill($id)) {
             throw new \InvalidArgumentException("Neither of the high scores contains the requested skill.");
         }
 
