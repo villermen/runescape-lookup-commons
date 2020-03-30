@@ -7,16 +7,13 @@ namespace Villermen\RuneScape\HighScore;
  */
 abstract class HighScoreEntry
 {
-    /** @var int|false */
+    /** @var int|null */
     protected $rank;
 
-    /**
-     * @param int $rank
-     */
     protected function __construct(int $rank)
     {
         if ($rank < 1) {
-            $rank = false;
+            $rank = null;
         }
 
         $this->rank = $rank;
@@ -24,15 +21,10 @@ abstract class HighScoreEntry
 
     /**
      * Returns the name of the stat for display purposes.
-     *
-     * @return string
      */
     abstract public function getName(): string;
 
-    /**
-     * @return int|false
-     */
-    public function getRank()
+    public function getRank(): ?int
     {
         return $this->rank;
     }

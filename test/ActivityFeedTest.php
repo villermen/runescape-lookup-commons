@@ -18,7 +18,7 @@ class ActivityFeedTest extends TestCase
     /** @var ActivityFeed */
     protected $activityFeed2;
 
-    public function setUp()
+    public function setUp(): void
     {
         $dataConverter = new PlayerDataConverter();
 
@@ -31,13 +31,13 @@ class ActivityFeedTest extends TestCase
         $this->activityFeed2 = $convertedData2[PlayerDataConverter::KEY_ACTIVITY_FEED];
     }
 
-    public function testRealName()
+    public function testRealName(): void
     {
         self::assertEquals("Ardanwen", $this->realName1);
         self::assertEquals("Ardanwen", $this->realName2);
     }
 
-    public function testGetItems()
+    public function testGetItems(): void
     {
         self::assertCount(20, $this->activityFeed1->getItems());
         self::assertCount(11, $this->activityFeed2->getItems());
@@ -47,12 +47,12 @@ class ActivityFeedTest extends TestCase
         self::assertEquals(new DateTime("2017-08-17 0:00", new DateTimeZone("UTC")), $this->activityFeed1->getItems()[19]->getTime());
     }
 
-    public function testGetItemsAfter()
+    public function testGetItemsAfter(): void
     {
         self::assertCount(5, $this->activityFeed2->getItemsAfter($this->activityFeed1->getItems()[0]));
     }
 
-    public function testMerge()
+    public function testMerge(): void
     {
         $mergedActivityFeed = $this->activityFeed1->merge($this->activityFeed2);
         self::assertNotSame($this->activityFeed1, $mergedActivityFeed);

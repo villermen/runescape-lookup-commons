@@ -25,7 +25,7 @@ class HighScoreTest extends TestCase
     /** @var SkillHighScore */
     protected $skillHighScore3;
 
-    public function setUp()
+    public function setUp(): void
     {
         $dataConverter = new PlayerDataConverter();
         $convertedData1 = $dataConverter->convertIndexLite(file_get_contents(__DIR__ . "/fixtures/high-score-test-index-lite.csv"));
@@ -44,7 +44,7 @@ class HighScoreTest extends TestCase
         ]);
     }
 
-    public function testEntries()
+    public function testEntries(): void
     {
         // Skill
         self::assertEquals(120, $this->skillHighScore1->getSkill(Skill::SKILL_INVENTION)->getLevel());
@@ -70,7 +70,7 @@ class HighScoreTest extends TestCase
         // Activity
         self::assertEquals(1362803, $this->activityHighScore1->getActivity(Activity::ACTIVITY_DOMINION_TOWER)->getScore());
         self::assertNull($this->activityHighScore1->getActivity(200));
-        self::assertFalse($this->activityHighScore1->getActivity(Activity::ACTIVITY_GIELINOR_GAMES_RESOURCE_RACE)->getRank());
+        self::assertNull($this->activityHighScore1->getActivity(Activity::ACTIVITY_GIELINOR_GAMES_RESOURCE_RACE)->getRank());
         self::assertEquals(0, $this->activityHighScore1->getActivity(Activity::ACTIVITY_WORLD_EVENT_2_BANDOS_KILLS)->getScore());
 
         // Constitution initialized with no level
@@ -78,7 +78,7 @@ class HighScoreTest extends TestCase
         self::assertEquals(1154, $this->skillHighScore3->getSkill(Skill::SKILL_CONSTITUTION)->getXp());
     }
 
-    public function testCombatLevel()
+    public function testCombatLevel(): void
     {
         self::assertEquals(138, $this->skillHighScore1->getCombatLevel());
         self::assertEquals(126, $this->skillHighScore1->getCombatLevel(false));
@@ -87,7 +87,7 @@ class HighScoreTest extends TestCase
         self::assertEquals(3, $this->skillHighScore3->getCombatLevel());
     }
 
-    public function testComparison()
+    public function testComparison(): void
     {
         $skillComparison = $this->skillHighScore1->compareTo($this->skillHighScore2);
 
@@ -101,7 +101,7 @@ class HighScoreTest extends TestCase
         $invComparison = $skillComparison->getSkill(Skill::SKILL_INVENTION);
         self::assertEquals(119, $invComparison->getLevelDifference());
         self::assertEquals(89610570, $invComparison->getXpDifference());
-        self::assertFalse($invComparison->getRankDifference());
+        self::assertNull($invComparison->getRankDifference());
 
         // Uncapped level
         self::assertEquals(122, $invComparison->getVirtualLevelDifference());
@@ -116,6 +116,6 @@ class HighScoreTest extends TestCase
         // Both unranked
         $duelComparison = $activityComparison->getActivity(Activity::ACTIVITY_DUEL_TOURNAMENT);
         self::assertEquals(0, $duelComparison->getScoreDifference());
-        self::assertFalse($duelComparison->getRankDifference());
+        self::assertNull($duelComparison->getRankDifference());
     }
 }

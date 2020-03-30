@@ -8,8 +8,6 @@ class ActivityHighScore
     protected $activities;
 
     /**
-     * Creates a HighScore object from raw high score data.
-     *
      * @param HighScoreActivity[] $activities
      */
     public function __construct(array $activities)
@@ -30,25 +28,11 @@ class ActivityHighScore
         return $this->activities;
     }
 
-    /**
-     * @param $id
-     * @return HighScoreActivity|null
-     */
-    public function getActivity($id)
+    public function getActivity(int $id): ?HighScoreActivity
     {
-        if (!isset($this->activities[$id])) {
-            return null;
-        }
-
-        return $this->activities[$id];
+        return ($this->activities[$id] ?? null);
     }
 
-    /**
-     * Creates a HighScoreComparison between this high score and the given high score.
-     *
-     * @param ActivityHighScore $otherHighScore
-     * @return ActivityHighScoreComparison
-     */
     public function compareTo(ActivityHighScore $otherHighScore): ActivityHighScoreComparison
     {
         return new ActivityHighScoreComparison($this, $otherHighScore);

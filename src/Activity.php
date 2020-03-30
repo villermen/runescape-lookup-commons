@@ -30,6 +30,12 @@ class Activity
     const ACTIVITY_CABBAGE_FACEPUNCH_BONANZA = 21;
     const ACTIVITY_APRIL_FOOLS_2015_COW_TIPPING = 22;
     const ACTIVITY_APRIL_FOOLS_2015_RAT_KILLS = 23;
+    const ACTIVITY_RUNESCORE = 24;
+    const ACTIVITY_EASY_CLUE_SCROLLS = 25;
+    const ACTIVITY_MEDIUM_CLUE_SCROLLS = 26;
+    const ACTIVITY_HARD_CLUE_SCROLLS = 27;
+    const ACTIVITY_ELITE_CLUE_SCROLLS = 28;
+    const ACTIVITY_MASTER_CLUE_SCROLLS = 29;
 
     const ACTIVITY_OLD_SCHOOL_EASY_CLUE_SCROLLS = 1000;
     const ACTIVITY_OLD_SCHOOL_MEDIUM_CLUE_SCROLLS = 1001;
@@ -40,15 +46,15 @@ class Activity
     const ACTIVITY_OLD_SCHOOL_LAST_MAN_STANDING = 1006;
     const ACTIVITY_OLD_SCHOOL_ELITE_CLUE_SCROLLS = 1007;
     const ACTIVITY_OLD_SCHOOL_MASTER_CLUE_SCROLLS = 1008;
+    // Old School added activity highscores for pretty much every boss kill and I can't be asked to add them all.
 
     /** @var Activity[] */
     private static $activities;
 
     /**
-     * Initializes the activities array.
-     * Default values don't allow expressions (new objects).
+     * Initializes the activities array. In a method because expressions can't be used to initialize properties.
      */
-    public static function initializeActivities()
+    public static function initializeActivities(): void
     {
         if (self::$activities) {
             return;
@@ -79,6 +85,13 @@ class Activity
             self::ACTIVITY_CABBAGE_FACEPUNCH_BONANZA => new Activity(self::ACTIVITY_CABBAGE_FACEPUNCH_BONANZA, "Cabbage Facepunch Bonanza: 5 Game Average"),
             self::ACTIVITY_APRIL_FOOLS_2015_COW_TIPPING => new Activity(self::ACTIVITY_APRIL_FOOLS_2015_COW_TIPPING, "April Fools 2015: Cow Tipping"),
             self::ACTIVITY_APRIL_FOOLS_2015_RAT_KILLS => new Activity(self::ACTIVITY_APRIL_FOOLS_2015_RAT_KILLS, "April Fools 2015: Rat Kills"),
+            self::ACTIVITY_RUNESCORE => new Activity(self::ACTIVITY_RUNESCORE, "RuneScore"),
+            self::ACTIVITY_EASY_CLUE_SCROLLS => new Activity(self::ACTIVITY_EASY_CLUE_SCROLLS, "Clue Scrolls (easy)"),
+            self::ACTIVITY_MEDIUM_CLUE_SCROLLS => new Activity(self::ACTIVITY_MEDIUM_CLUE_SCROLLS, "Clue Scrolls (medium)"),
+            self::ACTIVITY_HARD_CLUE_SCROLLS => new Activity(self::ACTIVITY_HARD_CLUE_SCROLLS, "Clue Scrolls (hard)"),
+            self::ACTIVITY_ELITE_CLUE_SCROLLS => new Activity(self::ACTIVITY_ELITE_CLUE_SCROLLS, "Clue Scrolls (elite)"),
+            self::ACTIVITY_MASTER_CLUE_SCROLLS => new Activity(self::ACTIVITY_MASTER_CLUE_SCROLLS, "Clue Scrolls (master)"),
+
             self::ACTIVITY_OLD_SCHOOL_EASY_CLUE_SCROLLS => new Activity(self::ACTIVITY_OLD_SCHOOL_EASY_CLUE_SCROLLS, "Clue Scrolls (easy)"),
             self::ACTIVITY_OLD_SCHOOL_MEDIUM_CLUE_SCROLLS => new Activity(self::ACTIVITY_OLD_SCHOOL_MEDIUM_CLUE_SCROLLS, "Clue Scrolls (hard)"),
             self::ACTIVITY_OLD_SCHOOL_ALL_CLUE_SCROLLS => new Activity(self::ACTIVITY_OLD_SCHOOL_ALL_CLUE_SCROLLS, "Clue Scrolls (all)"),
@@ -102,19 +115,14 @@ class Activity
     }
 
     /**
-     * Retrieve an activity by ID.
-     * You can use the ACTIVITY_ constants in this class for IDs.
-     *
-     * @param int $id
-     * @return Activity
-     * @throws RuneScapeException When the requested activity does not exist.
+     * Retrieve an activity by ID. Use the ACTIVITY_* constants in this class for IDs.
      */
     public static function getActivity(int $id): Activity
     {
         self::initializeActivities();
 
         if (!isset(self::$activities[$id])) {
-            throw new RuneScapeException(sprintf("Activity with id %d does not exist.", $id));
+            throw new \InvalidArgumentException(sprintf("Activity with id %d does not exist.", $id));
         }
 
         return self::$activities[$id];
@@ -126,27 +134,17 @@ class Activity
     /** @var string */
     protected $name;
 
-    /**
-     * @param int $id
-     * @param string $name
-     */
     public function __construct(int $id, string $name)
     {
         $this->id = $id;
         $this->name = $name;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;

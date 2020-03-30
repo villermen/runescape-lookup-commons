@@ -26,7 +26,6 @@ class ActivityFeed
     /**
      * Returns all feed items in this feed that occur after the given item.
      *
-     * @param ActivityFeedItem $targetItem
      * @return ActivityFeedItem[]
      */
     public function getItemsAfter(ActivityFeedItem $targetItem): array
@@ -47,9 +46,6 @@ class ActivityFeed
     /**
      * Merges this ActivityFeed with a newer feed.
      * Returns a new feed with all new items from the newerFeed prepended to it.
-     *
-     * @param ActivityFeed $newerFeed
-     * @return ActivityFeed
      */
     public function merge(ActivityFeed $newerFeed): ActivityFeed
     {

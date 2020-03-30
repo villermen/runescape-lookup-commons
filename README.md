@@ -35,7 +35,8 @@ echo $comparison->getSkill(Skill::SKILL_ATTACK)->getLevelDifference(true);
 // 39
 
 // These should return instantly if $highScore was successfully obtained from RuneMetrics
-echo $player->fixName()->getName();
+$player->fixName();
+echo $player->getName();
 // "Villermen"
 
 echo $player->getActivityFeed()->getItems()[0]->getTitle();

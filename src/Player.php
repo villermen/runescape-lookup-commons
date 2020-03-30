@@ -22,9 +22,6 @@ class Player
 
     /**
      * Returns whether the given name is a valid RuneScape player name.
-     *
-     * @param string $name
-     * @return bool
      */
     public static function validateName(string $name): bool
     {
@@ -32,9 +29,7 @@ class Player
     }
 
     /**
-     * @param string $name
-     * @param PlayerDataFetcher|null $dataFetcher Use the same data fetcher instance for all players to have them share the same cache.
-     * @throws RuneScapeException
+     * Use the same data fetcher instance for all players to have them share the same cache.
      */
     public function __construct(string $name, PlayerDataFetcher $dataFetcher = null)
     {
@@ -44,7 +39,7 @@ class Player
 
         // Validate that name adheres to RS policies
         if (!self::validateName($name)) {
-            throw new RuneScapeException("Name does not conform to the RuneScape specifications.");
+            throw new \InvalidArgumentException("Name does not conform to the RuneScape specifications.");
         }
 
         $this->name = $name;
@@ -52,32 +47,23 @@ class Player
 
     /**
      * @throws FetchFailedException
-     *
-     * @return Player
      */
-    public function fixName(): Player
+    public function fixName(): void
     {
         $this->name = $this->getDataFetcher()->fetchRealName($this->getName());
-
-        return $this;
     }
 
-    /** @noinspection PhpDocMissingThrowsInspection */
     /**
-     * @return Player
+     * Fixes the player's name only if it can be done without performing an additional request.
      */
-    public function fixNameIfCached(): Player
+    public function fixNameIfCached(): void
     {
         if ($this->getDataFetcher()->getCachedRealName($this->getName())) {
-            /** @noinspection PhpUnhandledExceptionInspection */
             $this->fixName();
         }
-
-        return $this;
     }
 
     /**
-     * @return SkillHighScore
      * @throws FetchFailedException
      */
     public function getSkillHighScore(): SkillHighScore
@@ -86,7 +72,6 @@ class Player
     }
 
     /**
-     * @return SkillHighScore
      * @throws FetchFailedException
      */
     public function getOldSchoolSkillHighScore(): SkillHighScore
@@ -95,7 +80,6 @@ class Player
     }
 
     /**
-     * @return ActivityHighScore
      * @throws FetchFailedException
      */
     public function getActivityHighScore(): ActivityHighScore
@@ -104,7 +88,6 @@ class Player
     }
 
     /**
-     * @return ActivityHighScore
      * @throws FetchFailedException
      */
     public function getOldSchoolActivityHighScore(): ActivityHighScore
@@ -115,7 +98,6 @@ class Player
     /**
      * Returns the activities currently displayed on the player's activity feed.
      *
-     * @return ActivityFeed
      * @throws FetchFailedException
      */
     public function getActivityFeed(): ActivityFeed
@@ -123,55 +105,33 @@ class Player
         return $this->getDataFetcher()->fetchActivityFeed($this->getName());
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return string
-     */
     public function getChatHeadUrl(): string
     {
         return sprintf(self::CHAT_HEAD_URL, $this->getName());
     }
 
-    /**
-     * @return string
-     */
     public function getFullBodyUrl(): string
     {
         return sprintf(self::FULL_BODY_URL, $this->getName());
     }
 
-    /**
-     * @return string
-     */
     public function getRuneMetricsUrl(): string
     {
         return sprintf(self::RUNEMETRICS_URL, $this->getName());
     }
 
-    /**
-     * @return PlayerDataFetcher
-     */
     public function getDataFetcher(): PlayerDataFetcher
     {
         return $this->dataFetcher;
     }
 
-    /**
-     * @param PlayerDataFetcher $dataFetcher
-     *
-     * @return Player
-     */
-    public function setDataFetcher(PlayerDataFetcher $dataFetcher): Player
+    public function setDataFetcher(PlayerDataFetcher $dataFetcher): void
     {
         $this->dataFetcher = $dataFetcher;
-
-        return $this;
     }
 }

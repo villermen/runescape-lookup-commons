@@ -2,6 +2,7 @@
 
 namespace Villermen\RuneScape\HighScore;
 
+use Villermen\RuneScape\Activity;
 use Villermen\RuneScape\Exception\RuneScapeException;
 
 class ActivityHighScoreComparison
@@ -9,11 +10,6 @@ class ActivityHighScoreComparison
     /** @var HighScoreActivityComparison[] */
     protected $activities = [];
 
-    /** @noinspection PhpDocMissingThrowsInspection */
-    /**
-     * @param ActivityHighScore $highScore1
-     * @param ActivityHighScore $highScore2
-     */
     public function __construct(ActivityHighScore $highScore1, ActivityHighScore $highScore2)
     {
         $activityIds = array_unique(array_merge(
@@ -22,7 +18,6 @@ class ActivityHighScoreComparison
         ));
 
         foreach($activityIds as $activityId) {
-            /** @noinspection PhpUnhandledExceptionInspection */
             $this->activities[$activityId] = new HighScoreActivityComparison(
                 $highScore1->getActivity($activityId),
                 $highScore2->getActivity($activityId)
@@ -39,14 +34,12 @@ class ActivityHighScoreComparison
     }
 
     /**
-     * @param int $id
-     * @return HighScoreActivityComparison
-     * @throws RuneScapeException
+     * @param int $id One of the {@see Activity}::ACTIVITY_* constants.
      */
     public function getActivity(int $id): HighScoreActivityComparison
     {
         if (!isset($this->activities[$id])) {
-            throw new RuneScapeException("Neither of the high scores contains the requested activity.");
+            throw new \InvalidArgumentException("Neither of the high scores contains the requested activity.");
         }
 
         return $this->activities[$id];

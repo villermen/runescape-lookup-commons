@@ -5,15 +5,13 @@ namespace Villermen\RuneScape;
 use Villermen\RuneScape\ActivityFeed\ActivityFeed;
 use Villermen\RuneScape\ActivityFeed\ActivityFeedItem;
 use Villermen\RuneScape\Exception\DataConversionException;
-use Villermen\RuneScape\Exception\RuneScapeException;
 use Villermen\RuneScape\HighScore\ActivityHighScore;
 use Villermen\RuneScape\HighScore\HighScoreActivity;
 use Villermen\RuneScape\HighScore\HighScoreSkill;
 use Villermen\RuneScape\HighScore\SkillHighScore;
 
 /**
- * Converts data obtained from Jagex APIs into objects.
- * Methods return arrays of converted objects by their key.
+ * Converts data obtained from Jagex APIs into objects. Methods return arrays of converted objects by their key.
  */
 class PlayerDataConverter
 {
@@ -25,9 +23,8 @@ class PlayerDataConverter
     const KEY_ACTIVITY_FEED = "activityFeed";
 
     /**
-     * KEY_SKILL_HIGH_SCORE, KEY_ACTIVITY_HIGH_SCORE
+     * Yields {@see KEY_SKILL_HIGH_SCORE} and {@see KEY_ACTIVITY_HIGH_SCORE}.
      *
-     * @param string $data
      * @return mixed[]
      * @throws DataConversionException
      */
@@ -37,9 +34,8 @@ class PlayerDataConverter
     }
 
     /**
-     * KEY_OLD_SCHOOL_SKILL_HIGH_SCORE, KEY_OLDSCHOOL_ACTIVITY_HIGH_SCORE
+     * Yields {@see KEY_OLD_SCHOOL_SKILL_HIGH_SCORE} and {@see KEY_OLDSCHOOL_ACTIVITY_HIGH_SCORE}.
      *
-     * @param string $data
      * @return mixed[]
      * @throws DataConversionException
      */
@@ -65,24 +61,26 @@ class PlayerDataConverter
         foreach($entries as $entry) {
             $entryArray = explode(",", $entry);
 
-            if (count($entryArray) == 3) {
+            if (count($entryArray) === 3) {
                 // Skill
                 try {
                     $skill = Skill::getSkill($skillId);
                     list($rank, $level, $xp) = $entryArray;
                     $skills[] = new HighScoreSkill($skill, $rank, $level, $xp);
-                } catch (RuneScapeException $exception) {
+                } catch (\InvalidArgumentException $exception) {
+                    // Unknown (new?) skill
                 }
 
                 $skillId++;
-            } elseif (count($entryArray) == 2) {
+            } elseif (count($entryArray) === 2) {
                 // Activity
                 try {
                     $activity = Activity::getActivity($oldSchool ? $activityId + 1000 : $activityId);
                     list($rank, $score) = $entryArray;
 
                     $activities[] = new HighScoreActivity($activity, $rank, $score);
-                } catch (RuneScapeException $exception) {
+                } catch (\InvalidArgumentException $exception) {
+                    // Unknown (new?) activity
                 }
 
                 $activityId++;
@@ -104,12 +102,9 @@ class PlayerDataConverter
         ];
     }
 
-
-    /** @noinspection PhpDocMissingThrowsInspection */
     /**
-     * KEY_REAL_NAME, KEY_SKILL_HIGH_SCORE, KEY_ACTIVITY_FEED
+     * Yields {@see KEY_REAL_NAME}, {@see KEY_SKILL_HIGH_SCORE} and {@see KEY_ACTIVITY_FEED}.
      *
-     * @param string $data
      * @return mixed[]
      * @throws DataConversionException
      */
@@ -135,12 +130,12 @@ class PlayerDataConverter
                 $xp = (int)($skillvalue->xp / 10);
 
                 $skills[] = new HighScoreSkill($skill, $skillvalue->rank ?? 0, $skillvalue->level, $xp);
-            } catch (RuneScapeException $exception) {
+            } catch (\InvalidArgumentException $exception) {
+                // Unknown (new?) skill
             }
         }
 
         // Add total
-        /** @noinspection PhpUnhandledExceptionInspection */
         $skills[] = new HighScoreSkill(
             Skill::getSkill(Skill::SKILL_TOTAL),
             $data->rank ? str_replace(",", "", $data->rank) : 0,
@@ -168,9 +163,8 @@ class PlayerDataConverter
     }
 
     /**
-     * KEY_REAL_NAME, KEY_ACTIVITY_FEED
+     * Yields {@see KEY_REAL_NAME} and {@see KEY_ACTIVITY_FEED}.
      *
-     * @param string $data
      * @return mixed[]
      * @throws DataConversionException
      */

@@ -10,8 +10,8 @@ use Villermen\RuneScape\Skill;
 class PlayerTest extends TestCase
 {
     /**
-     * Excl should have lifetime membership due to winning the first Machinima competition.
-     * Now let's hope they don't turn their adventurer's log to private.
+     * Excl should have lifetime membership due to winning the first Machinima competition. Now let's hope they don't
+     * turn their adventurer's log to private.
      */
     const PLAYER_NAME = "excl";
     const NONEXISTENT_PLAYER_NAME = "ifugMERWzm5G";
@@ -22,13 +22,13 @@ class PlayerTest extends TestCase
     /** @var Player */
     protected $player;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->dataFetcher = new PlayerDataFetcher(10);
         $this->player = new Player(self::PLAYER_NAME, $this->dataFetcher);
     }
 
-    public function testDataFetchingAndCaching()
+    public function testDataFetchingAndCaching(): void
     {
         $highScore = $this->player->getSkillHighScore();
         self::assertSame($highScore, $this->player->getSkillHighScore());
@@ -50,7 +50,7 @@ class PlayerTest extends TestCase
         self::assertEquals("Excl", $this->player->getName());
     }
 
-    public function testNonExistentPlayer()
+    public function testNonExistentPlayer(): void
     {
         try {
             $player = new Player(self::NONEXISTENT_PLAYER_NAME, $this->dataFetcher);

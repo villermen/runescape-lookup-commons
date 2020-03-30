@@ -2,8 +2,6 @@
 
 namespace Villermen\RuneScape;
 
-use Villermen\RuneScape\Exception\RuneScapeException;
-
 class Skill
 {
     const SKILL_TOTAL = 0;
@@ -46,10 +44,9 @@ class Skill
     private static $skills;
 
     /**
-     * Initializes the skills array.
-     * Default values don't allow expressions (new objects).
+     * Initializes the skills array. In a method because expressions can't be used to initialize properties.
      */
-    public static function initializeSkills()
+    public static function initializeSkills(): void
     {
         if (self::$skills) {
             return;
@@ -99,19 +96,14 @@ class Skill
     }
 
     /**
-     * Retrieve a skill by ID.
-     * You can use the SKILL_ constants in this class for IDs.
-     *
-     * @param int $id
-     * @return Skill
-     * @throws RuneScapeException When the requested skill does not exist.
+     * Retrieve a skill by ID. Use the SKILL_* constants in this class for IDs.
      */
     public static function getSkill(int $id): Skill
     {
         self::initializeSkills();
 
         if (!isset(self::$skills[$id])) {
-            throw new RuneScapeException(sprintf("Skill with id %d does not exist.", $id));
+            throw new \InvalidArgumentException(sprintf("Skill with id %d does not exist.", $id));
         }
 
         return self::$skills[$id];
@@ -132,15 +124,13 @@ class Skill
     /** @var int */
     protected $minimumLevel;
 
-    /**
-     * @param int $id
-     * @param string $name
-     * @param bool $highLevelCap
-     * @param bool $elite
-     * @param int $minimumLevel
-     */
-    public function __construct(int $id, string $name, bool $highLevelCap = false, bool $elite = false, int $minimumLevel = 1)
-    {
+    public function __construct(
+        int $id,
+        string $name,
+        bool $highLevelCap = false,
+        bool $elite = false,
+        int $minimumLevel = 1
+    ) {
         $this->id = $id;
         $this->name = $name;
         $this->highLevelCap = $highLevelCap;
@@ -150,9 +140,6 @@ class Skill
 
     /**
      * Returns the level in this skill for the given XP.
-     *
-     * @param int $xp
-     * @return int
      */
     public function getLevel(int $xp): int
     {
@@ -164,9 +151,6 @@ class Skill
 
     /**
      * Returns the level in this skill for the given XP, disregarding the maximum level in the skill.
-     *
-     * @param int $xp
-     * @return int
      */
     public function getVirtualLevel(int $xp): int
     {
@@ -185,13 +169,10 @@ class Skill
     }
 
     /**
-     * Returns the XP corresponding to the given level of this skill.
-     * Returns false if the level is too high or low to be represented.
-     *
-     * @param int $level
-     * @return int|false
+     * Returns the XP corresponding to the given level of this skill. Returns null if the level is too high or low to
+     * be represented.
      */
-    public function getXp(int $level)
+    public function getXp(int $level): ?int
     {
         $xpTable = $this->getXpTable();
 
@@ -210,41 +191,26 @@ class Skill
         return $this->isElite() ? self::ELITE_XP_TABLE : self::XP_TABLE;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return bool
-     */
     public function isHighLevelCap(): bool
     {
         return $this->highLevelCap;
     }
 
-    /**
-     * @return bool
-     */
     public function isElite(): bool
     {
         return $this->elite;
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @return int
-     */
     public function getMinimumLevel(): int
     {
         return $this->minimumLevel;

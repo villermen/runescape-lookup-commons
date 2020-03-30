@@ -10,8 +10,6 @@ class SkillHighScore
     protected $skills;
 
     /**
-     * Creates a HighScore object from raw high score data.
-     *
      * @param HighScoreSkill[] $skills
      */
     public function __construct(array $skills)
@@ -28,9 +26,8 @@ class SkillHighScore
      * Returns the combat level of this high score.
      *
      * @param bool $includeSummoning Whether to include the summoning skill while calculating the combat level.
-     * @return int
      */
-    public function getCombatLevel($includeSummoning = true): int
+    public function getCombatLevel(bool $includeSummoning = true): int
     {
         $attackLevel = $this->getSkill(Skill::SKILL_ATTACK) ? $this->getSkill(Skill::SKILL_ATTACK)->getLevel() : 1;
         $defenceLevel = $this->getSkill(Skill::SKILL_DEFENCE) ? $this->getSkill(Skill::SKILL_DEFENCE)->getLevel() : 1;
@@ -56,10 +53,9 @@ class SkillHighScore
     }
 
     /**
-     * @param $id
-     * @return HighScoreSkill|null
+     * @param int $id One of the {@see Skill}::SKILL_* constants.
      */
-    public function getSkill($id)
+    public function getSkill(int $id): ?HighScoreSkill
     {
         if (!isset($this->skills[$id])) {
             return null;
@@ -68,12 +64,6 @@ class SkillHighScore
         return $this->skills[$id];
     }
 
-    /**
-     * Creates a HighScoreComparison between this high score and the given high score.
-     *
-     * @param SkillHighScore $otherHighScore
-     * @return SkillHighScoreComparison
-     */
     public function compareTo(SkillHighScore $otherHighScore): SkillHighScoreComparison
     {
         return new SkillHighScoreComparison($this, $otherHighScore);

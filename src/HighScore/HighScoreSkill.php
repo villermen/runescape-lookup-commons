@@ -28,20 +28,17 @@ class HighScoreSkill extends HighScoreEntry
         $this->xp = max(0, $xp);
     }
 
-    /**
-     * @return int|false
-     */
-    public function getXpToNextLevel()
+    public function getXpToNextLevel(): ?int
     {
         if ($this->isTotal()) {
-            return false;
+            return null;
         }
 
         $level = $this->getVirtualLevel();
         $nextXp = $this->getSkill()->getXp($level + 1);
 
         if (!$nextXp) {
-            return false;
+            return null;
         }
 
         return $nextXp - $this->getXp();
@@ -49,13 +46,11 @@ class HighScoreSkill extends HighScoreEntry
 
     /**
      * Returns how far to the next level this skill is from 0-1.
-     *
-     * @return float|false
      */
-    public function getProgressToNextLevel()
+    public function getProgressToNextLevel(): ?float
     {
         if ($this->isTotal()) {
-            return false;
+            return null;
         }
 
         $level = $this->getVirtualLevel();
@@ -63,7 +58,7 @@ class HighScoreSkill extends HighScoreEntry
         $nextLevelXp = $this->getSkill()->getXp($level + 1);
 
         if (!$nextLevelXp) {
-            return false;
+            return null;
         }
 
         $totalXpInLevel = $nextLevelXp - $currentLevelXp;
@@ -72,17 +67,11 @@ class HighScoreSkill extends HighScoreEntry
         return $xpInLevel / $totalXpInLevel;
     }
 
-    /**
-     * @return Skill
-     */
     public function getSkill(): Skill
     {
         return $this->skill;
     }
 
-    /**
-     * @return int
-     */
     public function getLevel(): int
     {
         if ($this->isTotal()) {
@@ -92,9 +81,6 @@ class HighScoreSkill extends HighScoreEntry
         return $this->getSkill()->getLevel($this->xp);
     }
 
-    /**
-     * @return int
-     */
     public function getVirtualLevel(): int
     {
         if ($this->isTotal()) {
@@ -104,9 +90,6 @@ class HighScoreSkill extends HighScoreEntry
         return $this->getSkill()->getVirtualLevel($this->xp);
     }
 
-    /**
-     * @return int
-     */
     public function getXp(): int
     {
         // Match minimum XP required if skill has a higher minimum level
@@ -117,25 +100,16 @@ class HighScoreSkill extends HighScoreEntry
         return $this->xp;
     }
 
-    /** @inheritdoc */
     public function getName(): string
     {
         return $this->getSkill()->getName();
     }
 
-    /**
-     * @return bool
-     */
     public function isTotal(): bool
     {
         return $this->skill->getId() === Skill::SKILL_TOTAL;
     }
 
-    /**
-     * @param HighScoreSkill $otherSkill
-     * @return HighScoreSkillComparison
-     * @throws RuneScapeException
-     */
     public function compareTo(HighScoreSkill $otherSkill): HighScoreSkillComparison
     {
         return new HighScoreSkillComparison($this, $otherSkill);

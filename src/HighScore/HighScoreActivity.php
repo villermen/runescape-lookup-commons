@@ -28,25 +28,17 @@ class HighScoreActivity extends HighScoreEntry
 
     /**
      * Returns the name of the stat for display purposes.
-     *
-     * @return string
      */
     public function getName(): string
     {
         return $this->activity->getName();
     }
 
-    /**
-     * @return Activity
-     */
     public function getActivity(): Activity
     {
         return $this->activity;
     }
 
-    /**
-     * @return int
-     */
     public function getScore(): int
     {
         return $this->score;

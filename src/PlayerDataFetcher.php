@@ -23,19 +23,17 @@ class PlayerDataFetcher
     private $cache;
 
     /** @var int */
-    protected $timeOut;
+    protected $timeout;
 
     protected $dataConverter;
 
     public function __construct(int $timeOut = 5, PlayerDataConverter $dataConverter = null)
     {
-        $this->timeOut = $timeOut;
+        $this->timeout = $timeOut;
         $this->dataConverter = $dataConverter ?: new PlayerDataConverter();
     }
 
     /**
-     * @param string $playerName
-     * @return string
      * @throws FetchFailedException
      */
     public function fetchRealName(string $playerName): string
@@ -48,18 +46,13 @@ class PlayerDataFetcher
 
     /**
      * Returns an string from cache, or null if it isn't cached.
-     *
-     * @param string $playerName
-     * @return string|null
      */
-    public function getCachedRealName(string $playerName)
+    public function getCachedRealName(string $playerName): ?string
     {
         return $this->getCached($playerName, PlayerDataConverter::KEY_REAL_NAME);
     }
 
     /**
-     * @param string $playerName
-     * @return SkillHighScore
      * @throws FetchFailedException
      */
     public function fetchSkillHighScore(string $playerName): SkillHighScore
@@ -70,20 +63,12 @@ class PlayerDataFetcher
         ]);
     }
 
-    /**
-     * Returns a SkillHighScore from cache, or null if it isn't cached.
-     *
-     * @param string $playerName
-     * @return SkillHighScore|null
-     */
-    public function getCachedSkillHighScore(string $playerName)
+    public function getCachedSkillHighScore(string $playerName): ?SkillHighScore
     {
         return $this->getCached($playerName, PlayerDataConverter::KEY_SKILL_HIGH_SCORE);
     }
 
     /**
-     * @param string $playerName
-     * @return SkillHighScore
      * @throws FetchFailedException
      */
     public function fetchOldSchoolSkillHighScore(string $playerName): SkillHighScore
@@ -93,20 +78,12 @@ class PlayerDataFetcher
         ]);
     }
 
-    /**
-     * Returns a SkillHighScore from cache, or null if it isn't cached.
-     *
-     * @param string $playerName
-     * @return SkillHighScore|null
-     */
-    public function getCachedOldSchoolSkillHighScore(string $playerName)
+    public function getCachedOldSchoolSkillHighScore(string $playerName): ?SkillHighScore
     {
         return $this->getCached($playerName, PlayerDataConverter::KEY_OLD_SCHOOL_SKILL_HIGH_SCORE);
     }
 
     /**
-     * @param string $playerName
-     * @return ActivityHighScore
      * @throws FetchFailedException
      */
     public function fetchActivityHighScore(string $playerName): ActivityHighScore
@@ -116,20 +93,12 @@ class PlayerDataFetcher
         ]);
     }
 
-    /**
-     * Returns an ActivityHighScore from cache, or null if it isn't cached.
-     *
-     * @param string $playerName
-     * @return ActivityHighScore|null
-     */
-    public function getCachedActivityHighScore(string $playerName)
+    public function getCachedActivityHighScore(string $playerName): ?ActivityHighScore
     {
         return $this->getCached($playerName, PlayerDataConverter::KEY_ACTIVITY_HIGH_SCORE);
     }
 
     /**
-     * @param string $playerName
-     * @return ActivityHighScore
      * @throws FetchFailedException
      */
     public function fetchOldSchoolActivityHighScore(string $playerName): ActivityHighScore
@@ -139,20 +108,12 @@ class PlayerDataFetcher
         ]);
     }
 
-    /**
-     * Returns an ActivityHighScore from cache, or null if it isn't cached.
-     *
-     * @param string $playerName
-     * @return ActivityHighScore|null
-     */
-    public function getCachedOldSchoolActivityHighScore(string $playerName)
+    public function getCachedOldSchoolActivityHighScore(string $playerName): ?ActivityHighScore
     {
         return $this->getCached($playerName, PlayerDataConverter::KEY_OLD_SCHOOL_ACTIVITY_HIGH_SCORE);
     }
 
     /**
-     * @param string $playerName
-     * @return ActivityFeed
      * @throws FetchFailedException
      */
     public function fetchActivityFeed(string $playerName): ActivityFeed
@@ -163,32 +124,20 @@ class PlayerDataFetcher
         ]);
     }
 
-    /**
-     * Returns an ActivityFeed from cache, or null if it isn't cached.
-     *
-     * @param string $playerName
-     * @return ActivityFeed|null
-     */
-    public function getCachedActivityFeed(string $playerName)
+    public function getCachedActivityFeed(string $playerName): ?ActivityFeed
     {
         return $this->getCached($playerName, PlayerDataConverter::KEY_ACTIVITY_FEED);
     }
 
     /**
-     * Set the timeOut used for every external request.
-     *
-     * @param int $seconds
+     * Set the timeout used for every external request by this instance.
      */
-    public function setTimeOut(int $seconds)
+    public function setTimeout(int $seconds): void
     {
-        $this->timeOut = $seconds;
+        $this->timeout = $seconds;
     }
 
     /**
-     * Returns an object from cache, or null if it isn't cached.
-     *
-     * @param string $playerName
-     * @param string $cacheKey
      * @return mixed|null
      */
     protected function getCached(string $playerName, string $cacheKey)
@@ -202,12 +151,9 @@ class PlayerDataFetcher
         return $this->cache[$cacheKey][$playerCacheKey];
     }
 
-    /** @noinspection PhpDocMissingThrowsInspection */
     /**
      * Fetches an item from cache, or obtains it freshly using the given functions.
      *
-     * @param string $playerName
-     * @param string $cacheKey
      * @param string[] $fetchStrategies URL to data as key with $dataConverter conversion method as value.
      * @return mixed
      * @throws FetchFailedException
@@ -253,7 +199,6 @@ class PlayerDataFetcher
                         $firstException = $exception;
                     }
                 } else {
-                    /** @noinspection PhpUnhandledExceptionInspection */
                     throw $exception;
                 }
             }
@@ -265,8 +210,6 @@ class PlayerDataFetcher
     /**
      * Fetches data from the given URL.
      *
-     * @param string $url
-     * @return string
      * @throws FetchFailedException
      */
     protected function fetchUrl(string $url): string
@@ -274,7 +217,7 @@ class PlayerDataFetcher
         $curl = curl_init($url);
         curl_setopt_array($curl, [
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT => $this->timeOut
+            CURLOPT_TIMEOUT => $this->timeout
         ]);
         $data = curl_exec($curl);
         $statusCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);

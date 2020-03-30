@@ -11,7 +11,7 @@ class ActivityFeedItem
      */
     const COMPARISON_TIME_TOLERANCE = 25 * 60 * 60;
 
-    /** @var \DateTime */
+    /** @var \DateTimeInterface */
     protected $time;
 
     /** @var string */
@@ -20,14 +20,14 @@ class ActivityFeedItem
     /** @var string */
     protected $description;
 
-    public function __construct(\DateTime $time, string $title, string $description)
+    public function __construct(\DateTimeInterface $time, string $title, string $description)
     {
         $this->time = $time;
         $this->title = trim($title);
         $this->description = trim($description);
     }
 
-    public function getTime(): \DateTime
+    public function getTime(): \DateTimeInterface
     {
         return $this->time;
     }
@@ -43,8 +43,8 @@ class ActivityFeedItem
     }
 
     /**
-     * Compares this feed item to another.
-     * Only the date part of the time is compared, because adventurer's log feeds only contain accurate date parts.
+     * Compares this feed item to another. Only the date part of the time is compared, because adventurer's log feeds
+     * only contain accurate date parts.
      */
     public function equals(ActivityFeedItem $otherItem): bool
     {
