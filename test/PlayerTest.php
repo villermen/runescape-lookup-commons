@@ -35,12 +35,17 @@ class PlayerTest extends TestCase
         self::assertGreaterThanOrEqual(1929, $highScore->getSkill(Skill::SKILL_TOTAL)->getLevel());
         self::assertGreaterThanOrEqual(9, $highScore->getSkill(Skill::SKILL_DIVINATION)->getLevel());
 
+        // Activity feed and real name already loaded because RuneMetrics is preferred for skill high scores.
         $activityFeed = $this->dataFetcher->getCachedActivityFeed(self::PLAYER_NAME);
         self::assertNotNull($activityFeed);
         self::assertNotNull($this->dataFetcher->getCachedRealName(self::PLAYER_NAME));
 
         self::assertSame($activityFeed, $this->player->getActivityFeed());
-        self::assertGreaterThan(new DateTime("2018-01-30"), $activityFeed->getItems()[0]->getTime());
+        self::assertGreaterThan(new DateTime("2018-01-30 0:00"), $activityFeed->getItems()[0]->getTime());
+
+        // Activity high score is not yet cached because it can only be obtained using index_lite.
+        $activityHighScore = $this->player->getActivityHighScore();
+        $this->assertGreaterThanOrEqual(4355, $activityHighScore->getActivity(Activity::ACTIVITY_RUNESCORE)->getScore());
 
         $oldSchoolActivityHighScore = $this->player->getOldSchoolActivityHighScore();
         self::assertSame($oldSchoolActivityHighScore, $this->player->getOldSchoolActivityHighScore());
