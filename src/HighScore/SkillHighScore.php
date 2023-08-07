@@ -36,10 +36,11 @@ class SkillHighScore
         $rangedLevel = $this->getSkill(Skill::SKILL_RANGED) ? $this->getSkill(Skill::SKILL_RANGED)->getLevel() : 1;
         $prayerLevel = $this->getSkill(Skill::SKILL_PRAYER) ? $this->getSkill(Skill::SKILL_PRAYER)->getLevel() : 1;
         $magicLevel = $this->getSkill(Skill::SKILL_MAGIC) ? $this->getSkill(Skill::SKILL_MAGIC)->getLevel() : 1;
+        $necromancyLevel = $this->getSkill(Skill::SKILL_NECROMANCY) ? $this->getSkill(Skill::SKILL_NECROMANCY)->getLevel() : 1;
         $summoningLevel = $includeSummoning && $this->getSkill(Skill::SKILL_SUMMONING) ? $this->getSkill(Skill::SKILL_SUMMONING)->getLevel() : 1;
 
         return (int)((
-            max($attackLevel + $strengthLevel, $magicLevel * 2, $rangedLevel * 2) * 1.3 +
+            max($attackLevel + $strengthLevel, $magicLevel * 2, $rangedLevel * 2, $necromancyLevel * 2) * 1.3 +
             $defenceLevel + $constitutionLevel + floor($prayerLevel / 2) + floor($summoningLevel / 2)
         ) / 4);
     }
