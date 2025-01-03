@@ -2,41 +2,87 @@
 
 namespace Villermen\RuneScape\HighScore;
 
-use Villermen\RuneScape\Exception\RuneScapeException;
-use Villermen\RuneScape\Skill;
-
 /**
  * A skill entry of a player's high score.
+ *
+ * @template TSkill of SkillInterface
  */
-class HighScoreSkill extends HighScoreEntry
+class HighScoreSkill
 {
-    /** @var Skill */
-    protected $skill;
+    /**
+     * @param TSkill $skill
+     */
+    public function __construct(
+        protected readonly SkillInterface $skill,
+        protected readonly ?int $rank,
+        protected readonly ?int $level,
+        protected readonly ?int $xp,
+    ) {
+    }
 
-    /** @var int */
-    protected $level;
-
-    /** @var int */
-    protected $xp;
-
-    public function __construct(Skill $skill, int $rank, int $level, int $xp)
+    /**
+     * @return TSkill
+     */
+    public function getSkill(): SkillInterface
     {
-        parent::__construct($rank);
+        return $this->skill;
+    }
 
-        $this->skill = $skill;
-        $this->level = max(1, $level);
-        $this->xp = max(0, $xp);
+    public function getRank(): ?int
+    {
+        return $this->rank;
+    }
+
+    public function getLevel(): ?int
+    {
+        return $this->level;
+    }
+
+    public function getLevelOrMinimum(): int
+    {
+        return $this->getLevel() ?? $this->getSkill()->getMinimumLevel();
+    }
+
+    public function getVirtualLevel(): ?int
+    {
+        if ($this->isTotal()) {
+            return $this->getLevel();
+        }
+
+        if ($this->getXp() === null) {
+            return null;
+        }
+
+        return $this->getSkill()->getVirtualLevel($this->getXp());
+    }
+
+    public function getXp(): ?int
+    {
+        return $this->xp;
+    }
+
+    public function getName(): string
+    {
+        return $this->getSkill()->getName();
+    }
+
+    public function isTotal(): bool
+    {
+        return in_array($this->getSkill(), [Rs3Skill::TOTAL, OsrsSkill::TOTAL]);
     }
 
     public function getXpToNextLevel(): ?int
     {
-        if ($this->isTotal()) {
+        if ($this->isTotal() || $this->getXp() === null) {
             return null;
         }
 
-        $level = $this->getVirtualLevel();
-        $nextXp = $this->getSkill()->getXp($level + 1);
+        $virtualLevel = $this->getVirtualLevel();
+        if ($virtualLevel === null) {
+            return null;
+        }
 
+        $nextXp = $this->getSkill()->getXp($virtualLevel + 1);
         if (!$nextXp) {
             return null;
         }
@@ -49,15 +95,18 @@ class HighScoreSkill extends HighScoreEntry
      */
     public function getProgressToNextLevel(): ?float
     {
-        if ($this->isTotal()) {
+        if ($this->isTotal() || $this->getXp() === null) {
             return null;
         }
 
-        $level = $this->getVirtualLevel();
-        $currentLevelXp = $this->getSkill()->getXp($level);
-        $nextLevelXp = $this->getSkill()->getXp($level + 1);
+        $virtualLevel = $this->getVirtualLevel();
+        if ($virtualLevel === null) {
+            return null;
+        }
 
-        if (!$nextLevelXp) {
+        $currentLevelXp = $this->getSkill()->getXp($virtualLevel);
+        $nextLevelXp = $this->getSkill()->getXp($virtualLevel + 1);
+        if ($currentLevelXp === null || $nextLevelXp === null) {
             return null;
         }
 
@@ -65,53 +114,5 @@ class HighScoreSkill extends HighScoreEntry
         $xpInLevel = $this->getXp() - $currentLevelXp;
 
         return $xpInLevel / $totalXpInLevel;
-    }
-
-    public function getSkill(): Skill
-    {
-        return $this->skill;
-    }
-
-    public function getLevel(): int
-    {
-        if ($this->isTotal()) {
-            return $this->level;
-        }
-
-        return $this->getSkill()->getLevel($this->xp);
-    }
-
-    public function getVirtualLevel(): int
-    {
-        if ($this->isTotal()) {
-            return $this->level;
-        }
-
-        return $this->getSkill()->getVirtualLevel($this->xp);
-    }
-
-    public function getXp(): int
-    {
-        // Match minimum XP required if skill has a higher minimum level
-        if (!$this->xp && $this->getLevel() > 1) {
-            return $this->getSkill()->getXp($this->getLevel());
-        }
-
-        return $this->xp;
-    }
-
-    public function getName(): string
-    {
-        return $this->getSkill()->getName();
-    }
-
-    public function isTotal(): bool
-    {
-        return $this->skill->getId() === Skill::SKILL_TOTAL;
-    }
-
-    public function compareTo(HighScoreSkill $otherSkill): HighScoreSkillComparison
-    {
-        return new HighScoreSkillComparison($this, $otherSkill);
     }
 }

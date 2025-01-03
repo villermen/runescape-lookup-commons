@@ -2,55 +2,41 @@
 
 namespace Villermen\RuneScape\HighScore;
 
-use Villermen\RuneScape\Activity;
-use Villermen\RuneScape\Exception\RuneScapeException;
-
-class HighScoreActivity extends HighScoreEntry
+/**
+ * @template TActivity of ActivityInterface
+ */
+class HighScoreActivity
 {
-    /** @var Activity */
-    protected $activity;
-
-    /** @var int */
-    protected $score;
-
-    public function __construct(Activity $activity, int $rank, int $score)
-    {
-        parent::__construct($rank);
-
-        $this->activity = $activity;
-
-        if ($score < 0) {
-            $score = 0;
-        }
-
-        $this->score = $score;
+    /**
+     * @param TActivity $activity
+     */
+    public function __construct(
+        protected readonly ActivityInterface $activity,
+        protected readonly ?int $rank,
+        protected readonly ?int $score
+    ) {
     }
 
     /**
-     * Returns the name of the stat for display purposes.
+     * @return TActivity
      */
-    public function getName(): string
-    {
-        return $this->activity->getName();
-    }
-
-    public function getActivity(): Activity
+    public function getActivity(): ActivityInterface
     {
         return $this->activity;
     }
 
-    public function getScore(): int
+    public function getRank(): ?int
+    {
+        return $this->rank;
+    }
+
+    public function getScore(): ?int
     {
         return $this->score;
     }
 
-    /**
-     * @param HighScoreActivity $otherActivity
-     * @return HighScoreActivityComparison
-     * @throws RuneScapeException
-     */
-    public function compareTo(HighScoreActivity $otherActivity): HighScoreActivityComparison
+    public function getName(): string
     {
-        return new HighScoreActivityComparison($this, $otherActivity);
+        return $this->getActivity()->getName();
     }
 }

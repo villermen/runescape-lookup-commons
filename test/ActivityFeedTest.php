@@ -23,12 +23,12 @@ class ActivityFeedTest extends TestCase
         $dataConverter = new PlayerDataConverter();
 
         $convertedData1 = $dataConverter->convertAdventurersLog(file_get_contents(__DIR__ . "/fixtures/activity-feed-test-adventurers-log.xml"));
-        $this->realName1 = $convertedData1[PlayerDataConverter::KEY_REAL_NAME];
-        $this->activityFeed1 = $convertedData1[PlayerDataConverter::KEY_ACTIVITY_FEED];
+        $this->realName1 = $convertedData1[PlayerDataConverter::CACHE_KEY_REAL_NAME];
+        $this->activityFeed1 = $convertedData1[PlayerDataConverter::CACHE_KEY_ACTIVITY_FEED];
 
         $convertedData2 = $dataConverter->convertRuneMetrics(file_get_contents(__DIR__ . "/fixtures/activity-feed-test-runemetrics.json"));
-        $this->realName2 = $convertedData2[PlayerDataConverter::KEY_REAL_NAME];
-        $this->activityFeed2 = $convertedData2[PlayerDataConverter::KEY_ACTIVITY_FEED];
+        $this->realName2 = $convertedData2[PlayerDataConverter::CACHE_KEY_REAL_NAME];
+        $this->activityFeed2 = $convertedData2[PlayerDataConverter::CACHE_KEY_ACTIVITY_FEED];
     }
 
     public function testRealName(): void

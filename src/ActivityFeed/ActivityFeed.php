@@ -4,13 +4,10 @@ namespace Villermen\RuneScape\ActivityFeed;
 
 class ActivityFeed
 {
-    /** @var ActivityFeedItem[] */
-    protected $items = [];
-
     /**
      * @param ActivityFeedItem[] $items
      */
-    public function __construct(array $items)
+    public function __construct(protected array $items)
     {
         $this->items = array_values($items);
     }

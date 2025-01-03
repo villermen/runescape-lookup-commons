@@ -17,13 +17,12 @@
 For looking up player related matters, simply construct a `Player` object and use its methods:
 
 ```php
-use Villermen\RuneScape\Player;
-use Villermen\RuneScape\Skill;
+use Villermen\RuneScape\HighScore\Rs3Skill;use Villermen\RuneScape\Player;
 
 $player = new Player("VILLERMEN");
 
 $highScore = $player->getSkillHighScore();
-echo $highScore->getSkill(Skill::SKILL_FARMING)->getLevel(true);
+echo $highScore->getSkill(Rs3Skill::SKILL_FARMING)->getLevel(true);
 // 107
 
 $oldSchoolHighScore = $player->getOldSchoolSkillHighScore();
@@ -31,7 +30,7 @@ echo $oldSchoolHighScore->getCombatLevel();
 // 69
 
 $comparison = $highScore->compareTo($oldSchoolHighScore);
-echo $comparison->getSkill(Skill::SKILL_ATTACK)->getLevelDifference(true);
+echo $comparison->getSkill(Rs3Skill::SKILL_ATTACK)->getLevelDifference(true);
 // 39
 
 // These should return instantly if $highScore was successfully obtained from RuneMetrics
