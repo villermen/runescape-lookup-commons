@@ -5,13 +5,18 @@
     "license": "MIT",
     "require": {
         "php": ">=8.1",
-        "ext-curl": "*",
         "ext-json": "*",
-        "ext-simplexml": "*"
+        "ext-simplexml": "*",
+        "symfony/http-client": "^6.4"
     },
     "autoload": {
         "psr-4": {
             "Villermen\\RuneScape\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Villermen\\RuneScape\\Test": "test/"
         }
     },
     "require-dev": {

@@ -7,9 +7,14 @@ namespace Villermen\RuneScape\HighScore;
  */
 class Rs3HighScore extends HighScore
 {
-    public function isOldSchool(): bool
+    public function getSkills(): array
     {
-        return false;
+        return array_map($this->getSkill(...), Rs3Skill::cases());
+    }
+
+    public function getActivities(): array
+    {
+        return array_map($this->getActivity(...), Rs3Activity::cases());
     }
 
     public function getCombatLevel(bool $includeSummoning = true): float

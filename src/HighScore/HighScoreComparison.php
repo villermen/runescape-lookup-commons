@@ -8,7 +8,7 @@ class HighScoreComparison
         protected readonly HighScore $highScore1,
         protected readonly HighScore $highScore2,
     ) {
-        if ($this->highScore1->isOldSchool() !== $this->highScore2->isOldSchool()) {
+        if ($this->highScore1 instanceof OsrsHighScore !== $this->highScore2 instanceof OsrsHighScore) {
             throw new \InvalidArgumentException(
                 'Highscore comparison can only be created between highscores of the same game version.'
             );

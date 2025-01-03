@@ -54,6 +54,7 @@ abstract class HighScore
 
     /**
      * Skills/activities are stored as weakly-typed arrays indexed by ID to retain data for unknown IDs.
+     * TODO: But accept as HighScoreSkill[] and HighScoreActivity[]? With unsupported values?
      *
      * @param array<int, array{rank: int|null, level: int|null, xp: int|null}> $skills
      * @param array<int, array{rank: int|null, score: int|null}> $activities
@@ -67,20 +68,18 @@ abstract class HighScore
         }
     }
 
-    public abstract function isOldSchool(): bool;
-
     public abstract function getCombatLevel(): float;
 
     /**
      * @return array<HighScoreSkill<TSkill>>
      */
-    public function getSkills(): array
-    {
-        return array_map(
-            $this->getSkill(...),
-            $this->isOldSchool() ? OsrsSkill::cases() : Rs3Skill::cases()
-        );
-    }
+    public abstract function getSkills(): array;
+
+
+    /**
+     * @return array<HighScoreActivity<TActivity>>
+     */
+    public abstract function getActivities(): array;
 
     /**
      * Note that you can pass a skill for the wrong version of the game. This will result in the stats for the skill
@@ -102,23 +101,11 @@ abstract class HighScore
     }
 
     /**
-     * @return array<HighScoreActivity<TActivity>>
-     */
-    public function getActivities(): array
-    {
-        return array_map(
-            $this->getActivity(...),
-            $this->isOldSchool() ? OsrsActivity::cases() : Rs3Activity::cases()
-        );
-    }
-
-    /**
      * Note that you can pass an activity for the wrong version of the game. This will result in the stats for the
      * activity with the same ID in the correct version of the game.
      *
-     * @template T of ActivityInterface
-     * @param T $activity
-     * @return HighScoreActivity<T>
+     * @param TActivity $activity
+     * @return HighScoreActivity<TActivity>
      */
     public function getActivity(ActivityInterface $activity): HighScoreActivity
     {

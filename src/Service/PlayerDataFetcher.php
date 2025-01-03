@@ -2,6 +2,9 @@
 
 namespace Villermen\RuneScape\Service;
 
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Villermen\RuneScape\ActivityFeed\ActivityFeed;
 use Villermen\RuneScape\ActivityFeed\ActivityFeedItem;
 use Villermen\RuneScape\Exception\DataConversionException;
@@ -20,24 +23,26 @@ class PlayerDataFetcher
 {
     protected const RS3_INDEX_LITE_URL = "https://secure.runescape.com/m=hiscore/index_lite.ws?player=%s";
     protected const OSRS_INDEX_LITE_URL = "https://secure.runescape.com/m=hiscore_oldschool/index_lite.ws?player=%s";
-    protected const ADVENTURERS_LOG_URL = "http://services.runescape.com/m=adventurers-log/rssfeed?searchName=%s";
+    protected const ADVENTURERS_LOG_URL = "https://secure.runescape.com/m=adventurers-log/rssfeed?searchName=%s";
     protected const RUNEMETRICS_URL = "https://apps.runescape.com/runemetrics/profile/profile?user=%s&activities=20";
 
-    /**
-     * @param int $timeout The timeout used for every external request by this instance.
-     */
-    public function __construct(
-        public int $timeout = 5,
-    ) {
+    protected readonly HttpClientInterface $httpClient;
+
+    public function __construct(?HttpClientInterface $httpClient = null)
+    {
+        $this->httpClient = $httpClient ?? HttpClient::create([
+            'timeout' => 5,
+            'max_redirects' => 0,
+        ]);
     }
 
     /**
-     * Tried and true.
+     * The tried and true way to obtain highscore data.
      *
      * @throws FetchFailedException
      * @throws DataConversionException
      */
-    public function fetchIndexLite(Player $player, bool $oldSchool): OsrsHighScore|Rs3HighScore
+    public function fetchIndexLite(Player $player, bool $oldSchool = false): OsrsHighScore|Rs3HighScore
     {
         $url = $oldSchool ? self::OSRS_INDEX_LITE_URL : self::RS3_INDEX_LITE_URL;
         $url = sprintf($url, urlencode($player->getName()));
@@ -121,14 +126,13 @@ class PlayerDataFetcher
 
         // ActivityFeed
         $activities = [];
-        foreach($data->activities as $activity) {
-            $time = new \DateTime($activity->date);
-            $time->setTimezone(new \DateTimeZone('UTC'));
+        foreach($data['activities'] as $activity) {
+            $time = new \DateTimeImmutable($activity['date'], new \DateTimeZone('UTC'));
 
             $activities[] = new ActivityFeedItem(
                 $time,
-                trim($activity->text),
-                trim($activity->details)
+                trim($activity['text']),
+                trim($activity['details'])
             );
         }
 
@@ -164,8 +168,7 @@ class PlayerDataFetcher
         }
 
         foreach ($itemElements as $itemElement) {
-            $time = new \DateTime($itemElement->pubDate);
-            $time->setTimezone(new \DateTimeZone('UTC'));
+            $time = new \DateTimeImmutable($itemElement->pubDate, new \DateTimeZone('UTC'));
             $title = trim((string)$itemElement->title);
             $description = trim((string)$itemElement->description);
 
@@ -202,28 +205,16 @@ class PlayerDataFetcher
      */
     protected function fetchUrl(string $url): string
     {
-        $curl = curl_init($url);
-        curl_setopt_array($curl, [
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT => $this->timeout
-        ]);
-        $data = (string)curl_exec($curl);
-        $statusCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-        $error = curl_error($curl);
-        curl_close($curl);
+        try {
+            $response = $this->httpClient->request('GET', $url);
+            $data = $response->getContent();
+            if (!$data) {
+                throw new FetchFailedException(sprintf('URL \"%s\" returned no data.', $url));
+            }
 
-        if ($error) {
-            throw new FetchFailedException(sprintf("A cURL error occurred for \"%s\": %s", $url, $error));
+            return $data;
+        } catch (ExceptionInterface $exception) {
+            throw new FetchFailedException(sprintf("An exception occurred while fetching \"%s\": %s", $url, $exception->getMessage()), previous: $exception);
         }
-
-        if ($statusCode !== 200) {
-            throw new FetchFailedException(sprintf("URL \"%s\" responded with status code %d.", $url, $statusCode));
-        }
-
-        if (!$data) {
-            throw new FetchFailedException(sprintf("URL \"%s\" returned no data.", $url));
-        }
-
-        return $data;
     }
 }

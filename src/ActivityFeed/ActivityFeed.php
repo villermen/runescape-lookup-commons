@@ -7,9 +7,8 @@ class ActivityFeed
     /**
      * @param ActivityFeedItem[] $items
      */
-    public function __construct(protected array $items)
+    public function __construct(protected readonly array $items)
     {
-        $this->items = array_values($items);
     }
 
     /**
@@ -17,7 +16,7 @@ class ActivityFeed
      */
     public function getItems(): array
     {
-        return $this->items;
+        return array_values($this->items);
     }
 
     /**

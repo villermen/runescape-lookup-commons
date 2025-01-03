@@ -7,9 +7,14 @@ namespace Villermen\RuneScape\HighScore;
  */
 class OsrsHighScore extends HighScore
 {
-    public function isOldSchool(): bool
+    public function getSkills(): array
     {
-        return true;
+        return array_map($this->getSkill(...), OsrsSkill::cases());
+    }
+
+    public function getActivities(): array
+    {
+        return array_map($this->getActivity(...), OsrsActivity::cases());
     }
 
     public function getCombatLevel(): float
