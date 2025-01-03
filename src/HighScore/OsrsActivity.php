@@ -90,6 +90,11 @@ enum OsrsActivity: int implements ActivityInterface
     case ZALCANO = 80;
     case ZULRAH = 81;
 
+    public function getId(): int
+    {
+        return $this->value;
+    }
+
     public function getName(): string
     {
         return match ($this) {

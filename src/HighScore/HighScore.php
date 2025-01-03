@@ -9,30 +9,32 @@ namespace Villermen\RuneScape\HighScore;
 abstract class HighScore
 {
     /**
-     * Compatible with both OSRS's JSON format and the output of {@see toArray()}.
+     * Compatible with both OSRS's JSON format and the output of {@see toArray()}. Retains data for unknown skills and
+     * activities.
      *
      * @param mixed[] $data
      * @return ($oldSchool is true ? OsrsHighScore : Rs3HighScore)
      */
-    public static function fromArray(array $data, bool $oldSchool): OsrsHighScore|Rs3HighScore
+    public static function fromArray(array $data, bool $oldSchool = false): OsrsHighScore|Rs3HighScore
     {
         if (!is_array($data['skills'] ?? null) || !is_array($data['activities'] ?? null)) {
             throw new \InvalidArgumentException('Invalid highscore array data provided.');
         }
 
-        // Filter/correct keys and values.
-        $skills = array_values(array_map(fn (array $skill) => [
+        $highScore = $oldSchool ? new OsrsHighScore([], []) : new Rs3HighScore([], []);
+
+        $highScore->skills = array_values(array_map(fn (array $skill) => [
             'rank' => self::correctValue($skill['rank'] ?? null),
             'level' => self::correctValue($skill['level'] ?? null),
             'xp' => self::correctValue($skill['xp'] ?? null),
         ], $data['skills']));
 
-        $activities = array_values(array_map(fn (array $activity) => [
+        $highScore->activities = array_values(array_map(fn (array $activity) => [
             'rank' => self::correctValue($activity['rank'] ?? null),
             'score' => self::correctValue($activity['score'] ?? null),
         ], $data['activities']));
 
-        return $oldSchool ? new OsrsHighScore($skills, $activities) : new Rs3HighScore($skills, $activities);
+        return $highScore;
     }
 
     /**
@@ -53,18 +55,40 @@ abstract class HighScore
     }
 
     /**
-     * Skills/activities are stored as weakly-typed arrays indexed by ID to retain data for unknown IDs.
-     * TODO: But accept as HighScoreSkill[] and HighScoreActivity[]? With unsupported values?
+     * Stored as weakly-typed array to retain data for unknown IDs.
      *
-     * @param array<int, array{rank: int|null, level: int|null, xp: int|null}> $skills
-     * @param array<int, array{rank: int|null, score: int|null}> $activities
+     * @var array<int, array{rank: int|null, level: int|null, xp: int|null}> $skills
+     */
+    protected array $skills = [];
+
+    /**
+     * Stored as weakly-typed array to retain data for unknown IDs.
+     *
+     * @var array<int, array{rank: int|null, score: int|null}> $activities
+     */
+    protected array $activities = [];
+
+    /**
+     * @param array<HighScoreSkill<TSkill>> $skills
+     * @param array<HighScoreActivity<TActivity>> $activities
      */
     public function __construct(
-        protected readonly array $skills,
-        protected readonly array $activities,
+        array $skills,
+        array $activities,
     ) {
-        if (!count($this->skills) && !count($this->activities)) {
-            throw new \InvalidArgumentException('No high score information provided.');
+        foreach ($skills as $skill) {
+            $this->skills[$skill->getSkill()->getId()] = [
+                'rank' => $skill->getRank(),
+                'level' => $skill->getLevel(),
+                'xp' => $skill->getXp(),
+            ];
+        }
+
+        foreach ($activities as $activity) {
+            $this->activities[$activity->getActivity()->getId()] = [
+                'rank' => $activity->getRank(),
+                'score' => $activity->getScore(),
+            ];
         }
     }
 
@@ -90,7 +114,7 @@ abstract class HighScore
      */
     public function getSkill(SkillInterface $skill): HighScoreSkill
     {
-        $skillData = $this->skills[$skill->value] ?? null;
+        $skillData = $this->skills[$skill->getId()] ?? null;
 
         return new HighScoreSkill(
             $skill,
@@ -109,7 +133,7 @@ abstract class HighScore
      */
     public function getActivity(ActivityInterface $activity): HighScoreActivity
     {
-        $activityData = $this->activities[$activity->value] ?? null;
+        $activityData = $this->activities[$activity->getId()] ?? null;
 
         return new HighScoreActivity(
             $activity,

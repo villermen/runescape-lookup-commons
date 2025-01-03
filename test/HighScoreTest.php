@@ -3,6 +3,8 @@
 namespace Villermen\RuneScape\Test;
 
 use PHPUnit\Framework\TestCase;
+use Villermen\RuneScape\HighScore\HighScoreActivity;
+use Villermen\RuneScape\HighScore\HighScoreSkill;
 use Villermen\RuneScape\HighScore\OsrsActivity;
 use Villermen\RuneScape\HighScore\OsrsHighScore;
 use Villermen\RuneScape\HighScore\OsrsSkill;
@@ -20,96 +22,102 @@ class HighScoreTest extends TestCase
 
     public function setUp(): void
     {
-        $this->highScore1 = new Rs3HighScore(
-            skills: [
-                Rs3Skill::INVENTION->value => [
-                    'rank' => 1999999,
-                    'level' => 120,
-                    'xp' => 104772129,
-                ],
-                Rs3Skill::MINING->value => [
-                    'rank' => null,
-                    'level' => 108,
-                    'xp' => 33566929,
-                ],
-                Rs3Skill::TOTAL->value => [
-                    'rank' => null,
-                    'level' => 2943,
-                    'xp' =>  2067425433,
-                ],
-                Rs3Skill::NECROMANCY->value => [
-                    'rank' => null,
-                    'level' => 68,
-                    'xp' => 1200,
-                ],
-                Rs3Skill::SUMMONING->value => [
-                    'rank' => null,
-                    'level' => 68,
-                    'xp' => 0,
-                ],
-            ],
-            activities: [
-                Rs3Activity::DOMINION_TOWER->value => [
-                    'rank' => null,
-                    'score' => 1362803,
-                ],
-                Rs3Activity::WORLD_EVENT_2_BANDOS_KILLS->value => [
-                    'rank' => null,
-                    'score' => 0,
-                ],
-            ],
-        );
+        $this->highScore1 = new Rs3HighScore([
+            new HighScoreSkill(
+                skill: Rs3Skill::INVENTION,
+                rank: 1999999,
+                level: 120,
+                xp: 104772129,
+            ),
+            new HighScoreSkill(
+                skill: Rs3Skill::MINING,
+                rank: null,
+                level: 108,
+                xp: 33566929,
+            ),
+            new HighScoreSkill(
+                skill: Rs3Skill::TOTAL,
+                rank: null,
+                level: 2943,
+                xp:  2067425433,
+            ),
+            new HighScoreSkill(
+                skill: Rs3Skill::NECROMANCY,
+                rank: null,
+                level: 68,
+                xp: 1200,
+            ),
+            new HighScoreSkill(
+                skill: Rs3Skill::SUMMONING,
+                rank: null,
+                level: 68,
+                xp: 0,
+            ),
+        ], [
+            new HighScoreActivity(
+                activity: Rs3Activity::DOMINION_TOWER,
+                rank: null,
+                score: 1362803,
+            ),
+            new HighScoreActivity(
+                activity: Rs3Activity::WORLD_EVENT_2_BANDOS_KILLS,
+                rank: null,
+                score: 0,
+            ),
+        ]);
 
-        $this->highScore2 = new Rs3HighScore(
-            skills: [
-                Rs3Skill::ATTACK->value => [
-                    'rank' => null,
-                    'level' => 68,
-                    'xp' => 0,
-                ],
-                Rs3Skill::MINING->value => [
-                    'rank' => null,
-                    'level' => 80,
-                    'xp' => 33567929,
-                ],
-                Rs3Skill::TOTAL->value => [
-                    'rank' => 1200000,
-                    'level' => 2743,
-                    'xp' =>  2167425433,
-                ],
-            ],
-            activities: [
-                Rs3Activity::DOMINION_TOWER->value => [
-                    'rank' => null,
-                    'score' => 1200,
-                ],
-            ],
-        );
+        $this->highScore2 = new Rs3HighScore([
+            new HighScoreSkill(
+                skill: Rs3Skill::ATTACK,
+                rank: null,
+                level: 68,
+                xp: 0,
+            ),
+            new HighScoreSkill(
+                skill: Rs3Skill::MINING,
+                rank: null,
+                level: 80,
+                xp: 33567929,
+            ),
+            new HighScoreSkill(
+                skill: Rs3Skill::TOTAL,
+                rank: 1200000,
+                level: 2743,
+                xp:  2167425433,
+            ),
+        ], [
+            new HighScoreActivity(
+                activity: Rs3Activity::DOMINION_TOWER,
+                rank: null,
+                score: 1200,
+            ),
+        ]);
 
-        $this->highScore3 = new OsrsHighScore(
-            skills: [
-                OsrsSkill::MAGIC->value => [
-                    'rank' => null,
-                    'level' => 68,
-                    'xp' => 0,
-                ],
-                OsrsSkill::MINING->value => [
-                    'rank' => null,
-                    'level' => 80,
-                    'xp' => 33567929,
-                ],
-            ],
-            activities: [
-                Rs3Activity::DOMINION_TOWER->value => [
-                    'rank' => 1,
-                    'score' => 1362803,
-                ],
-                Rs3Activity::WORLD_EVENT_2_BANDOS_KILLS->value => [
-                    'rank' => null,
-                    'score' => 0,
-                ],
-            ],
-        );
+        $this->highScore3 = new OsrsHighScore([
+            new HighScoreSkill(
+                skill: OsrsSkill::MAGIC,
+                rank: null,
+                level: 68,
+                xp: 0,
+            ),
+            new HighScoreSkill(
+                skill: OsrsSkill::MINING,
+                rank: null,
+                level: 80,
+                xp: 33567929,
+            ),
+        ], [
+            new HighScoreActivity(
+                activity: OsrsActivity::ZULRAH,
+                rank: 1,
+                score: 1362803,
+            ),
+            new HighScoreActivity(
+                activity: OsrsActivity::LEAGUE_POINTS,
+                rank: null,
+                score: 0,
+            ),
+        ]);
     }
 
     public function testEntries(): void

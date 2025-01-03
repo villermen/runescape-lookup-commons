@@ -31,6 +31,11 @@ enum OsrsSkill: int implements SkillInterface
     case HUNTER = 22;
     case CONSTRUCTION = 23;
 
+    public function getId(): int
+    {
+        return $this->value;
+    }
+
     public function getName(): string
     {
         return match ($this) {

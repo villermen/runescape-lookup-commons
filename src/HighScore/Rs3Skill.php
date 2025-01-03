@@ -37,6 +37,11 @@ enum Rs3Skill: int implements SkillInterface
     case ARCHAEOLOGY = 28;
     case NECROMANCY = 29;
 
+    public function getId(): int
+    {
+        return $this->value;
+    }
+
     public function getName(): string
     {
         return match ($this) {

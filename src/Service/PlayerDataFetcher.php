@@ -79,7 +79,10 @@ class PlayerDataFetcher
             throw new DataConversionException('Invalid high score data supplied.');
         }
 
-        return $oldSchool ? new OsrsHighScore($skills, $activities) : new Rs3HighScore($skills, $activities);
+        return HighScore::fromArray([
+            'skills' => $skills,
+            'activities' => $activities,
+        ], $oldSchool);
     }
 
     /**
@@ -139,7 +142,10 @@ class PlayerDataFetcher
         return new RuneMetricsData(
             $player,
             $data['name'],
-            new Rs3HighScore($skills, activities: []),
+            HighScore::fromArray([
+                'skills' => $skills,
+                'activities' => [],
+            ]),
             new ActivityFeed($activities),
         );
     }
@@ -209,12 +215,12 @@ class PlayerDataFetcher
             $response = $this->httpClient->request('GET', $url);
             $data = $response->getContent();
             if (!$data) {
-                throw new FetchFailedException(sprintf('URL \"%s\" returned no data.', $url));
+                throw new FetchFailedException(sprintf('URL "%s" returned no data.', $url));
             }
 
             return $data;
         } catch (ExceptionInterface $exception) {
-            throw new FetchFailedException(sprintf("An exception occurred while fetching \"%s\": %s", $url, $exception->getMessage()), previous: $exception);
+            throw new FetchFailedException(sprintf('An exception occurred while fetching "%s": %s', $url, $exception->getMessage()), previous: $exception);
         }
     }
 }

@@ -35,6 +35,11 @@ enum Rs3Activity: int implements ActivityInterface
     case CLUE_SCROLLS_ELITE = 28;
     case CLUE_SCROLLS_MASTER = 29;
 
+    public function getId(): int
+    {
+        return $this->value;
+    }
+
     public function getName(): string
     {
         return match ($this) {

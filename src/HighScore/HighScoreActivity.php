@@ -3,7 +3,7 @@
 namespace Villermen\RuneScape\HighScore;
 
 /**
- * @template TActivity of ActivityInterface
+ * @template-covariant TActivity of ActivityInterface
  */
 class HighScoreActivity
 {
