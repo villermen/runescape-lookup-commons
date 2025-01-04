@@ -20,8 +20,8 @@ class PlayerDataFetcherTest extends TestCase
      * Excl should have lifetime membership due to winning the first Machinima competition. Now let's hope they don't
      * turn their adventurer's log to private.
      */
-    private const MEMBER_PLAYER_NAME = "excl";
-    private const NONEXISTENT_PLAYER_NAME = "ifugMERWzm5G";
+    private const MEMBER_PLAYER_NAME = 'excl';
+    private const NONEXISTENT_PLAYER_NAME = 'ifugMERWzm5G';
 
     /** @return mixed[] */
     public static function indexLiteRs3Provider(): array

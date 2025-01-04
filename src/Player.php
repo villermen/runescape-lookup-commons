@@ -4,9 +4,9 @@ namespace Villermen\RuneScape;
 
 class Player
 {
-    protected const RUNEMETRICS_URL = "https://apps.runescape.com/runemetrics/app/overview/player/%s";
-    protected const CHAT_HEAD_URL = "https://secure.runescape.com/m=avatar-rs/%s/chat.gif";
-    protected const FULL_BODY_URL = "https://secure.runescape.com/m=avatar-rs/%s/full.gif";
+    protected const RUNEMETRICS_URL = 'https://apps.runescape.com/runemetrics/app/overview/player/%s';
+    protected const CHAT_HEAD_URL = 'https://secure.runescape.com/m=avatar-rs/%s/chat.gif';
+    protected const FULL_BODY_URL = 'https://secure.runescape.com/m=avatar-rs/%s/full.gif';
 
     /**
      * Returns whether the given name is a valid RuneScape player name.

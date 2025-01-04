@@ -2,6 +2,7 @@
 
 namespace Villermen\RuneScape\Service;
 
+use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -14,6 +15,7 @@ use Villermen\RuneScape\HighScore\OsrsHighScore;
 use Villermen\RuneScape\HighScore\Rs3HighScore;
 use Villermen\RuneScape\Player;
 use Villermen\RuneScape\PlayerData\AdventurersLogData;
+use Villermen\RuneScape\PlayerData\GroupIronmanData;
 use Villermen\RuneScape\PlayerData\RuneMetricsData;
 
 /**
@@ -21,10 +23,11 @@ use Villermen\RuneScape\PlayerData\RuneMetricsData;
  */
 class PlayerDataFetcher
 {
-    protected const RS3_INDEX_LITE_URL = "https://secure.runescape.com/m=hiscore/index_lite.ws?player=%s";
-    protected const OSRS_INDEX_LITE_URL = "https://secure.runescape.com/m=hiscore_oldschool/index_lite.ws?player=%s";
-    protected const ADVENTURERS_LOG_URL = "https://secure.runescape.com/m=adventurers-log/rssfeed?searchName=%s";
-    protected const RUNEMETRICS_URL = "https://apps.runescape.com/runemetrics/profile/profile?user=%s&activities=20";
+    protected const RS3_INDEX_LITE_URL = 'https://secure.runescape.com/m=hiscore/index_lite.ws?player=%s';
+    protected const OSRS_INDEX_LITE_URL = 'https://secure.runescape.com/m=hiscore_oldschool/index_lite.ws?player=%s';
+    protected const ADVENTURERS_LOG_URL = 'https://secure.runescape.com/m=adventurers-log/rssfeed?searchName=%s';
+    protected const RUNEMETRICS_URL = 'https://apps.runescape.com/runemetrics/profile/profile?user=%s&activities=20';
+    protected const GROUP_IRONMAN_URL = 'https://secure.runescape.com/m=hiscore_oldschool_ironman/group-ironman/view-group?name=%s';
 
     protected readonly HttpClientInterface $httpClient;
 
@@ -160,23 +163,16 @@ class PlayerDataFetcher
         $data = $this->fetchUrl($url);
 
         // Parse data into ActivityFeed object
-        $feedItems = [];
-
-        try {
-            $feed = new \SimpleXmlElement($data);
-        } catch (\Exception) {
-            throw new DataConversionException('Could not parse the adventurer\'s log as XML.');
-        }
-
-        $itemElements = @$feed->xpath('/rss/channel/item');
-        if (!$itemElements) {
+        $crawler = new Crawler($data);
+        $itemCrawler = $crawler->filter('rss > channel > item');
+        if ($itemCrawler->count() === 0) {
             throw new DataConversionException('Could not obtain any feed items from feed.');
         }
 
-        foreach ($itemElements as $itemElement) {
-            $time = new \DateTimeImmutable($itemElement->pubDate, new \DateTimeZone('UTC'));
-            $title = trim((string)$itemElement->title);
-            $description = trim((string)$itemElement->description);
+        $feedItems = $itemCrawler->each(function (Crawler $subCrawler) {
+            $time = new \DateTimeImmutable($subCrawler->children('pubDate')->innerText(), new \DateTimeZone('UTC'));
+            $title = trim($subCrawler->children('title')->innerText());
+            $description = trim($subCrawler->children('description')->innerText());
 
             if (!$title || !$description) {
                 throw new DataConversionException(sprintf(
@@ -185,16 +181,16 @@ class PlayerDataFetcher
                 ));
             }
 
-            $feedItems[] = new ActivityFeedItem($time, $title, $description);
-        }
+            return new ActivityFeedItem($time, $title, $description);
+        });
 
         // Parse real name
-        $titleElements = @$feed->xpath('/rss/channel/title');
-        if (!$titleElements) {
+        $titleCrawler = $crawler->filter('rss > channel > title');
+        if ($titleCrawler->count() === 0) {
             throw new DataConversionException('Could not obtain player name element from feed.');
         }
 
-        $title = (string)$titleElements[0];
+        $title = $titleCrawler->innerText();
         $realName = trim(substr($title, strrpos($title, ':') + 1));
 
         return new AdventurersLogData(
@@ -202,6 +198,25 @@ class PlayerDataFetcher
             $realName,
             new ActivityFeed($feedItems),
         );
+    }
+
+    /**
+     * @throws FetchFailedException
+     */
+    public function fetchGroupIronman(string $groupName): GroupIronmanData
+    {
+        $url = sprintf(self::GROUP_IRONMAN_URL, urlencode($groupName));
+        $data = $this->fetchUrl($url);
+
+        $crawler = new Crawler($data);
+
+        $realName = trim($crawler->filter('.uc-scroll__group-title')->innerText());
+
+        $players = $crawler
+            ->filter('.uc-scroll__table-row--type-player .uc-scroll__link')
+            ->each(fn (Crawler $subCrawler) => new Player($subCrawler->innerText()));
+
+        return new GroupIronmanData($realName, $players);
     }
 
     /**
