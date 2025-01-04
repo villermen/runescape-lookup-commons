@@ -14,22 +14,25 @@ jobs:
       matrix:
         # Oldest and newest stable.
         php-version: ['8.1', '8.4']
-    name: PHP ${{ matrix.php_version }}
+    name: PHP ${{ matrix.php-version }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4.2.0
-      - uses: shivammathur/setup-php@2.32.0
+      - name: Install PHP
+        uses: shivammathur/setup-php@2.32.0
         with:
           php-version: ${{ matrix.php-version }}
       - name: Validate composer.json
         run: composer validate --strict
-      - uses: actions/cache@v4.2.0
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4.2.0
         with:
           path: vendor
-          key: php-${{ matrix.php-version }}-${{ hashFiles('**/composer.json') }}-${{ hashFiles('**/composer.lock') }}
+          key: php-${{ hashFiles('**/composer.json') }}-${{ matrix.php-version }}
           restore-keys: |
-            php-${{ matrix.php-version }}-${{ hashFiles('**/composer.json') }}
-            php-${{ matrix.php-version }}
+            php-${{ hashFiles('**/composer.json') }}-${{ matrix.php-version }}
+            php-${{ hashFiles('**/composer.json') }}
+            php
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
       - name: Run unit tests
