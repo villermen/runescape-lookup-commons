@@ -77,17 +77,17 @@ abstract class HighScore
         array $activities,
     ) {
         foreach ($skills as $skill) {
-            $this->skills[$skill->getSkill()->getId()] = [
-                'rank' => $skill->getRank(),
-                'level' => $skill->getLevel(),
+            $this->skills[$skill->skill->getId()] = [
+                'rank' => $skill->rank,
+                'level' => $skill->level,
                 'xp' => $skill->getXp(),
             ];
         }
 
         foreach ($activities as $activity) {
-            $this->activities[$activity->getActivity()->getId()] = [
-                'rank' => $activity->getRank(),
-                'score' => $activity->getScore(),
+            $this->activities[$activity->activity->getId()] = [
+                'rank' => $activity->rank,
+                'score' => $activity->score,
             ];
         }
     }

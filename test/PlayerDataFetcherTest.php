@@ -66,9 +66,9 @@ class PlayerDataFetcherTest extends TestCase
         $dataFetcher = $this->createDataFetcher($source);
 
         $highScore = $dataFetcher->fetchIndexLite($player);
-        self::assertGreaterThanOrEqual(1982, $highScore->getSkill(Rs3Skill::TOTAL)->getLevel());
+        self::assertGreaterThanOrEqual(1982, $highScore->getSkill(Rs3Skill::TOTAL)->level);
         self::assertGreaterThanOrEqual(187952, $highScore->getSkill(Rs3Skill::DIVINATION)->getXp());
-        self::assertEquals(1391, $highScore->getActivity(Rs3Activity::CONQUEST)->getScore());
+        self::assertEquals(1391, $highScore->getActivity(Rs3Activity::CONQUEST)->score);
     }
 
     #[DataProvider('indexLiteOsrsProvider')]
@@ -78,9 +78,9 @@ class PlayerDataFetcherTest extends TestCase
         $dataFetcher = $this->createDataFetcher($source);
 
         $highScore = $dataFetcher->fetchIndexLite($player, oldSchool: true);
-        self::assertGreaterThanOrEqual(1882, $highScore->getSkill(OsrsSkill::TOTAL)->getLevel());
+        self::assertGreaterThanOrEqual(1882, $highScore->getSkill(OsrsSkill::TOTAL)->level);
         self::assertGreaterThanOrEqual(3644543, $highScore->getSkill(OsrsSkill::CONSTRUCTION)->getXp());
-        self::assertGreaterThanOrEqual(71, $highScore->getActivity(OsrsActivity::ZULRAH)->getScore());
+        self::assertGreaterThanOrEqual(71, $highScore->getActivity(OsrsActivity::ZULRAH)->score);
     }
 
     #[DataProvider('runeMetricsProvider')]
@@ -92,12 +92,12 @@ class PlayerDataFetcherTest extends TestCase
         $runeMetrics = $dataFetcher->fetchRuneMetrics($player);
         self::assertEquals('Excl', $runeMetrics->displayName);
         // You would expect this to equal the index lite value, but it doesn't...
-        self::assertGreaterThanOrEqual(1983, $runeMetrics->highScore->getSkill(Rs3Skill::TOTAL)->getLevel());
+        self::assertGreaterThanOrEqual(1983, $runeMetrics->highScore->getSkill(Rs3Skill::TOTAL)->level);
         self::assertEquals(187952, $runeMetrics->highScore->getSkill(Rs3Skill::DIVINATION)->getXp());
         // RuneMetrics does not include activities in high score.
-        self::assertNull($runeMetrics->highScore->getActivity(Rs3Activity::CONQUEST)->getScore());
-        self::assertCount(20, $runeMetrics->activityFeed->getItems());
-        self::assertGreaterThanOrEqual(new \DateTime('2022-09-05 04:13:00', new \DateTimeZone('UTC')), $runeMetrics->activityFeed->getItems()[0]->getTime());
+        self::assertNull($runeMetrics->highScore->getActivity(Rs3Activity::CONQUEST)->score);
+        self::assertCount(20, $runeMetrics->activityFeed->items);
+        self::assertGreaterThanOrEqual(new \DateTime('2022-09-05 04:13:00', new \DateTimeZone('UTC')), $runeMetrics->activityFeed->items[0]->time);
     }
 
     #[DataProvider('adventurersLogProvider')]
@@ -108,9 +108,9 @@ class PlayerDataFetcherTest extends TestCase
 
         $adventurersLog = $dataFetcher->fetchAdventurersLog($player);
         self::assertEquals('Excl', $adventurersLog->displayName);
-        self::assertCount(20, $adventurersLog->activityFeed->getItems());
+        self::assertCount(20, $adventurersLog->activityFeed->items);
         // Adventurer's log does not include times, but only for older events...
-        self::assertGreaterThanOrEqual(new \DateTime('2022-09-05 00:00:00', new \DateTimeZone('UTC')), $adventurersLog->activityFeed->getItems()[0]->getTime());
+        self::assertGreaterThanOrEqual(new \DateTime('2022-09-05 00:00:00', new \DateTimeZone('UTC')), $adventurersLog->activityFeed->items[0]->time);
     }
 
     public function testNonExistentPlayer(): void

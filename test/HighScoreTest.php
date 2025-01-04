@@ -122,36 +122,36 @@ class HighScoreTest extends TestCase
 
     public function testEntries(): void
     {
-        self::assertEquals(108, $this->highScore1->getSkill(Rs3Skill::MINING)->getLevel());
-        self::assertEquals(2943, $this->highScore1->getSkill(Rs3Skill::TOTAL)->getLevel());
+        self::assertEquals(108, $this->highScore1->getSkill(Rs3Skill::MINING)->level);
+        self::assertEquals(2943, $this->highScore1->getSkill(Rs3Skill::TOTAL)->level);
         // Total level doesn't do virtual.
         self::assertEquals(2943, $this->highScore1->getSkill(Rs3Skill::TOTAL)->getVirtualLevel());
-        self::assertEquals(null, $this->highScore1->getSkill(Rs3Skill::TOTAL)->getRank());
+        self::assertEquals(null, $this->highScore1->getSkill(Rs3Skill::TOTAL)->rank);
         // Unranked
         self::assertEquals(null, $this->highScore1->getSkill(Rs3Skill::DEFENCE)->getXp());
-        self::assertEquals(null, $this->highScore1->getSkill(Rs3Skill::DEFENCE)->getLevel());
-        self::assertEquals(null, $this->highScore1->getSkill(Rs3Skill::DEFENCE)->getRank());
+        self::assertEquals(null, $this->highScore1->getSkill(Rs3Skill::DEFENCE)->level);
+        self::assertEquals(null, $this->highScore1->getSkill(Rs3Skill::DEFENCE)->rank);
         // OSRS skill mapping compatibility.
         // @phpstan-ignore argument.type
         self::assertEquals(33566929, $this->highScore1->getSkill(OsrsSkill::MINING)->getXp());
         // @phpstan-ignore argument.type
-        self::assertEquals(108, $this->highScore1->getSkill(OsrsSkill::MINING)->getLevel());
+        self::assertEquals(108, $this->highScore1->getSkill(OsrsSkill::MINING)->level);
 
         $invSkill = $this->highScore1->getSkill(Rs3Skill::INVENTION);
-        self::assertEquals(120, $invSkill->getLevel());
+        self::assertEquals(120, $invSkill->level);
         self::assertEquals(128, $invSkill->getVirtualLevel());
         self::assertEquals(104772129, $invSkill->getXp());
-        self::assertEquals(1999999, $invSkill->getRank());
-        self::assertSame(Rs3Skill::INVENTION, $invSkill->getSkill());
+        self::assertEquals(1999999, $invSkill->rank);
+        self::assertSame(Rs3Skill::INVENTION, $invSkill->skill);
         self::assertEquals(2992087, $invSkill->getXpToNextLevel());
         self::assertEquals(0.0904, round($invSkill->getProgressToNextLevel() ?? 0.0, 4));
 
-        self::assertEquals(1362803, $this->highScore1->getActivity(Rs3Activity::DOMINION_TOWER)->getScore());
-        self::assertEquals(null, $this->highScore1->getActivity(Rs3Activity::DOMINION_TOWER)->getRank());
-        self::assertEquals(0, $this->highScore1->getActivity(Rs3Activity::WORLD_EVENT_2_BANDOS_KILLS)->getScore());
+        self::assertEquals(1362803, $this->highScore1->getActivity(Rs3Activity::DOMINION_TOWER)->score);
+        self::assertEquals(null, $this->highScore1->getActivity(Rs3Activity::DOMINION_TOWER)->rank);
+        self::assertEquals(0, $this->highScore1->getActivity(Rs3Activity::WORLD_EVENT_2_BANDOS_KILLS)->score);
         // Out of bound OSRS activity.
         // @phpstan-ignore argument.type
-        self::assertEquals(null, $this->highScore1->getActivity(OsrsActivity::ZULRAH)->getScore());
+        self::assertEquals(null, $this->highScore1->getActivity(OsrsActivity::ZULRAH)->score);
 
         self::assertEquals(55.45, $this->highScore1->getCombatLevel());
         self::assertEquals(46.95, $this->highScore1->getCombatLevel(includeSummoning: false));

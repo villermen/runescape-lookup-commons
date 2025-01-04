@@ -52,12 +52,12 @@ class ActivityFeedTest extends TestCase
 
     public function testMerge(): void
     {
-        $itemsAfter = $this->feed2->getItemsAfter($this->feed1->getItems()[1]);
+        $itemsAfter = $this->feed2->getItemsAfter($this->feed1->items[1]);
         self::assertCount(2, $itemsAfter);
-        self::assertEquals('I levelled my Divination skill, I am now level 38.', $itemsAfter[1]->getDescription());
+        self::assertEquals('I levelled my Divination skill, I am now level 38.', $itemsAfter[1]->description);
 
         $mergedFeed = $this->feed1->merge($this->feed2);
         self::assertNotSame($this->feed1, $mergedFeed);
-        self::assertCount(4, $mergedFeed->getItems());
+        self::assertCount(4, $mergedFeed->items);
     }
 }

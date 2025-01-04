@@ -13,47 +13,29 @@ class HighScoreSkill
      * @param TSkill $skill
      */
     public function __construct(
-        protected readonly SkillInterface $skill,
-        protected readonly ?int $rank,
-        protected readonly ?int $level,
-        protected readonly ?int $xp,
+        public readonly SkillInterface $skill,
+        public readonly ?int $rank,
+        public readonly ?int $level,
+        public readonly ?int $xp,
     ) {
-    }
-
-    /**
-     * @return TSkill
-     */
-    public function getSkill(): SkillInterface
-    {
-        return $this->skill;
-    }
-
-    public function getRank(): ?int
-    {
-        return $this->rank;
-    }
-
-    public function getLevel(): ?int
-    {
-        return $this->level;
     }
 
     public function getLevelOrMinimum(): int
     {
-        return $this->getLevel() ?? $this->getSkill()->getMinimumLevel();
+        return $this->level ?? $this->skill->getMinimumLevel();
     }
 
     public function getVirtualLevel(): ?int
     {
         if ($this->isTotal()) {
-            return $this->getLevel();
+            return $this->level;
         }
 
         if ($this->getXp() === null) {
             return null;
         }
 
-        return $this->getSkill()->getVirtualLevel($this->getXp());
+        return $this->skill->getVirtualLevel($this->getXp());
     }
 
     public function getXp(): ?int
@@ -63,12 +45,12 @@ class HighScoreSkill
 
     public function getName(): string
     {
-        return $this->getSkill()->getName();
+        return $this->skill->getName();
     }
 
     public function isTotal(): bool
     {
-        return in_array($this->getSkill(), [Rs3Skill::TOTAL, OsrsSkill::TOTAL]);
+        return in_array($this->skill, [Rs3Skill::TOTAL, OsrsSkill::TOTAL]);
     }
 
     public function getXpToNextLevel(): ?int
@@ -82,7 +64,7 @@ class HighScoreSkill
             return null;
         }
 
-        $nextXp = $this->getSkill()->getXp($virtualLevel + 1);
+        $nextXp = $this->skill->getXp($virtualLevel + 1);
         if (!$nextXp) {
             return null;
         }
@@ -104,8 +86,8 @@ class HighScoreSkill
             return null;
         }
 
-        $currentLevelXp = $this->getSkill()->getXp($virtualLevel);
-        $nextLevelXp = $this->getSkill()->getXp($virtualLevel + 1);
+        $currentLevelXp = $this->skill->getXp($virtualLevel);
+        $nextLevelXp = $this->skill->getXp($virtualLevel + 1);
         if ($currentLevelXp === null || $nextLevelXp === null) {
             return null;
         }

@@ -11,28 +11,17 @@ class ActivityFeedItem
      */
     protected const COMPARISON_TIME_TOLERANCE = 25 * 60 * 60;
 
+    public readonly string $title;
+
+    public readonly string $description;
+
     public function __construct(
-        protected \DateTimeImmutable $time,
-        protected string $title,
-        protected string $description
+        public readonly \DateTimeImmutable $time,
+        string $title,
+        string $description
     ) {
-        $this->title = trim($this->title);
-        $this->description = trim($this->description);
-    }
-
-    public function getTime(): \DateTimeImmutable
-    {
-        return $this->time;
-    }
-
-    public function getTitle(): string
-    {
-        return $this->title;
-    }
-
-    public function getDescription(): string
-    {
-        return $this->description;
+        $this->title = trim($title);
+        $this->description = trim($description);
     }
 
     /**
@@ -42,9 +31,9 @@ class ActivityFeedItem
     public function equals(ActivityFeedItem $otherItem): bool
     {
         return (
-            abs($this->getTime()->getTimestamp() - $otherItem->getTime()->getTimestamp()) <= self::COMPARISON_TIME_TOLERANCE &&
-            $this->getTitle() === $otherItem->getTitle() &&
-            $this->getDescription() === $otherItem->getDescription()
+            abs($this->time->getTimestamp() - $otherItem->time->getTimestamp()) <= self::COMPARISON_TIME_TOLERANCE &&
+            $this->title === $otherItem->title &&
+            $this->description === $otherItem->description
         );
     }
 }

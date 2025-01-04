@@ -11,32 +11,14 @@ class HighScoreActivity
      * @param TActivity $activity
      */
     public function __construct(
-        protected readonly ActivityInterface $activity,
-        protected readonly ?int $rank,
-        protected readonly ?int $score
+        public readonly ActivityInterface $activity,
+        public readonly ?int $rank,
+        public readonly ?int $score
     ) {
-    }
-
-    /**
-     * @return TActivity
-     */
-    public function getActivity(): ActivityInterface
-    {
-        return $this->activity;
-    }
-
-    public function getRank(): ?int
-    {
-        return $this->rank;
-    }
-
-    public function getScore(): ?int
-    {
-        return $this->score;
     }
 
     public function getName(): string
     {
-        return $this->getActivity()->getName();
+        return $this->activity->getName();
     }
 }
