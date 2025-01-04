@@ -34,7 +34,7 @@ class PlayerDataFetcher
     public function __construct(?HttpClientInterface $httpClient = null)
     {
         $this->httpClient = $httpClient ?? HttpClient::create([
-            'timeout' => 5,
+            'timeout' => 10,
             'max_redirects' => 0,
         ]);
     }
