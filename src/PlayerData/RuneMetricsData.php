@@ -10,7 +10,7 @@ class RuneMetricsData
 {
     public function __construct(
         public readonly Player $player,
-        public readonly string $realName,
+        public readonly string $displayName,
         public readonly Rs3HighScore $highScore,
         public readonly ActivityFeed $activityFeed,
     ) {

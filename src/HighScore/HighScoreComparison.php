@@ -10,7 +10,7 @@ class HighScoreComparison
     ) {
         if ($this->highScore1 instanceof OsrsHighScore !== $this->highScore2 instanceof OsrsHighScore) {
             throw new \InvalidArgumentException(
-                'Highscore comparison can only be created between highscores of the same game version.'
+                'High score comparison can only be created between high scores of the same game version.'
             );
         }
     }

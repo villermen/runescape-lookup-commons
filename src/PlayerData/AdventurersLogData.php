@@ -9,7 +9,7 @@ class AdventurersLogData
 {
     public function __construct(
         public readonly Player $player,
-        public readonly string $realName,
+        public readonly string $displayName,
         public readonly ActivityFeed $activityFeed,
     ) {
     }

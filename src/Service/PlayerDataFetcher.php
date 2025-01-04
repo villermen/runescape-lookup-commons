@@ -40,7 +40,7 @@ class PlayerDataFetcher
     }
 
     /**
-     * The tried and true way to obtain highscore data.
+     * The tried and true way to obtain high score data.
      *
      * @throws FetchFailedException
      * @throws DataConversionException
@@ -89,7 +89,7 @@ class PlayerDataFetcher
     }
 
     /**
-     * May yield unranked and non-member RS3 highscore data, but lacks highscore activities.
+     * May yield unranked and non-member RS3 high score data, but lacks high score activities.
      *
      * @throws FetchFailedException
      * @throws DataConversionException
@@ -191,11 +191,11 @@ class PlayerDataFetcher
         }
 
         $title = $titleCrawler->innerText();
-        $realName = trim(substr($title, strrpos($title, ':') + 1));
+        $displayName = trim(substr($title, strrpos($title, ':') + 1));
 
         return new AdventurersLogData(
             $player,
-            $realName,
+            $displayName,
             new ActivityFeed($feedItems),
         );
     }
@@ -210,13 +210,13 @@ class PlayerDataFetcher
 
         $crawler = new Crawler($data);
 
-        $realName = trim($crawler->filter('.uc-scroll__group-title')->innerText());
+        $displayName = trim($crawler->filter('.uc-scroll__group-title')->innerText());
 
         $players = $crawler
             ->filter('.uc-scroll__table-row--type-player .uc-scroll__link')
             ->each(fn (Crawler $subCrawler) => new Player($subCrawler->innerText()));
 
-        return new GroupIronmanData($realName, $players);
+        return new GroupIronmanData($displayName, $players);
     }
 
     /**

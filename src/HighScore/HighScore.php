@@ -18,7 +18,7 @@ abstract class HighScore
     public static function fromArray(array $data, bool $oldSchool = false): OsrsHighScore|Rs3HighScore
     {
         if (!is_array($data['skills'] ?? null) || !is_array($data['activities'] ?? null)) {
-            throw new \InvalidArgumentException('Invalid highscore array data provided.');
+            throw new \InvalidArgumentException('Invalid high score array data provided.');
         }
 
         $highScore = $oldSchool ? new OsrsHighScore([], []) : new Rs3HighScore([], []);
@@ -38,7 +38,7 @@ abstract class HighScore
     }
 
     /**
-     * Corrects raw highscore value to a nullable positive integer.
+     * Corrects raw high score value to a nullable positive integer.
      */
     public static function correctValue(mixed $value): ?int
     {
