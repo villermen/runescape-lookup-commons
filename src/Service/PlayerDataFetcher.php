@@ -143,7 +143,6 @@ class PlayerDataFetcher
         }
 
         return new RuneMetricsData(
-            $player,
             $data['name'],
             HighScore::fromArray([
                 'skills' => $skills,
@@ -194,7 +193,6 @@ class PlayerDataFetcher
         $displayName = trim(substr($title, strrpos($title, ':') + 1));
 
         return new AdventurersLogData(
-            $player,
             $displayName,
             new ActivityFeed($feedItems),
         );
