@@ -30,11 +30,11 @@ class HighScoreComparison
     {
         $skill1 = $this->highScore1->getSkill($skill);
         $skill2 = $this->highScore2->getSkill($skill);
-        if ($skill1->getXp() === null || $skill2->getXp() === null) {
+        if ($skill1->xp === null || $skill2->xp === null) {
             return null;
         }
 
-        return $skill1->getXp() - $skill2->getXp();
+        return $skill1->xp - $skill2->xp;
     }
 
     public function getLevelDifference(SkillInterface $skill): ?int

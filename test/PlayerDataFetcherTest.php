@@ -67,7 +67,7 @@ class PlayerDataFetcherTest extends TestCase
 
         $highScore = $dataFetcher->fetchIndexLite($player);
         self::assertGreaterThanOrEqual(1982, $highScore->getSkill(Rs3Skill::TOTAL)->level);
-        self::assertGreaterThanOrEqual(187952, $highScore->getSkill(Rs3Skill::DIVINATION)->getXp());
+        self::assertGreaterThanOrEqual(187952, $highScore->getSkill(Rs3Skill::DIVINATION)->xp);
         self::assertEquals(1391, $highScore->getActivity(Rs3Activity::CONQUEST)->score);
     }
 
@@ -79,7 +79,7 @@ class PlayerDataFetcherTest extends TestCase
 
         $highScore = $dataFetcher->fetchIndexLite($player, oldSchool: true);
         self::assertGreaterThanOrEqual(1882, $highScore->getSkill(OsrsSkill::TOTAL)->level);
-        self::assertGreaterThanOrEqual(3644543, $highScore->getSkill(OsrsSkill::CONSTRUCTION)->getXp());
+        self::assertGreaterThanOrEqual(3644543, $highScore->getSkill(OsrsSkill::CONSTRUCTION)->xp);
         self::assertGreaterThanOrEqual(71, $highScore->getActivity(OsrsActivity::ZULRAH)->score);
     }
 
@@ -93,7 +93,7 @@ class PlayerDataFetcherTest extends TestCase
         self::assertEquals('Excl', $runeMetrics->displayName);
         // You would expect this to equal the index lite value, but it doesn't...
         self::assertGreaterThanOrEqual(1983, $runeMetrics->highScore->getSkill(Rs3Skill::TOTAL)->level);
-        self::assertEquals(187952, $runeMetrics->highScore->getSkill(Rs3Skill::DIVINATION)->getXp());
+        self::assertEquals(187952, $runeMetrics->highScore->getSkill(Rs3Skill::DIVINATION)->xp);
         // RuneMetrics does not include activities in high score.
         self::assertNull($runeMetrics->highScore->getActivity(Rs3Activity::CONQUEST)->score);
         self::assertCount(20, $runeMetrics->activityFeed->items);

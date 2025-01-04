@@ -128,19 +128,19 @@ class HighScoreTest extends TestCase
         self::assertEquals(2943, $this->highScore1->getSkill(Rs3Skill::TOTAL)->getVirtualLevel());
         self::assertEquals(null, $this->highScore1->getSkill(Rs3Skill::TOTAL)->rank);
         // Unranked
-        self::assertEquals(null, $this->highScore1->getSkill(Rs3Skill::DEFENCE)->getXp());
+        self::assertEquals(null, $this->highScore1->getSkill(Rs3Skill::DEFENCE)->xp);
         self::assertEquals(null, $this->highScore1->getSkill(Rs3Skill::DEFENCE)->level);
         self::assertEquals(null, $this->highScore1->getSkill(Rs3Skill::DEFENCE)->rank);
         // OSRS skill mapping compatibility.
         // @phpstan-ignore argument.type
-        self::assertEquals(33566929, $this->highScore1->getSkill(OsrsSkill::MINING)->getXp());
+        self::assertEquals(33566929, $this->highScore1->getSkill(OsrsSkill::MINING)->xp);
         // @phpstan-ignore argument.type
         self::assertEquals(108, $this->highScore1->getSkill(OsrsSkill::MINING)->level);
 
         $invSkill = $this->highScore1->getSkill(Rs3Skill::INVENTION);
         self::assertEquals(120, $invSkill->level);
         self::assertEquals(128, $invSkill->getVirtualLevel());
-        self::assertEquals(104772129, $invSkill->getXp());
+        self::assertEquals(104772129, $invSkill->xp);
         self::assertEquals(1999999, $invSkill->rank);
         self::assertSame(Rs3Skill::INVENTION, $invSkill->skill);
         self::assertEquals(2992087, $invSkill->getXpToNextLevel());

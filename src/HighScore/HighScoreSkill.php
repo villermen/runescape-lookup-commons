@@ -31,21 +31,11 @@ class HighScoreSkill
             return $this->level;
         }
 
-        if ($this->getXp() === null) {
+        if ($this->xp === null) {
             return null;
         }
 
-        return $this->skill->getVirtualLevel($this->getXp());
-    }
-
-    public function getXp(): ?int
-    {
-        return $this->xp;
-    }
-
-    public function getName(): string
-    {
-        return $this->skill->getName();
+        return $this->skill->getVirtualLevel($this->xp);
     }
 
     public function isTotal(): bool
@@ -55,7 +45,7 @@ class HighScoreSkill
 
     public function getXpToNextLevel(): ?int
     {
-        if ($this->isTotal() || $this->getXp() === null) {
+        if ($this->isTotal() || $this->xp === null) {
             return null;
         }
 
@@ -69,7 +59,7 @@ class HighScoreSkill
             return null;
         }
 
-        return $nextXp - $this->getXp();
+        return $nextXp - $this->xp;
     }
 
     /**
@@ -77,7 +67,7 @@ class HighScoreSkill
      */
     public function getProgressToNextLevel(): ?float
     {
-        if ($this->isTotal() || $this->getXp() === null) {
+        if ($this->isTotal() || $this->xp === null) {
             return null;
         }
 
@@ -93,7 +83,7 @@ class HighScoreSkill
         }
 
         $totalXpInLevel = $nextLevelXp - $currentLevelXp;
-        $xpInLevel = $this->getXp() - $currentLevelXp;
+        $xpInLevel = $this->xp - $currentLevelXp;
 
         return $xpInLevel / $totalXpInLevel;
     }

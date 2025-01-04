@@ -80,7 +80,7 @@ abstract class HighScore
             $this->skills[$skill->skill->getId()] = [
                 'rank' => $skill->rank,
                 'level' => $skill->level,
-                'xp' => $skill->getXp(),
+                'xp' => $skill->xp,
             ];
         }
 
