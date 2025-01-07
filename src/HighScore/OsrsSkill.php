@@ -27,7 +27,7 @@ enum OsrsSkill: int implements SkillInterface
     case THIEVING = 18;
     case SLAYER = 19;
     case FARMING = 20;
-    case RUNECRAFTING = 21;
+    case RUNECRAFT = 21;
     case HUNTER = 22;
     case CONSTRUCTION = 23;
 
@@ -60,7 +60,7 @@ enum OsrsSkill: int implements SkillInterface
             self::THIEVING => 'Thieving',
             self::SLAYER => 'Slayer',
             self::FARMING => 'Farming',
-            self::RUNECRAFTING => 'Runecrafting',
+            self::RUNECRAFT => 'Runecraft',
             self::HUNTER => 'Hunter',
             self::CONSTRUCTION => 'Construction',
         };
