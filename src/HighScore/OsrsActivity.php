@@ -23,7 +23,7 @@ enum OsrsActivity: int implements ActivityInterface
     case LAST_MAN_STANDING_RANK = 13;
     case PVP_ARENA_RANK = 14;
     case SOUL_WARS_ZEAL = 15;
-    case GUARDIANS_OF_THE_RIFT_RIFTS_CLOSED = 16;
+    case GUARDIANS_OF_THE_RIFT = 16;
     case COLOSSEUM_GLORY = 17;
     case ABYSSAL_SIRE = 18;
     case ALCHEMICAL_HYDRA = 19;
@@ -114,7 +114,7 @@ enum OsrsActivity: int implements ActivityInterface
             self::LAST_MAN_STANDING_RANK => 'Last Man Standing Rank',
             self::PVP_ARENA_RANK => 'PvP Arena Rank',
             self::SOUL_WARS_ZEAL => 'Soul Wars Zeal',
-            self::GUARDIANS_OF_THE_RIFT_RIFTS_CLOSED => 'Guardians of the Rift: Rifts Closed',
+            self::GUARDIANS_OF_THE_RIFT => 'Guardians of the Rift',
             self::COLOSSEUM_GLORY => 'Colosseum Glory',
             self::ABYSSAL_SIRE => 'Abyssal Sire',
             self::ALCHEMICAL_HYDRA => 'Alchemical Hydra',
