@@ -23,11 +23,18 @@ abstract class HighScore
 
         $highScore = $oldSchool ? new OsrsHighScore([], []) : new Rs3HighScore([], []);
 
-        $highScore->skills = array_values(array_map(fn (array $skill) => [
-            'rank' => self::correctValue($skill['rank'] ?? null),
-            'level' => self::correctValue($skill['level'] ?? null),
-            'xp' => self::correctValue($skill['xp'] ?? null),
-        ], $data['skills']));
+        $highScore->skills = array_values(array_map(function (array $skill) {
+            $xp = self::correctValue($skill['xp'] ?? null);
+
+            return [
+                'rank' => self::correctValue($skill['rank'] ?? null),
+                // Unknown XP implies unknown level, even when the API disagrees.
+                'level' => $xp === null ? null : self::correctValue($skill['level'] ?? null),
+                'xp' => $xp,
+            ];
+        }, $data['skills']));
+
+        // XP -1? level -1
 
         $highScore->activities = array_values(array_map(fn (array $activity) => [
             'rank' => self::correctValue($activity['rank'] ?? null),
