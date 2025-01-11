@@ -16,4 +16,9 @@ class HighScoreActivity
         public readonly ?int $score
     ) {
     }
+
+    public function getName(): string
+    {
+        return $this->activity->getName();
+    }
 }

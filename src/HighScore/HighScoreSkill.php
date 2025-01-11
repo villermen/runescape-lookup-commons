@@ -20,6 +20,11 @@ class HighScoreSkill
     ) {
     }
 
+    public function getName(): string
+    {
+        return $this->skill->getName();
+    }
+
     public function getLevelOrMinimum(): int
     {
         return $this->level ?? $this->skill->getMinimumLevel();
