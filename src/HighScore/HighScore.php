@@ -28,8 +28,7 @@ abstract class HighScore
 
             return [
                 'rank' => self::correctValue($skill['rank'] ?? null),
-                // Unknown XP implies unknown level, even when the API disagrees.
-                'level' => $xp === null ? null : self::correctValue($skill['level'] ?? null),
+                'level' => self::correctValue($skill['level'] ?? null),
                 'xp' => $xp,
             ];
         }, $data['skills']));
@@ -86,7 +85,8 @@ abstract class HighScore
         foreach ($skills as $skill) {
             $this->skills[$skill->skill->getId()] = [
                 'rank' => $skill->rank,
-                'level' => $skill->level,
+                // Unknown XP implies unknown level, even when APIs disagrees.
+                'level' => $skill->xp === null ? null : $skill->level,
                 'xp' => $skill->xp,
             ];
         }
