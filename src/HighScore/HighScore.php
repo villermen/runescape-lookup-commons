@@ -25,15 +25,15 @@ abstract class HighScore
 
         $highScore->skills = array_values(array_map(function (array $skill) {
             $xp = self::correctValue($skill['xp'] ?? null);
+            $level = self::correctValue($skill['level'] ?? null) ?: null;
 
             return [
                 'rank' => self::correctValue($skill['rank'] ?? null),
-                'level' => self::correctValue($skill['level'] ?? null),
-                'xp' => $xp,
+                // Unknown level means unknown XP and vice versa, even when the APIs disagree.
+                'level' => $xp === null ? null : $level,
+                'xp' => $level === null ? null : $xp,
             ];
         }, $data['skills']));
-
-        // XP -1? level -1
 
         $highScore->activities = array_values(array_map(fn (array $activity) => [
             'rank' => self::correctValue($activity['rank'] ?? null),
@@ -85,8 +85,7 @@ abstract class HighScore
         foreach ($skills as $skill) {
             $this->skills[$skill->skill->getId()] = [
                 'rank' => $skill->rank,
-                // Unknown XP implies unknown level, even when APIs disagrees.
-                'level' => $skill->xp === null ? null : $skill->level,
+                'level' => $skill->level,
                 'xp' => $skill->xp,
             ];
         }
