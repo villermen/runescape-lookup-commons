@@ -28,8 +28,8 @@ class OsrsHighScore extends HighScore
         $magicLevel = $this->getSkill(OsrsSkill::MAGIC)->getLevelOrMinimum();
 
         return (
-            max($attackLevel + $strengthLevel, $magicLevel * 1.5, $rangedLevel * 1.5) * 1.3 +
-            $defenceLevel + $hitpointsLevel + floor($prayerLevel / 2)
-        ) / 4;
+            0.25 * ($defenceLevel + $hitpointsLevel + floor($prayerLevel / 2)) +
+            0.325 * max($attackLevel + $strengthLevel, floor($magicLevel * 1.5), floor($rangedLevel * 1.5))
+        );
     }
 }
