@@ -15,7 +15,7 @@ abstract class HighScore
      * @param mixed[] $data
      * @return ($oldSchool is true ? OsrsHighScore : Rs3HighScore)
      */
-    public static function fromArray(array $data, bool $oldSchool = false): OsrsHighScore|Rs3HighScore
+    public static function fromArray(array $data, bool $oldSchool): OsrsHighScore|Rs3HighScore
     {
         if (!is_array($data['skills'] ?? null) || !is_array($data['activities'] ?? null)) {
             throw new \InvalidArgumentException('Invalid high score array data provided.');

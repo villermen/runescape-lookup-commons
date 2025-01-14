@@ -23,12 +23,6 @@ use Villermen\RuneScape\PlayerData\RuneMetricsData;
  */
 class PlayerDataFetcher
 {
-    protected const RS3_INDEX_LITE_URL = 'https://secure.runescape.com/m=hiscore/index_lite.ws?player=%s';
-    protected const OSRS_INDEX_LITE_URL = 'https://secure.runescape.com/m=hiscore_oldschool/index_lite.ws?player=%s';
-    protected const ADVENTURERS_LOG_URL = 'https://secure.runescape.com/m=adventurers-log/rssfeed?searchName=%s';
-    protected const RUNEMETRICS_URL = 'https://apps.runescape.com/runemetrics/profile/profile?user=%s&activities=20';
-    protected const GROUP_IRONMAN_URL = 'https://secure.runescape.com/m=hiscore_oldschool_ironman/group-ironman/view-group?name=%s';
-
     protected readonly HttpClientInterface $httpClient;
 
     public function __construct(?HttpClientInterface $httpClient = null)
@@ -45,9 +39,11 @@ class PlayerDataFetcher
      * @throws FetchFailedException
      * @throws DataConversionException
      */
-    public function fetchIndexLite(Player $player, bool $oldSchool = false): OsrsHighScore|Rs3HighScore
+    public function fetchIndexLite(Player $player, bool $oldSchool): OsrsHighScore|Rs3HighScore
     {
-        $url = $oldSchool ? self::OSRS_INDEX_LITE_URL : self::RS3_INDEX_LITE_URL;
+        $url = $oldSchool
+            ? 'https://secure.runescape.com/m=hiscore_oldschool/index_lite.ws?player=%s'
+            : 'https://secure.runescape.com/m=hiscore/index_lite.ws?player=%s';
         $url = sprintf($url, urlencode($player->getName()));
         $data = $this->fetchUrl($url);
 
@@ -96,7 +92,7 @@ class PlayerDataFetcher
      */
     public function fetchRuneMetrics(Player $player): RuneMetricsData
     {
-        $url = sprintf(self::RUNEMETRICS_URL, urlencode($player->getName()));
+        $url = sprintf('https://apps.runescape.com/runemetrics/profile/profile?user=%s&activities=20', urlencode($player->getName()));
         $data = @json_decode($this->fetchUrl($url), associative: true);
 
         if (!$data) {
@@ -147,7 +143,7 @@ class PlayerDataFetcher
             HighScore::fromArray([
                 'skills' => $skills,
                 'activities' => [],
-            ]),
+            ], oldSchool: false),
             new ActivityFeed($activities),
         );
     }
@@ -158,7 +154,10 @@ class PlayerDataFetcher
      */
     public function fetchAdventurersLog(Player $player): AdventurersLogData
     {
-        $url = sprintf(self::ADVENTURERS_LOG_URL, urlencode($player->getName()));
+        $url = sprintf(
+            'https://secure.runescape.com/m=adventurers-log/rssfeed?searchName=%s',
+            urlencode($player->getName())
+        );
         $data = $this->fetchUrl($url);
 
         // Parse data into ActivityFeed object
@@ -201,20 +200,49 @@ class PlayerDataFetcher
     /**
      * @throws FetchFailedException
      */
-    public function fetchGroupIronman(string $groupName): GroupIronmanData
+    public function fetchGroupIronman(string $groupName, bool $oldSchool): GroupIronmanData
     {
-        $url = sprintf(self::GROUP_IRONMAN_URL, urlencode($groupName));
-        $data = $this->fetchUrl($url);
+        if (!$oldSchool) {
+            // What horrendous interface they have...
+            // Probably:
+            // 1. https://secure.runescape.com/m=runescape_gim_hiscores//v1/groupScores/find/byGroupName/best%20bwanas?size=1&isCompetitive=false (+true)
+            // 2. Use size in https://rs.runescape.com/hiscores/group-ironman/regular/2-player/gim%20twins
+            // 3. All classes are garbage, use structure: section > h1 (group name) + div > (div figure + a (playername))
+            throw new \InvalidArgumentException('RS3 ironman lookup is not yet supported.');
+        }
 
-        $crawler = new Crawler($data);
+        $urls = [
+            sprintf(
+                'https://secure.runescape.com/m=hiscore_oldschool_ironman/group-ironman/view-group?name=%s',
+                urlencode($groupName)
+            ),
+            sprintf(
+                'https://secure.runescape.com/m=hiscore_oldschool_hardcore_ironman/group-ironman/view-group?name=%s',
+                urlencode($groupName)
+            ),
+        ];
 
-        $displayName = trim($crawler->filter('.uc-scroll__group-title')->innerText());
+        foreach ($urls as $url) {
+            try {
+                $data = $this->fetchUrl($url);
 
-        $players = $crawler
-            ->filter('.uc-scroll__table-row--type-player .uc-scroll__link')
-            ->each(fn (Crawler $subCrawler) => new Player($subCrawler->innerText()));
+                $crawler = new Crawler($data);
 
-        return new GroupIronmanData($displayName, $players);
+                $displayName = trim($crawler->filter('.uc-scroll__group-title')->innerText());
+
+                $players = $crawler
+                    ->filter('.uc-scroll__table-row--type-player .uc-scroll__link')
+                    ->each(fn (Crawler $subCrawler) => new Player($subCrawler->innerText()));
+
+                return new GroupIronmanData($displayName, $players);
+            } catch (FetchFailedException $lastException) {
+            }
+        }
+
+        throw new FetchFailedException(
+            sprintf('Failed to obtain group ironman data for "%s" on both regular and hardore leaderboards.', $groupName),
+            previous: $lastException,
+        );
     }
 
     /**
