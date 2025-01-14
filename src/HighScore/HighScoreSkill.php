@@ -5,7 +5,7 @@ namespace Villermen\RuneScape\HighScore;
 /**
  * A skill entry of a player's high score.
  *
- * @template-covariant TSkill of SkillInterface
+ * @template-covariant TSkill of SkillInterface = SkillInterface
  */
 class HighScoreSkill
 {
