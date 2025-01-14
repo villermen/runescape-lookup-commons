@@ -7,7 +7,7 @@ use Villermen\RuneScape\Player;
 class GroupIronmanData
 {
     /**
-     * @param Player[] $players
+     * @param non-empty-array<Player> $players
      */
     public function __construct(
         public readonly string $displayName,

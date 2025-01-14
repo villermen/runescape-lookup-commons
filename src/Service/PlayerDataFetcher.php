@@ -198,6 +198,7 @@ class PlayerDataFetcher
     }
 
     /**
+     * @throws DataConversionException
      * @throws FetchFailedException
      */
     public function fetchGroupIronman(string $groupName, bool $oldSchool): GroupIronmanData
@@ -233,6 +234,10 @@ class PlayerDataFetcher
                 $players = $crawler
                     ->filter('.uc-scroll__table-row--type-player .uc-scroll__link')
                     ->each(fn (Crawler $subCrawler) => new Player($subCrawler->innerText()));
+
+                if (count($players) === 0) {
+                    throw new DataConversionException(sprintf('Ironman group "%s" seems to have no members.', $groupName));
+                }
 
                 return new GroupIronmanData($displayName, $players);
             } catch (FetchFailedException $lastException) {
