@@ -229,11 +229,11 @@ class PlayerDataFetcher
 
                 $crawler = new Crawler($data);
 
-                $displayName = trim($crawler->filter('.uc-scroll__group-title')->innerText());
+                $displayName = $this->normalizeName($crawler->filter('.uc-scroll__group-title')->innerText());
 
                 $players = $crawler
                     ->filter('.uc-scroll__table-row--type-player .uc-scroll__link')
-                    ->each(fn (Crawler $subCrawler) => new Player($subCrawler->innerText()));
+                    ->each(fn (Crawler $subCrawler) => new Player($this->normalizeName($subCrawler->innerText())));
 
                 if (count($players) === 0) {
                     throw new DataConversionException(sprintf('Ironman group "%s" seems to have no members.', $groupName));
@@ -268,5 +268,10 @@ class PlayerDataFetcher
         } catch (ExceptionInterface $exception) {
             throw new FetchFailedException(sprintf('An exception occurred while fetching "%s": %s', $url, $exception->getMessage()), previous: $exception);
         }
+    }
+
+    protected function normalizeName(string $name): string
+    {
+        return trim(str_replace("\u{A0}", ' ', $name));
     }
 }
