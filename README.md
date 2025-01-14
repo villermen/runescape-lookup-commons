@@ -27,7 +27,7 @@ use Villermen\RuneScape\Service\PlayerDataFetcher;
 $fetcher = new PlayerDataFetcher(); // You can optionally provide your own HTTP client.
 $player = new Player('playername');
 
-$rs3HighScore = $fetcher->fetchIndexLite($player);
+$rs3HighScore = $fetcher->fetchIndexLite($player, oldSchool: false);
 $mining = $rs3HighScore->getSkill(Rs3Skill::MINING);
 $mining->level; // 110
 $mining->getVirtualLevel(); // 123

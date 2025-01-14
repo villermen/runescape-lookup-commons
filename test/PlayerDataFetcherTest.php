@@ -65,7 +65,7 @@ class PlayerDataFetcherTest extends TestCase
         $player = new Player(self::MEMBER_PLAYER_NAME);
         $dataFetcher = $this->createDataFetcher($source);
 
-        $highScore = $dataFetcher->fetchIndexLite($player);
+        $highScore = $dataFetcher->fetchIndexLite($player, oldSchool: false);
         self::assertGreaterThanOrEqual(1982, $highScore->getSkill(Rs3Skill::TOTAL)->level);
         self::assertGreaterThanOrEqual(187952, $highScore->getSkill(Rs3Skill::DIVINATION)->xp);
         self::assertEquals(1391, $highScore->getActivity(Rs3Activity::CONQUEST)->score);
@@ -119,7 +119,7 @@ class PlayerDataFetcherTest extends TestCase
         $dataFetcher = $this->createDataFetcher('live');
 
         try {
-            $dataFetcher->fetchIndexLite($player);
+            $dataFetcher->fetchIndexLite($player, oldSchool: false);
             self::fail();
         } catch (FetchFailedException) {
             self::addToAssertionCount(1);
