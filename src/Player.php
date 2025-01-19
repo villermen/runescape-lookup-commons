@@ -2,6 +2,8 @@
 
 namespace Villermen\RuneScape;
 
+use Villermen\RuneScape\Exception\InvalidNameException;
+
 class Player
 {
     protected const RUNEMETRICS_URL = 'https://apps.runescape.com/runemetrics/app/overview/player/%s';
@@ -18,6 +20,8 @@ class Player
 
     /**
      * Use the same data fetcher instance for all players to have them share the same cache.
+     *
+     * @throws InvalidNameException
      */
     public function __construct(protected string $name)
     {
@@ -25,7 +29,8 @@ class Player
 
         // Validate that name adheres to RS policies
         if (!self::validateName($name)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidNameException(
+                $name,
                 sprintf('Name "%s" does not conform to the RuneScape specifications.', $name)
             );
         }
