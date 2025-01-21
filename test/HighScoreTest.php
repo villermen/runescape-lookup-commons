@@ -1,121 +1,276 @@
 <?php
 
-use Villermen\RuneScape\Activity;
-use Villermen\RuneScape\HighScore\ActivityHighScore;
-use Villermen\RuneScape\HighScore\HighScoreSkill;
-use Villermen\RuneScape\HighScore\SkillHighScore;
+namespace Villermen\RuneScape\Test;
+
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
-use Villermen\RuneScape\PlayerDataConverter;
-use Villermen\RuneScape\Skill;
+use Villermen\RuneScape\HighScore\HighScore;
+use Villermen\RuneScape\HighScore\HighScoreActivity;
+use Villermen\RuneScape\HighScore\HighScoreSkill;
+use Villermen\RuneScape\HighScore\OsrsActivity;
+use Villermen\RuneScape\HighScore\OsrsHighScore;
+use Villermen\RuneScape\HighScore\OsrsSkill;
+use Villermen\RuneScape\HighScore\Rs3Activity;
+use Villermen\RuneScape\HighScore\Rs3HighScore;
+use Villermen\RuneScape\HighScore\Rs3Skill;
 
 class HighScoreTest extends TestCase
 {
-    /** @var SkillHighScore */
-    protected $skillHighScore1;
+    private Rs3HighScore $highScore1;
 
-    /** @var ActivityHighScore */
-    protected $activityHighScore1;
+    private Rs3HighScore $highScore2;
 
-    /** @var SkillHighScore */
-    protected $skillHighScore2;
-
-    /** @var ActivityHighScore */
-    protected $activityHighScore2;
-
-    /** @var SkillHighScore */
-    protected $skillHighScore3;
+    private OsrsHighScore $highScore3;
 
     public function setUp(): void
     {
-        $dataConverter = new PlayerDataConverter();
-        $convertedData1 = $dataConverter->convertIndexLite(file_get_contents(__DIR__ . "/fixtures/high-score-test-index-lite.csv"));
-        $this->skillHighScore1 = $convertedData1[PlayerDataConverter::KEY_SKILL_HIGH_SCORE];
-        $this->activityHighScore1 = $convertedData1[PlayerDataConverter::KEY_ACTIVITY_HIGH_SCORE];
+        $this->highScore1 = new Rs3HighScore([
+            new HighScoreSkill(
+                skill: Rs3Skill::INVENTION,
+                rank: 1999999,
+                level: 120,
+                xp: 104772129,
+            ),
+            new HighScoreSkill(
+                skill: Rs3Skill::MINING,
+                rank: null,
+                level: 108,
+                xp: 33566929,
+            ),
+            new HighScoreSkill(
+                skill: Rs3Skill::TOTAL,
+                rank: null,
+                level: 2943,
+                xp:  2067425433,
+            ),
+            new HighScoreSkill(
+                skill: Rs3Skill::NECROMANCY,
+                rank: null,
+                level: 68,
+                xp: 1200,
+            ),
+            new HighScoreSkill(
+                skill: Rs3Skill::SUMMONING,
+                rank: null,
+                level: 68,
+                xp: 0,
+            ),
+        ], [
+            new HighScoreActivity(
+                activity: Rs3Activity::DOMINION_TOWER,
+                rank: null,
+                score: 1362803,
+            ),
+            new HighScoreActivity(
+                activity: Rs3Activity::WORLD_EVENT_2_BANDOS_KILLS,
+                rank: null,
+                score: 0,
+            ),
+        ]);
 
-        $convertedData2 = $dataConverter->convertRuneMetrics(file_get_contents(__DIR__ . "/fixtures/high-score-test-runemetrics.json"));
-        $this->skillHighScore2 = $convertedData2[PlayerDataConverter::KEY_SKILL_HIGH_SCORE];
+        $this->highScore2 = new Rs3HighScore([
+            new HighScoreSkill(
+                skill: Rs3Skill::ATTACK,
+                rank: null,
+                level: 68,
+                xp: 0,
+            ),
+            new HighScoreSkill(
+                skill: Rs3Skill::MINING,
+                rank: null,
+                level: 80,
+                xp: 33567929,
+            ),
+            new HighScoreSkill(
+                skill: Rs3Skill::TOTAL,
+                rank: 1200000,
+                level: 2743,
+                xp:  2167425433,
+            ),
+        ], [
+            new HighScoreActivity(
+                activity: Rs3Activity::DOMINION_TOWER,
+                rank: null,
+                score: 1200,
+            ),
+        ]);
 
-        $convertedData3 = $dataConverter->convertIndexLite(file_get_contents(__DIR__ . "/fixtures/high-score-test-index-lite2.csv"));
-        $this->activityHighScore2 = $convertedData3[PlayerDataConverter::KEY_ACTIVITY_HIGH_SCORE];
-
-        $this->skillHighScore3 = new SkillHighScore([
-            new HighScoreSkill(Skill::getSkill(Skill::SKILL_ATTACK), -1, -1, -1),
-            new HighScoreSkill(Skill::getSkill(Skill::SKILL_CONSTITUTION), -1, -1, -1)
+        $this->highScore3 = new OsrsHighScore([
+            new HighScoreSkill(
+                skill: OsrsSkill::MAGIC,
+                rank: null,
+                level: 68,
+                xp: 0,
+            ),
+            new HighScoreSkill(
+                skill: OsrsSkill::MINING,
+                rank: null,
+                level: 80,
+                xp: 33567929,
+            ),
+        ], [
+            'sneakyDiscardedKey' => new HighScoreActivity(
+                activity: OsrsActivity::ZULRAH,
+                rank: 1,
+                score: 1362803,
+            ),
+            28 => new HighScoreActivity(
+                activity: OsrsActivity::LEAGUE_POINTS,
+                rank: null,
+                score: 0,
+            ),
         ]);
     }
 
     public function testEntries(): void
     {
-        // Skill
-        self::assertEquals(120, $this->skillHighScore1->getSkill(Skill::SKILL_INVENTION)->getLevel());
-        self::assertEquals(99, $this->skillHighScore1->getSkill(Skill::SKILL_SMITHING)->getLevel());
-        self::assertEquals(106, $this->skillHighScore1->getSkill(Skill::SKILL_SMITHING)->getVirtualLevel());
-        self::assertEquals(2733, $this->skillHighScore1->getSkill(Skill::SKILL_TOTAL)->getLevel());
-        self::assertEquals(2733, $this->skillHighScore1->getSkill(Skill::SKILL_TOTAL)->getVirtualLevel());
-        self::assertNull($this->skillHighScore1->getSkill(200));
+        self::assertEquals(108, $this->highScore1->getSkill(Rs3Skill::MINING)->level);
+        self::assertEquals(2943, $this->highScore1->getSkill(Rs3Skill::TOTAL)->level);
+        // Total level doesn't do virtual.
+        self::assertEquals(2943, $this->highScore1->getSkill(Rs3Skill::TOTAL)->getVirtualLevel());
+        self::assertEquals(null, $this->highScore1->getSkill(Rs3Skill::TOTAL)->rank);
+        // Unranked
+        self::assertEquals(null, $this->highScore1->getSkill(Rs3Skill::DEFENCE)->xp);
+        self::assertEquals(null, $this->highScore1->getSkill(Rs3Skill::DEFENCE)->level);
+        self::assertEquals(null, $this->highScore1->getSkill(Rs3Skill::DEFENCE)->rank);
+        // OSRS skill mapping compatibility.
+        // @phpstan-ignore argument.type
+        self::assertEquals(33566929, $this->highScore1->getSkill(OsrsSkill::MINING)->xp);
+        // @phpstan-ignore argument.type
+        self::assertEquals(108, $this->highScore1->getSkill(OsrsSkill::MINING)->level);
 
-        $invSkill = $this->skillHighScore1->getSkill(Skill::SKILL_INVENTION);
-        self::assertEquals(120, $invSkill->getLevel());
-        self::assertEquals(123, $invSkill->getVirtualLevel());
-        self::assertEquals(89610570, $invSkill->getXp());
-        self::assertEquals(2402334, $invSkill->getXpToNextLevel());
-        self::assertEquals(29334, $invSkill->getRank());
-        self::assertSame(Skill::getSkill(Skill::SKILL_INVENTION), $invSkill->getSkill());
-        self::assertEquals(2402334, $invSkill->getXpToNextLevel());
-        self::assertEquals(0.1846, round($invSkill->getProgressToNextLevel(), 4));
+        $invSkill = $this->highScore1->getSkill(Rs3Skill::INVENTION);
+        self::assertEquals(120, $invSkill->level);
+        self::assertEquals(128, $invSkill->getVirtualLevel());
+        self::assertEquals(104772129, $invSkill->xp);
+        self::assertEquals(1999999, $invSkill->rank);
+        self::assertSame(Rs3Skill::INVENTION, $invSkill->skill);
+        self::assertEquals(2992087, $invSkill->getXpToNextLevel());
+        self::assertEquals(0.0904, round($invSkill->getProgressToNextLevel() ?? 0.0, 4));
 
-        // Test division of XP for RuneMetrics
-        self::assertEquals(2497610, $this->skillHighScore2->getSkill(Skill::SKILL_AGILITY)->getXp());
+        self::assertEquals(1362803, $this->highScore1->getActivity(Rs3Activity::DOMINION_TOWER)->score);
+        self::assertEquals(null, $this->highScore1->getActivity(Rs3Activity::DOMINION_TOWER)->rank);
+        self::assertEquals(0, $this->highScore1->getActivity(Rs3Activity::WORLD_EVENT_2_BANDOS_KILLS)->score);
+        // Out of bound OSRS activity.
+        // @phpstan-ignore argument.type
+        self::assertEquals(null, $this->highScore1->getActivity(OsrsActivity::ZULRAH)->score);
 
-        // Activity
-        self::assertEquals(1362803, $this->activityHighScore1->getActivity(Activity::ACTIVITY_DOMINION_TOWER)->getScore());
-        self::assertNull($this->activityHighScore1->getActivity(200));
-        self::assertNull($this->activityHighScore1->getActivity(Activity::ACTIVITY_GIELINOR_GAMES_RESOURCE_RACE)->getRank());
-        self::assertEquals(0, $this->activityHighScore1->getActivity(Activity::ACTIVITY_WORLD_EVENT_2_BANDOS_KILLS)->getScore());
-
-        // Constitution initialized with no level
-        self::assertEquals(10, $this->skillHighScore3->getSkill(Skill::SKILL_CONSTITUTION)->getLevel());
-        self::assertEquals(1154, $this->skillHighScore3->getSkill(Skill::SKILL_CONSTITUTION)->getXp());
-    }
-
-    public function testCombatLevel(): void
-    {
-        self::assertEquals(138, $this->skillHighScore1->getCombatLevel());
-        self::assertEquals(126, $this->skillHighScore1->getCombatLevel(false));
-
-        // With only attack and constitution set
-        self::assertEquals(3, $this->skillHighScore3->getCombatLevel());
+        self::assertEquals(55.45, $this->highScore1->getCombatLevel());
+        self::assertEquals(46.95, $this->highScore1->getCombatLevel(includeSummoning: false));
+        self::assertEquals(35.9, $this->highScore3->getCombatLevel());
     }
 
     public function testComparison(): void
     {
-        $skillComparison = $this->skillHighScore1->compareTo($this->skillHighScore2);
+        $comparison = $this->highScore1->compareTo($this->highScore2);
 
-        // Skill
-        $totalComparison = $skillComparison->getSkill(Skill::SKILL_TOTAL);
-        self::assertEquals(424, $totalComparison->getLevelDifference());
-        self::assertEquals(786160152, $totalComparison->getXpDifference());
-        self::assertEquals(155432, $totalComparison->getRankDifference());
+        self::assertEquals(200, $comparison->getLevelDifference(Rs3Skill::TOTAL));
+        self::assertEquals(-100000000, $comparison->getXpDifference(Rs3Skill::TOTAL));
+        self::assertEquals(null, $comparison->getRankDifference(Rs3Skill::TOTAL));
 
-        // One unranked
-        $invComparison = $skillComparison->getSkill(Skill::SKILL_INVENTION);
-        self::assertEquals(119, $invComparison->getLevelDifference());
-        self::assertEquals(89610570, $invComparison->getXpDifference());
-        self::assertNull($invComparison->getRankDifference());
+        self::assertEquals(28, $comparison->getLevelDifference(Rs3Skill::MINING));
+        self::assertEquals(0, $comparison->getVirtualLevelDifference(Rs3Skill::MINING));
 
-        // Uncapped level
-        self::assertEquals(122, $invComparison->getVirtualLevelDifference());
+        self::assertEquals(1361603, $comparison->getScoreDifference(Rs3Activity::DOMINION_TOWER));
+        self::assertEquals(null, $comparison->getRankDifference(Rs3Activity::DOMINION_TOWER));
+    }
 
-        $activityComparison = $this->activityHighScore1->compareTo($this->activityHighScore2);
+    public function testToAndFromArray(): void
+    {
+        $this->highScore3 = new OsrsHighScore([
+            new HighScoreSkill(
+                skill: OsrsSkill::MAGIC,
+                rank: null,
+                level: 68,
+                xp: 0,
+            ),
+            new HighScoreSkill(
+                skill: OsrsSkill::MINING,
+                rank: null,
+                level: 80,
+                xp: 33567929,
+            ),
+        ], [
+            new HighScoreActivity(
+                activity: OsrsActivity::ZULRAH,
+                rank: 1,
+                score: 1362803,
+            ),
+            new HighScoreActivity(
+                activity: OsrsActivity::LEAGUE_POINTS,
+                rank: null,
+                score: 0,
+            ),
+        ]);
 
-        // Activity, negative
-        $fogComparison = $activityComparison->getActivity(Activity::ACTIVITY_FIST_OF_GUTHIX);
-        self::assertEquals(-1056, $fogComparison->getScoreDifference());
-        self::assertEquals(-101623, $fogComparison->getRankDifference());
+        $expected = [
+            'skills' => [
+                [
+                    'id' => 7,
+                    'rank' => null,
+                    'level' => 68,
+                    'xp' => 0,
+                ],
+                [
+                    'id' => 15,
+                    'rank' => null,
+                    'level' => 80,
+                    'xp' => 33567929,
+                ],
+            ],
+            'activities' => [
+                [
+                    'id' => 81,
+                    'rank' => 1,
+                    'score' => 1362803,
+                ],
+                [
+                    'id' => 0,
+                    'rank' => null,
+                    'score' => 0,
+                ],
+            ],
+        ];
 
-        // Both unranked
-        $duelComparison = $activityComparison->getActivity(Activity::ACTIVITY_DUEL_TOURNAMENT);
-        self::assertEquals(0, $duelComparison->getScoreDifference());
-        self::assertNull($duelComparison->getRankDifference());
+        $this->assertEquals($expected, $this->highScore3->toArray());
+
+        $highScoreFromArray = HighScore::fromArray($this->highScore3->toArray(), oldSchool: false);
+        $this->assertEquals($expected, $highScoreFromArray->toArray());
+    }
+
+    /**
+     * @param mixed[] $data
+     */
+    #[TestWith([
+        ['skills' => []],
+        'Invalid high score data: No entry for activities.'
+    ])]
+    #[TestWith([
+        ['activities' => []],
+        'Invalid high score data: No entry for skills.'
+    ])]
+    #[TestWith([
+        ['skills' => [['invalid' => 'forSure']], 'activities' => []],
+        'Invalid high score data: Skill without ID.'
+    ])]
+    #[TestWith([
+        ['skills' => [['id' => 5]], 'activities' => [['invalid' => 'forSure']]],
+        'Invalid high score data: Activity without ID.'
+    ])]
+    #[TestWith([
+        ['skills' => [['id' => 5], ['id' => 5]], 'activities' => []],
+        'Invalid high score data: Multiple entries for same skill.'
+    ])]
+    #[TestWith([
+        ['skills' => [], 'activities' => [['id' => 5], ['id' => 5]]],
+        'Invalid high score data: Multiple entries for same activity.'
+    ])]
+    public function testFromArrayExceptions(array $data, string $exceptionMessage): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage($exceptionMessage);
+
+        // @phpstan-ignore-next-line
+        HighScore::fromArray($data, oldSchool: true);
     }
 }

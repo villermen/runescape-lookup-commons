@@ -4,8 +4,8 @@ namespace Villermen\RuneScape\ActivityFeed;
 
 class ActivityFeed
 {
-    /** @var ActivityFeedItem[] */
-    protected $items = [];
+    /** @var list<ActivityFeedItem> */
+    public readonly array $items;
 
     /**
      * @param ActivityFeedItem[] $items
@@ -13,14 +13,6 @@ class ActivityFeed
     public function __construct(array $items)
     {
         $this->items = array_values($items);
-    }
-
-    /**
-     * @return ActivityFeedItem[]
-     */
-    public function getItems(): array
-    {
-        return $this->items;
     }
 
     /**
@@ -32,7 +24,7 @@ class ActivityFeed
     {
         $newerItems = [];
 
-        foreach($this->getItems() as $item) {
+        foreach($this->items as $item) {
             if ($item->equals($targetItem)) {
                 break;
             }
@@ -49,12 +41,12 @@ class ActivityFeed
      */
     public function merge(ActivityFeed $newerFeed): ActivityFeed
     {
-        if (count($this->getItems()) > 0) {
-            $prepend = $newerFeed->getItemsAfter($this->getItems()[0]);
+        if (count($this->items) > 0) {
+            $prepend = $newerFeed->getItemsAfter($this->items[0]);
         } else {
-            $prepend = $newerFeed->getItems();
+            $prepend = $newerFeed->items;
         }
 
-        return new ActivityFeed(array_merge($prepend, $this->getItems()));
+        return new ActivityFeed(array_merge($prepend, $this->items));
     }
 }
