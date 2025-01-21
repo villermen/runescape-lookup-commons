@@ -2,6 +2,7 @@
 
 namespace Villermen\RuneScape\Test;
 
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 use Villermen\RuneScape\HighScore\HighScore;
 use Villermen\RuneScape\HighScore\HighScoreActivity;
@@ -235,5 +236,41 @@ class HighScoreTest extends TestCase
 
         $highScoreFromArray = HighScore::fromArray($this->highScore3->toArray(), oldSchool: false);
         $this->assertEquals($expected, $highScoreFromArray->toArray());
+    }
+
+    /**
+     * @param mixed[] $data
+     */
+    #[TestWith([
+        ['skills' => []],
+        'Invalid high score data: No entry for activities.'
+    ])]
+    #[TestWith([
+        ['activities' => []],
+        'Invalid high score data: No entry for skills.'
+    ])]
+    #[TestWith([
+        ['skills' => [['invalid' => 'forSure']], 'activities' => []],
+        'Invalid high score data: Skill without ID.'
+    ])]
+    #[TestWith([
+        ['skills' => [['id' => 5]], 'activities' => [['invalid' => 'forSure']]],
+        'Invalid high score data: Activity without ID.'
+    ])]
+    #[TestWith([
+        ['skills' => [['id' => 5], ['id' => 5]], 'activities' => []],
+        'Invalid high score data: Multiple entries for same skill.'
+    ])]
+    #[TestWith([
+        ['skills' => [], 'activities' => [['id' => 5], ['id' => 5]]],
+        'Invalid high score data: Multiple entries for same activity.'
+    ])]
+    public function testFromArrayExceptions(array $data, string $exceptionMessage): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage($exceptionMessage);
+
+        // @phpstan-ignore-next-line
+        HighScore::fromArray($data, oldSchool: true);
     }
 }

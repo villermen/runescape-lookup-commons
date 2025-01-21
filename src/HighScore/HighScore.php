@@ -19,9 +19,13 @@ abstract class HighScore
      */
     public static function fromArray(array $data, bool $oldSchool): OsrsHighScore|Rs3HighScore
     {
-        // @phpstan-ignore-next-line Input may not match PHPDoc.
-        if (!is_array($data['skills'] ?? null) || !is_array($data['activities'] ?? null)) {
-            throw new \InvalidArgumentException('Invalid high score data provided.');
+        // @phpstan-ignore function.alreadyNarrowedType, nullCoalesce.offset (Input may not match PHPDoc.)
+        if (!is_array($data['skills'] ?? null)) {
+            throw new \InvalidArgumentException('Invalid high score data: No entry for skills.');
+        }
+        // @phpstan-ignore function.alreadyNarrowedType, nullCoalesce.offset
+        if (!is_array($data['activities'] ?? null)) {
+            throw new \InvalidArgumentException('Invalid high score data: No entry for activities.');
         }
 
         $highScore = $oldSchool ? new OsrsHighScore([], []) : new Rs3HighScore([], []);
@@ -29,7 +33,7 @@ abstract class HighScore
         $highScore->skills = array_values(array_map(function (array $skill) {
             // @phpstan-ignore isset.offset
             if (!isset($skill['id'])) {
-                throw new \InvalidArgumentException('High score data does not contain skill IDs.');
+                throw new \InvalidArgumentException('Invalid high score data: Skill without ID.');
             }
 
             $xp = self::correctValue($skill['xp'] ?? null);
@@ -47,7 +51,7 @@ abstract class HighScore
         $highScore->activities = array_values(array_map(function (array $activity) {
             // @phpstan-ignore isset.offset
             if (!isset($activity['id'])) {
-                throw new \InvalidArgumentException('High score data does not contain activity IDs.');
+                throw new \InvalidArgumentException('Invalid high score data: Activity without ID.');
             }
 
             return [
@@ -56,6 +60,8 @@ abstract class HighScore
                 'score' => self::correctValue($activity['score'] ?? null),
             ];
         }, $data['activities']));
+
+        $highScore->assertUniqueEntries();
 
         return $highScore;
     }
@@ -115,6 +121,8 @@ abstract class HighScore
                 'score' => $activity->score,
             ];
         }
+
+        $this->assertUniqueEntries();
     }
 
     public abstract function getCombatLevel(): float;
@@ -216,5 +224,18 @@ abstract class HighScore
             'skills' => $skills,
             'activities' => $activities,
         ];
+    }
+
+    private function assertUniqueEntries(): void
+    {
+        $skillIds = array_map(fn (array $weakSkill) => $weakSkill['id'], $this->skills);
+        if (count($skillIds) !== count(array_unique($skillIds))) {
+            throw new \InvalidArgumentException('Invalid high score data: Multiple entries for same skill.');
+        }
+
+        $activityIds = array_map(fn (array $weakActivity) => $weakActivity['id'], $this->activities);
+        if (count($activityIds) !== count(array_unique($activityIds))) {
+            throw new \InvalidArgumentException('Invalid high score data: Multiple entries for same activity.');
+        }
     }
 }
