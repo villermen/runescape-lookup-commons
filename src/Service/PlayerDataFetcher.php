@@ -104,7 +104,9 @@ class PlayerDataFetcher
         }
 
         if (isset($data['error'])) {
-            throw new FetchFailedException('RuneMetrics API returned an error. User might not exist.');
+            throw new FetchFailedException(
+                'RuneMetrics API returned an error. User may not exist or have their profile set to private.'
+            );
         }
 
         // HighScore
