@@ -3,6 +3,7 @@
 namespace Villermen\RuneScape\Test;
 
 use PHPUnit\Framework\TestCase;
+use Villermen\RuneScape\HighScore\HighScore;
 use Villermen\RuneScape\HighScore\HighScoreActivity;
 use Villermen\RuneScape\HighScore\HighScoreSkill;
 use Villermen\RuneScape\HighScore\OsrsActivity;
@@ -107,12 +108,12 @@ class HighScoreTest extends TestCase
                 xp: 33567929,
             ),
         ], [
-            new HighScoreActivity(
+            'sneakyDiscardedKey' => new HighScoreActivity(
                 activity: OsrsActivity::ZULRAH,
                 rank: 1,
                 score: 1362803,
             ),
-            new HighScoreActivity(
+            28 => new HighScoreActivity(
                 activity: OsrsActivity::LEAGUE_POINTS,
                 rank: null,
                 score: 0,
@@ -166,10 +167,73 @@ class HighScoreTest extends TestCase
         self::assertEquals(-100000000, $comparison->getXpDifference(Rs3Skill::TOTAL));
         self::assertEquals(null, $comparison->getRankDifference(Rs3Skill::TOTAL));
 
-        self::assertEquals(28, $comparison->getLevelDIfference(Rs3Skill::MINING));
+        self::assertEquals(28, $comparison->getLevelDifference(Rs3Skill::MINING));
         self::assertEquals(0, $comparison->getVirtualLevelDifference(Rs3Skill::MINING));
 
         self::assertEquals(1361603, $comparison->getScoreDifference(Rs3Activity::DOMINION_TOWER));
         self::assertEquals(null, $comparison->getRankDifference(Rs3Activity::DOMINION_TOWER));
+    }
+
+    public function testToAndFromArray(): void
+    {
+        $this->highScore3 = new OsrsHighScore([
+            new HighScoreSkill(
+                skill: OsrsSkill::MAGIC,
+                rank: null,
+                level: 68,
+                xp: 0,
+            ),
+            new HighScoreSkill(
+                skill: OsrsSkill::MINING,
+                rank: null,
+                level: 80,
+                xp: 33567929,
+            ),
+        ], [
+            new HighScoreActivity(
+                activity: OsrsActivity::ZULRAH,
+                rank: 1,
+                score: 1362803,
+            ),
+            new HighScoreActivity(
+                activity: OsrsActivity::LEAGUE_POINTS,
+                rank: null,
+                score: 0,
+            ),
+        ]);
+
+        $expected = [
+            'skills' => [
+                [
+                    'id' => 7,
+                    'rank' => null,
+                    'level' => 68,
+                    'xp' => 0,
+                ],
+                [
+                    'id' => 15,
+                    'rank' => null,
+                    'level' => 80,
+                    'xp' => 33567929,
+                ],
+            ],
+            'activities' => [
+                [
+                    'id' => 81,
+                    'rank' => 1,
+                    'score' => 1362803,
+                ],
+                [
+                    'id' => 0,
+                    'rank' => null,
+                    'score' => 0,
+                ],
+            ],
+        ];
+
+        $this->assertEquals($expected, $this->highScore3->toArray());
+
+        $highScoreFromArray = HighScore::fromArray($this->highScore3->toArray(), oldSchool: false);
+        $this->assertEquals($expected, $highScoreFromArray->toArray());
     }
 }

@@ -58,6 +58,7 @@ class PlayerDataFetcher
             if (count($entryArray) === 3) {
                 [$rank, $level, $xp] = $entryArray;
                 $skills[] = [
+                    'id' => count($skills),
                     'rank' => HighScore::correctValue($rank),
                     'level' => HighScore::correctValue($level),
                     'xp' => HighScore::correctValue($xp),
@@ -69,13 +70,16 @@ class PlayerDataFetcher
             if (count($entryArray) === 2) {
                 [$rank, $score] = $entryArray;
                 $activities[] = [
+                    'id' => count($activities),
                     'rank' => HighScore::correctValue($rank),
                     'score' => HighScore::correctValue($score),
                 ];
                 continue;
             }
 
-            throw new DataConversionException('Invalid high score data supplied.');
+            throw new DataConversionException(
+                sprintf('Invalid high score data with size %s supplied.', count($entryArray))
+            );
         }
 
         return HighScore::fromArray([
@@ -107,7 +111,8 @@ class PlayerDataFetcher
         $totalRank = isset($data['rank']) ? (int)str_replace(',', '', $data['rank']) : null;
 
         $skills = [
-            0 => [
+            [
+                'id' => 0,
                 'rank' => $totalRank,
                 'level' => $data['totalskill'],
                 'xp' => $data['totalxp'],
@@ -115,16 +120,14 @@ class PlayerDataFetcher
         ];
 
         foreach($data['skillvalues'] as $skillvalue) {
-            // +1 because total is not considered a skill.
-            $skillId = $skillvalue['id'] + 1;
-            $skills[$skillId] = [
+            $skills[] = [
+                // +1 because total is not considered a skill.
+                'id' => $skillvalue['id'] + 1,
                 'rank' =>  $skillvalue['rank'] ?? null,
                 'level' => $skillvalue['level'],
                 'xp' => (int)($skillvalue['xp'] / 10),
             ];
         }
-
-        ksort($skills);
 
         // ActivityFeed
         $activities = [];

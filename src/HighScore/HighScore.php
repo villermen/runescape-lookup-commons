@@ -5,29 +5,38 @@ namespace Villermen\RuneScape\HighScore;
 /**
  * @template TSkill of SkillInterface = SkillInterface
  * @template TActivity of ActivityInterface = ActivityInterface
+ *
+ * @phpstan-type WeakSkill array{id: int, rank: int|null, level: int|null, xp: int|null}
+ * @phpstan-type WeakActivity array{id: int, rank: int|null, score: int|null}
  */
 abstract class HighScore
 {
     /**
-     * Compatible with both OSRS's JSON format and the output of {@see toArray()}. Retains data for unknown skills and
-     * activities.
+     * Compatible with both OSRS's JSON format and the output of {@see toArray()}. Data for unknown skills is retained.
      *
-     * @param mixed[] $data
+     * @param array{skills: WeakSkill[], activities: WeakActivity[]} $data
      * @return ($oldSchool is true ? OsrsHighScore : Rs3HighScore)
      */
     public static function fromArray(array $data, bool $oldSchool): OsrsHighScore|Rs3HighScore
     {
+        // @phpstan-ignore-next-line Input may not match PHPDoc.
         if (!is_array($data['skills'] ?? null) || !is_array($data['activities'] ?? null)) {
-            throw new \InvalidArgumentException('Invalid high score array data provided.');
+            throw new \InvalidArgumentException('Invalid high score data provided.');
         }
 
         $highScore = $oldSchool ? new OsrsHighScore([], []) : new Rs3HighScore([], []);
 
         $highScore->skills = array_values(array_map(function (array $skill) {
+            // @phpstan-ignore isset.offset
+            if (!isset($skill['id'])) {
+                throw new \InvalidArgumentException('High score data does not contain skill IDs.');
+            }
+
             $xp = self::correctValue($skill['xp'] ?? null);
             $level = self::correctValue($skill['level'] ?? null) ?: null;
 
             return [
+                'id' => (int)$skill['id'],
                 'rank' => self::correctValue($skill['rank'] ?? null),
                 // Unknown level means unknown XP and vice versa, even when the APIs disagree.
                 'level' => $xp === null ? null : $level,
@@ -35,10 +44,18 @@ abstract class HighScore
             ];
         }, $data['skills']));
 
-        $highScore->activities = array_values(array_map(fn (array $activity) => [
-            'rank' => self::correctValue($activity['rank'] ?? null),
-            'score' => self::correctValue($activity['score'] ?? null),
-        ], $data['activities']));
+        $highScore->activities = array_values(array_map(function (array $activity) {
+            // @phpstan-ignore isset.offset
+            if (!isset($activity['id'])) {
+                throw new \InvalidArgumentException('High score data does not contain activity IDs.');
+            }
+
+            return [
+                'id' => (int)$activity['id'],
+                'rank' => self::correctValue($activity['rank'] ?? null),
+                'score' => self::correctValue($activity['score'] ?? null),
+            ];
+        }, $data['activities']));
 
         return $highScore;
     }
@@ -61,16 +78,16 @@ abstract class HighScore
     }
 
     /**
-     * Stored as weakly-typed array to retain data for unknown IDs.
+     * Stored in weak type to retain data for unknown IDs.
      *
-     * @var array<int, array{rank: int|null, level: int|null, xp: int|null}> $skills
+     * @var WeakSkill[] $skills
      */
     protected array $skills = [];
 
     /**
-     * Stored as weakly-typed array to retain data for unknown IDs.
+     * Stored in weak type to retain data for unknown IDs.
      *
-     * @var array<int, array{rank: int|null, score: int|null}> $activities
+     * @var WeakActivity[] $activities
      */
     protected array $activities = [];
 
@@ -83,7 +100,8 @@ abstract class HighScore
         array $activities,
     ) {
         foreach ($skills as $skill) {
-            $this->skills[$skill->skill->getId()] = [
+            $this->skills[] = [
+                'id' => $skill->skill->getId(),
                 'rank' => $skill->rank,
                 'level' => $skill->level,
                 'xp' => $skill->xp,
@@ -91,7 +109,8 @@ abstract class HighScore
         }
 
         foreach ($activities as $activity) {
-            $this->activities[$activity->activity->getId()] = [
+            $this->activities[] = [
+                'id' => $activity->activity->getId(),
                 'rank' => $activity->rank,
                 'score' => $activity->score,
             ];
@@ -120,13 +139,17 @@ abstract class HighScore
      */
     public function getSkill(SkillInterface $skill): HighScoreSkill
     {
-        $skillData = $this->skills[$skill->getId()] ?? null;
+        // PHP 8.4: array_find()
+        $weakSkill = array_filter($this->skills, fn (array $weak): bool => (
+            $weak['id'] === $skill->getId()
+        ));
+        $weakSkill = reset($weakSkill) ?: null;
 
         return new HighScoreSkill(
             $skill,
-            $skillData['rank'] ?? null,
-            $skillData['level'] ?? null,
-            $skillData['xp'] ?? null,
+            $weakSkill['rank'] ?? null,
+            $weakSkill['level'] ?? null,
+            $weakSkill['xp'] ?? null,
         );
     }
 
@@ -139,12 +162,16 @@ abstract class HighScore
      */
     public function getActivity(ActivityInterface $activity): HighScoreActivity
     {
-        $activityData = $this->activities[$activity->getId()] ?? null;
+        // PHP 8.4: array_find()
+        $weakActivity = array_filter($this->activities, fn (array $weak): bool => (
+            $weak['id'] === $activity->getId()
+        ));
+        $weakActivity = reset($weakActivity) ?: null;
 
         return new HighScoreActivity(
             $activity,
-            $activityData['rank'] ?? null,
-            $activityData['score'] ?? null,
+            $weakActivity['rank'] ?? null,
+            $weakActivity['score'] ?? null,
         );
     }
 
@@ -154,30 +181,34 @@ abstract class HighScore
     }
 
     /**
-     * @return array{
-     *     skills: list<array{rank: int|null, level: int|null, xp: int|null}>,
-     *     activities: list<array{rank: int|null, score: int|null}>
-     * }
+     * @return array{skills: list<WeakSkill>, activities: list<WeakActivity>}
      */
     public function toArray(): array
     {
-        // Force arrays to be correctly-ordered lists.
-        $maxSkillId = count($this->skills) ? max(array_keys($this->skills)) : 0;
         $skills = [];
-        for ($i = 0; $i < $maxSkillId; $i++) {
-            $skills[] = $this->skills[$i] ?? [
-                'rank' => null,
-                'level' => null,
-                'xp' => null,
+        foreach ($this->skills as $skill) {
+            if ($skill['rank'] === null && $skill['level'] === null && $skill['xp'] === null) {
+                continue;
+            }
+
+            $skills[] = [
+                'id' => $skill['id'],
+                'rank' => $skill['rank'],
+                'level' => $skill['level'],
+                'xp' => $skill['xp'],
             ];
         }
 
-        $maxActivityId = count($this->activities) ? max(array_keys($this->activities)) : 0;
         $activities = [];
-        for ($i = 0; $i < $maxActivityId; $i++) {
-            $activities[] = $this->activities[$i] ?? [
-                'rank' => null,
-                'score' => null,
+        foreach ($this->activities as $activity) {
+            if ($activity['rank'] === null && $activity['score'] === null) {
+                continue;
+            }
+
+            $activities[] = [
+                'id' => $activity['id'],
+                'rank' => $activity['rank'],
+                'score' => $activity['score'],
             ];
         }
 
