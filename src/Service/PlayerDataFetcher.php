@@ -29,7 +29,6 @@ class PlayerDataFetcher
     {
         $this->httpClient = $httpClient ?? HttpClient::create([
             'timeout' => 10,
-            'max_redirects' => 0,
         ]);
     }
 
@@ -263,7 +262,9 @@ class PlayerDataFetcher
     protected function fetchUrl(string $url): string
     {
         try {
-            $response = $this->httpClient->request('GET', $url);
+            $response = $this->httpClient->request('GET', $url , [
+                'max_redirects' => 0,
+            ]);
             $data = $response->getContent();
             if (!$data) {
                 throw new FetchFailedException(sprintf('URL "%s" returned no data.', $url));
