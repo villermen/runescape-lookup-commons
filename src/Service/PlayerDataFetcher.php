@@ -233,7 +233,12 @@ class PlayerDataFetcher
 
                 $crawler = new Crawler($data);
 
-                $displayName = $this->normalizeName($crawler->filter('.uc-scroll__group-title')->innerText());
+                $titleNode = $crawler->filter('.uc-scroll__group-title');
+                if (!$titleNode->count()) {
+                    throw new FetchFailedException(sprintf('Ironman group "%s" could not be found.', $groupName));
+                }
+
+                $displayName = $this->normalizeName($titleNode->innerText());
 
                 $players = $crawler
                     ->filter('.uc-scroll__table-row--type-player .uc-scroll__link')
