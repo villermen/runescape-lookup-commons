@@ -232,10 +232,10 @@ class HighScoreTest extends TestCase
             ],
         ];
 
-        $this->assertEquals($expected, $this->highScore3->toArray());
+        self::assertEquals($expected, $this->highScore3->toArray());
 
         $highScoreFromArray = HighScore::fromArray($this->highScore3->toArray(), oldSchool: false);
-        $this->assertEquals($expected, $highScoreFromArray->toArray());
+        self::assertEquals($expected, $highScoreFromArray->toArray());
     }
 
     /**
