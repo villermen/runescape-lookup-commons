@@ -7,6 +7,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use Villermen\RuneScape\Exception\FetchFailedException;
+use Villermen\RuneScape\HighScore\HighScore;
 use Villermen\RuneScape\HighScore\OsrsActivity;
 use Villermen\RuneScape\HighScore\OsrsSkill;
 use Villermen\RuneScape\HighScore\Rs3Activity;
@@ -69,6 +70,7 @@ class PlayerDataFetcherTest extends TestCase
         self::assertGreaterThanOrEqual(1982, $highScore->getSkill(Rs3Skill::TOTAL)->level);
         self::assertGreaterThanOrEqual(187952, $highScore->getSkill(Rs3Skill::DIVINATION)->xp);
         self::assertEquals(1391, $highScore->getActivity(Rs3Activity::CONQUEST)->score);
+        self::assertHighScoreEntryCounts($highScore, count(Rs3Skill::cases()), count(Rs3Activity::cases()));
     }
 
     #[DataProvider('indexLiteOsrsProvider')]
@@ -81,6 +83,7 @@ class PlayerDataFetcherTest extends TestCase
         self::assertGreaterThanOrEqual(1882, $highScore->getSkill(OsrsSkill::TOTAL)->level);
         self::assertGreaterThanOrEqual(3644543, $highScore->getSkill(OsrsSkill::CONSTRUCTION)->xp);
         self::assertGreaterThanOrEqual(71, $highScore->getActivity(OsrsActivity::ZULRAH)->score);
+        self::assertHighScoreEntryCounts($highScore, count(OsrsSkill::cases()), count(OsrsActivity::cases()));
     }
 
     #[DataProvider('runeMetricsProvider')]
@@ -98,6 +101,7 @@ class PlayerDataFetcherTest extends TestCase
         self::assertNull($runeMetrics->highScore->getActivity(Rs3Activity::CONQUEST)->score);
         self::assertCount(20, $runeMetrics->activityFeed->items);
         self::assertGreaterThanOrEqual(new \DateTime('2022-09-05 04:13:00', new \DateTimeZone('UTC')), $runeMetrics->activityFeed->items[0]->time);
+        self::assertHighScoreEntryCounts($runeMetrics->highScore, count(Rs3Skill::cases()), 0);
     }
 
     #[DataProvider('adventurersLogProvider')]
@@ -156,5 +160,18 @@ class PlayerDataFetcherTest extends TestCase
             ->willReturn($responseMock);
 
         return new PlayerDataFetcher($httpClientMock);
+    }
+
+    /**
+     * Dives into internals to verify the expected amount of skills and activities are contained within a
+     * {@see HighScore} instance. Used to verify that the library and fixture data match the actual APIs.
+     */
+    private static function assertHighScoreEntryCounts(HighScore $highScore, int $skillCount, int $activityCount): void
+    {
+        $skillsProperty = new \ReflectionProperty($highScore, 'skills');
+        self::assertCount($skillCount, $skillsProperty->getValue($highScore));
+
+        $activitiesProperty = new \ReflectionProperty($highScore, 'activities');
+        self::assertCount($activityCount, $activitiesProperty->getValue($highScore));
     }
 }

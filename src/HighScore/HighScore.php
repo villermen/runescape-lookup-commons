@@ -12,7 +12,7 @@ namespace Villermen\RuneScape\HighScore;
 abstract class HighScore
 {
     /**
-     * Compatible with both OSRS's JSON format and the output of {@see toArray()}. Data for unknown skills is retained.
+     * Compatible with the output of {@see toArray()}. Data for unknown skills is retained.
      *
      * @param array{skills: WeakSkill[], activities: WeakActivity[]} $data
      * @return ($oldSchool is true ? OsrsHighScore : Rs3HighScore)

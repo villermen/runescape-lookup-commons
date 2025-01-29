@@ -89,6 +89,42 @@ enum OsrsActivity: int implements ActivityInterface
     case WINTERTODT = 79;
     case ZALCANO = 80;
     case ZULRAH = 81;
+    case COLLECTION_LOG = 82;
+
+    /**
+     * @var array<array{self, int|null}>
+     */
+    private const API_MUTATIONS = [
+        [self::COLLECTION_LOG, 18], // 2025-01-29
+    ];
+
+    /**
+     * Returns a mapping from API IDs to consistent enum values. Disregard all activity data if the size of this map
+     * differs from the list of activities returned by the API to prevent data corruption!
+     *
+     * This enum's values no longer correspond to the API's IDs (starting 29-01-2025) as activities can be inserted at
+     * arbitrary locations. That's bad for keeping track of activities over time, so we apply all mutations since then
+     * to create a stable mapping.
+     *
+     * @return array<int, self>
+     */
+    public static function createApiMap(): array
+    {
+        $map = array_slice(self::cases(), 0, self::COLLECTION_LOG->value);
+        foreach (self::API_MUTATIONS as [$activity, $insertId]) {
+            // @phpstan-ignore identical.alwaysFalse (I don't want to have to write this when it becomes necessary.)
+            if ($insertId === null) {
+                $map = array_values(array_filter($map, fn (OsrsActivity $mapActivity): bool => (
+                    $mapActivity !== $activity
+                )));
+                continue;
+            }
+
+            array_splice($map, $insertId, 0, [$activity]);
+        }
+
+        return $map;
+    }
 
     public function getId(): int
     {
@@ -180,6 +216,7 @@ enum OsrsActivity: int implements ActivityInterface
             self::WINTERTODT => 'Wintertodt',
             self::ZALCANO => 'Zalcano',
             self::ZULRAH => 'Zulrah',
+            self::COLLECTION_LOG => 'Collection log',
         };
     }
 }
