@@ -11,6 +11,7 @@ use Villermen\RuneScape\ActivityFeed\ActivityFeedItem;
 use Villermen\RuneScape\Exception\DataConversionException;
 use Villermen\RuneScape\Exception\FetchFailedException;
 use Villermen\RuneScape\HighScore\HighScore;
+use Villermen\RuneScape\HighScore\OsrsActivity;
 use Villermen\RuneScape\HighScore\OsrsHighScore;
 use Villermen\RuneScape\HighScore\Rs3HighScore;
 use Villermen\RuneScape\Player;
@@ -79,6 +80,23 @@ class PlayerDataFetcher
             throw new DataConversionException(
                 sprintf('Invalid high score data with size %s supplied.', count($entryArray))
             );
+        }
+
+        // Map OSRS activity IDs to keep IDs stable over time. Strip all activities in case of mismatch.
+        if ($oldSchool) {
+            $apiMap = OsrsActivity::createApiMap();
+            if (count($activities) === count($apiMap)) {
+                $activities = array_map(fn (array $activity): array => [
+                    ...$activity,
+                    'id' => $apiMap[$activity['id']]->getId(),
+                ], $activities);
+            } else {
+                trigger_error(
+                    'Unable to map OSRS activity ID. Stripping all activity data from high score.',
+                    E_USER_WARNING,
+                );
+                $activities = [];
+            }
         }
 
         return HighScore::fromArray([
