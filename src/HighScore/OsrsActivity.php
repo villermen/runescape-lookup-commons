@@ -90,12 +90,14 @@ enum OsrsActivity: int implements ActivityInterface
     case ZALCANO = 80;
     case ZULRAH = 81;
     case COLLECTION_LOG = 82;
+    case ROYAL_TITANS = 83;
 
     /**
      * @var array<array{self, int|null}>
      */
     private const API_MUTATIONS = [
         [self::COLLECTION_LOG, 18], // 2025-01-29
+        [self::ROYAL_TITANS, 68], // 2025-02-05
     ];
 
     /**
@@ -217,6 +219,7 @@ enum OsrsActivity: int implements ActivityInterface
             self::ZALCANO => 'Zalcano',
             self::ZULRAH => 'Zulrah',
             self::COLLECTION_LOG => 'Collection log',
+            self::ROYAL_TITANS => 'Royal titans',
         };
     }
 }
