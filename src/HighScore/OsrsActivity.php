@@ -92,6 +92,7 @@ enum OsrsActivity: int implements ActivityInterface
     case COLLECTION_LOG = 82;
     case ROYAL_TITANS = 83;
     case YAMA = 84;
+    case DOOM_OF_MOKHAIOTL = 85;
 
     /**
      * @var array<array{self, int|null}>
@@ -100,6 +101,7 @@ enum OsrsActivity: int implements ActivityInterface
         [self::COLLECTION_LOG, 18], // 2025-01-29
         [self::ROYAL_TITANS, 68], // 2025-02-05
         [self::YAMA, 82], // 2025-05-14
+        [self::DOOM_OF_MOKHAIOTL, 40], // 2025-07-23
     ];
 
     /**
@@ -223,6 +225,7 @@ enum OsrsActivity: int implements ActivityInterface
             self::COLLECTION_LOG => 'Collection log',
             self::ROYAL_TITANS => 'Royal titans',
             self::YAMA => 'Yama',
+            self::DOOM_OF_MOKHAIOTL => 'Doom of Mokhaiotl',
         };
     }
 }
