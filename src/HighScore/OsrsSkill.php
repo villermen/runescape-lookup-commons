@@ -30,6 +30,7 @@ enum OsrsSkill: int implements SkillInterface
     case RUNECRAFT = 21;
     case HUNTER = 22;
     case CONSTRUCTION = 23;
+    case SAILING = 24;
 
     public function getId(): int
     {
@@ -63,6 +64,7 @@ enum OsrsSkill: int implements SkillInterface
             self::RUNECRAFT => 'Runecraft',
             self::HUNTER => 'Hunter',
             self::CONSTRUCTION => 'Construction',
+            self::SAILING => 'Sailing',
         };
     }
 
