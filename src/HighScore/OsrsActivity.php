@@ -234,4 +234,12 @@ enum OsrsActivity: int implements ActivityInterface
             self::SHELLBANE_GRYPHON => 'Shellbane Gryphon',
         };
     }
+
+    public function getDefaultScore(): int
+    {
+        return match ($this) {
+            OsrsActivity::PVP_ARENA_RANK => 2500,
+            default => 0,
+        };
+    }
 }

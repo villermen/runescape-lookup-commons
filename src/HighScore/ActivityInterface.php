@@ -7,4 +7,6 @@ interface ActivityInterface extends \BackedEnum
     public function getId(): int;
 
     public function getName(): string;
+
+    public function getDefaultScore(): int;
 }

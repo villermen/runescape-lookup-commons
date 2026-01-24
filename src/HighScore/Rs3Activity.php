@@ -77,4 +77,9 @@ enum Rs3Activity: int implements ActivityInterface
             self::CATALYST_LEAGUE_POINTS => 'Catalyst League: League Points',
         };
     }
+
+    public function getDefaultScore(): int
+    {
+        return 0;
+    }
 }
