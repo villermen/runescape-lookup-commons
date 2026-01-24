@@ -119,6 +119,11 @@ class HighScoreTest extends TestCase
                 rank: null,
                 score: 0,
             ),
+            new HighScoreActivity(
+                activity: OsrsActivity::PVP_ARENA_RANK,
+                rank: null,
+                score: 2500,
+            ),
         ]);
     }
 
@@ -158,6 +163,11 @@ class HighScoreTest extends TestCase
         self::assertEquals(55.45, $this->highScore1->getCombatLevel());
         self::assertEquals(46.95, $this->highScore1->getCombatLevel(includeSummoning: false));
         self::assertEquals(35.9, $this->highScore3->getCombatLevel());
+
+        self::assertEquals(
+            $this->highScore3->getActivity(OsrsActivity::PVP_ARENA_RANK)->activity->getDefaultScore(),
+            $this->highScore3->getActivity(OsrsActivity::PVP_ARENA_RANK)->score
+        );
     }
 
     public function testComparison(): void
