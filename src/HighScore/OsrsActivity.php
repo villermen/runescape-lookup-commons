@@ -95,6 +95,7 @@ enum OsrsActivity: int implements ActivityInterface
     case DOOM_OF_MOKHAIOTL = 85;
     case GRID_POINTS = 86;
     case SHELLBANE_GRYPHON = 87;
+    case BRUTUS = 88;
 
     /**
      * @var array<array{self, int|null}>
@@ -106,6 +107,7 @@ enum OsrsActivity: int implements ActivityInterface
         [self::DOOM_OF_MOKHAIOTL, 40], // 2025-07-23
         [self::GRID_POINTS, 0], // 2025-10-15
         [self::SHELLBANE_GRYPHON, 62], // 2025-11-05
+        [self::BRUTUS, 26], // 2026-02-25
     ];
 
     /**
@@ -232,6 +234,7 @@ enum OsrsActivity: int implements ActivityInterface
             self::DOOM_OF_MOKHAIOTL => 'Doom of Mokhaiotl',
             self::GRID_POINTS => 'Grid Points',
             self::SHELLBANE_GRYPHON => 'Shellbane Gryphon',
+            self::BRUTUS => 'Brutus',
         };
     }
 
