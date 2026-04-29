@@ -124,7 +124,7 @@ enum OsrsActivity: int implements ActivityInterface
     {
         $map = array_slice(self::cases(), 0, self::COLLECTION_LOG->value);
         foreach (self::API_MUTATIONS as [$activity, $insertId]) {
-            // @phpstan-ignore identical.alwaysFalse (I don't want to have to write this when it becomes necessary.)
+            /** @var int|null $insertId */
             if ($insertId === null) {
                 $map = array_values(array_filter($map, fn (OsrsActivity $mapActivity): bool => (
                     $mapActivity !== $activity
