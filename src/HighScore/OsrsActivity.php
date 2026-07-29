@@ -97,6 +97,7 @@ enum OsrsActivity: int implements ActivityInterface
     case SHELLBANE_GRYPHON = 87;
     case BRUTUS = 88;
     case MAGGOT_KING = 89;
+    case MAD_ANGEL = 90;
 
     /**
      * @var array<array{self, int|null}>
@@ -110,6 +111,7 @@ enum OsrsActivity: int implements ActivityInterface
         [self::SHELLBANE_GRYPHON, 62], // 2025-11-05
         [self::BRUTUS, 26], // 2026-02-25
         [self::MAGGOT_KING, 55], // 2026-07-01
+        [self::MAD_ANGEL, 54], // 2026-07-29
     ];
 
     /**
@@ -238,6 +240,7 @@ enum OsrsActivity: int implements ActivityInterface
             self::SHELLBANE_GRYPHON => 'Shellbane Gryphon',
             self::BRUTUS => 'Brutus',
             self::MAGGOT_KING => 'Maggot King',
+            self::MAD_ANGEL => 'Mad Angel',
         };
     }
 
