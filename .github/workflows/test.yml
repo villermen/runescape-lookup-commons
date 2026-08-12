@@ -4,8 +4,8 @@ on:
   pull_request:
     branches: [ 'master' ]
   schedule:
-    # Run every Wednesday after OSRS update to verify skill and activity counts.
-    - cron: '03 15 * * 3'
+    # Run every Monday and Wednesday after respectively RS3 and OSRS update to verify skill and activity counts.
+    - cron: '03 15 * * 1,3'
 
 permissions:
   contents: read
@@ -20,7 +20,7 @@ jobs:
     name: PHP ${{ matrix.php-version }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4.2.0
+        uses: actions/checkout@v7.0.1
       - name: Install PHP
         uses: shivammathur/setup-php@2.37.2
         with:
@@ -28,7 +28,7 @@ jobs:
       - name: Validate composer.json
         run: composer validate --strict
       - name: Cache Composer dependencies
-        uses: actions/cache@v4.2.0
+        uses: actions/cache@v6.1.0
         with:
           path: vendor
           key: php-${{ matrix.php-version }}-${{ hashFiles('**/composer.json') }}
