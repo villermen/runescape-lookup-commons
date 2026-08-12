@@ -15,8 +15,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        # Oldest and newest stable.
-        php-version: ['8.1', '8.4']
+        # Oldest supported and latest stable.
+        php-version: ['8.2', '8.5']
     name: PHP ${{ matrix.php-version }}
     steps:
       - name: Checkout
