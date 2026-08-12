@@ -110,7 +110,7 @@ enum OsrsActivity: int implements ActivityInterface
         [self::GRID_POINTS, 0], // 2025-10-15
         [self::SHELLBANE_GRYPHON, 62], // 2025-11-05
         [self::BRUTUS, 26], // 2026-02-25
-        [self::MAGGOT_KING, 55], // 2026-07-01
+        [self::MAGGOT_KING, 54], // 2026-07-01
         [self::MAD_ANGEL, 54], // 2026-07-29
     ];
 
