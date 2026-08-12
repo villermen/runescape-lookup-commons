@@ -35,6 +35,7 @@ enum Rs3Activity: int implements ActivityInterface
     case CLUE_SCROLLS_ELITE = 28;
     case CLUE_SCROLLS_MASTER = 29;
     case CATALYST_LEAGUE_POINTS = 30;
+    case EQUILIBRIUM_LEAGUE_POINTS = 31;
 
     public function getId(): int
     {
@@ -75,6 +76,7 @@ enum Rs3Activity: int implements ActivityInterface
             self::CLUE_SCROLLS_ELITE => 'Clue Scrolls (elite)',
             self::CLUE_SCROLLS_MASTER => 'Clue Scrolls (master)',
             self::CATALYST_LEAGUE_POINTS => 'Catalyst League: League Points',
+            self::EQUILIBRIUM_LEAGUE_POINTS => 'Equilibrium League: League Points',
         };
     }
 
