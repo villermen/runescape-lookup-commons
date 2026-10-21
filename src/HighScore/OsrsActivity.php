@@ -98,6 +98,7 @@ enum OsrsActivity: int implements ActivityInterface
     case BRUTUS = 88;
     case MAGGOT_KING = 89;
     case MAD_ANGEL = 90;
+    case THE_FRACTURED_ARCHIVE = 91;
 
     /**
      * @var array<array{self, int|null}>
@@ -112,6 +113,7 @@ enum OsrsActivity: int implements ActivityInterface
         [self::BRUTUS, 26], // 2026-02-25
         [self::MAGGOT_KING, 54], // 2026-07-01
         [self::MAD_ANGEL, 54], // 2026-07-29
+        [self::THE_FRACTURED_ARCHIVE, 78], // 2026-10-21
     ];
 
     /**
@@ -241,6 +243,7 @@ enum OsrsActivity: int implements ActivityInterface
             self::BRUTUS => 'Brutus',
             self::MAGGOT_KING => 'Maggot King',
             self::MAD_ANGEL => 'Mad Angel',
+            self::THE_FRACTURED_ARCHIVE => 'The Fractured Archive',
         };
     }
 
